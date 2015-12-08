@@ -1,7 +1,9 @@
+package adventofcode
+
 import scala.io.{BufferedSource, Source}
 
 object Input {
-  def apply(day: Int) = new Input(Source.fromFile(s"input/day$day.txt"))
+  def apply(day: Int) = new Input(Source.fromInputStream(getClass.getResourceAsStream(s"/input/day$day.txt")))
 }
 
 class Input(file: BufferedSource) {

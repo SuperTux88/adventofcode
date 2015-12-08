@@ -1,3 +1,4 @@
+package adventofcode
 
 object Day1 extends App {
   var floor = 0

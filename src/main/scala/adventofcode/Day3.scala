@@ -1,3 +1,4 @@
+package adventofcode
 
 object Day3 extends App {
   part1()

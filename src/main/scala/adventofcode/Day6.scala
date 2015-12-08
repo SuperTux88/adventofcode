@@ -1,3 +1,4 @@
+package adventofcode
 
 object Day6 extends App {
   val ActionRE = "([a-z\\s]+) (\\d+),(\\d+) through (\\d+),(\\d+)".r

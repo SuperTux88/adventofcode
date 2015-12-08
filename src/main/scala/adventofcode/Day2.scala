@@ -1,3 +1,4 @@
+package adventofcode
 
 object Day2 extends App {
   var totalPaper = 0

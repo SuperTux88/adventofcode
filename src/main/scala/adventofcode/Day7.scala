@@ -1,3 +1,5 @@
+package adventofcode
+
 object Day7 extends App {
   val InstructionRE = "([\\w ]+) -> (\\w+)".r
   val SignalRE = "(\\d+)".r

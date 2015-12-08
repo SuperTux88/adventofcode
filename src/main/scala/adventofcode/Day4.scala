@@ -1,8 +1,10 @@
+package adventofcode
+
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
 
-import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 object Day4 extends App {
   val input = Input(4).string
