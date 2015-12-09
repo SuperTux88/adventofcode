@@ -1,26 +1,25 @@
 package adventofcode
 
-object Day3 extends App {
-  part1()
-  part2()
+object Day3 extends DayApp {
+  override val day: Int = 3
 
-  private def part1() {
+  printDayPart(1, s"total $part1 visits in unique houses")
+  printDayPart(2, s"total $part2 visits in unique houses")
+
+  private def part1: Int = {
     val pos = Pos(0, 0)
-    val houses = Pos(0, 0) :: Input(3).source.map(move(_, pos)).toList
-
-    println(s"PART 1: total ${houses.distinct.size} visits in unique houses")
+    (Pos(0, 0) :: Input(3).source.map(move(_, pos)).toList).distinct.size
   }
 
-  private def part2() {
-    val santaPos = Pos(0, 0)
-    val roboSantaPos = Pos(0, 0)
+  private def part2: Int = {
+    val santaPos, roboSantaPos = Pos(0, 0)
 
     val houses = Pos(0, 0) :: Input(3).withIndex.map { case (char, index) =>
       val pos = if (index % 2 == 0) santaPos else roboSantaPos
       move(char, pos)
     }.toList
 
-    println(s"PART 2: total ${houses.distinct.size} visits in unique houses")
+    houses.distinct.size
   }
 
   private def move(c: Char, pos: Pos): Pos = {

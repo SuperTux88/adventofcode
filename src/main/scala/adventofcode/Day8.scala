@@ -1,14 +1,20 @@
 package adventofcode
 
-object Day8 extends App {
+object Day8 extends DayApp {
+  override val day: Int = 8
+
   val AsciiRE = """(\\x..|\\\"|\\\\)""".r
   val charsToEscape = Set('\\', '"')
 
-  val total1 = Input(8).lines.map { line =>
+  //printDayPart(1, part1)
+  printDayPart(1, part1NoRegex)
+  printDayPart(2, part2)
+
+  private def part1 = Input(8).lines.map { line =>
     line.length - AsciiRE.replaceAllIn(line, " ").length + 2
   }.sum
 
-  val total1x = Input(8).lines.map(_.toCharArray).map { line =>
+  private def part1NoRegex = Input(8).lines.map(_.toCharArray).map { line =>
     var count = 0
     val it = line.iterator
     while(it.hasNext) {
@@ -24,11 +30,7 @@ object Day8 extends App {
     count
   }.sum
 
-  val total2 = Input(8).lines.map { line =>
+  private def part2 = Input(8).lines.map { line =>
     line.count(charsToEscape) + 2
   }.sum
-
-  println(s"PART 1: $total1")
-  println(s"PART 1: $total1x")
-  println(s"PART 2: $total2")
 }

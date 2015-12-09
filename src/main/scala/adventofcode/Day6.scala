@@ -1,6 +1,8 @@
 package adventofcode
 
-object Day6 extends App {
+object Day6 extends DayApp {
+  override val day: Int = 6
+
   val ActionRE = """([a-z\s]+) (\d+),(\d+) through (\d+),(\d+)""".r
 
   val matrix = Array.fill(1000, 1000)((false, 0))
@@ -19,6 +21,6 @@ object Day6 extends App {
         }
   }
 
-  println(s"PART 1: total ${matrix.map(_.count(_._1)).sum} lights are lit")
-  println(s"PART 2: total brightness: ${matrix.map(_.map(_._2).sum).sum}")
+  printDayPart(1, s"total ${matrix.map(_.count(_._1)).sum} lights are lit")
+  printDayPart(2, s"total brightness: ${matrix.map(_.map(_._2).sum).sum}")
 }

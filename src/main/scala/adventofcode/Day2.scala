@@ -1,6 +1,8 @@
 package adventofcode
 
-object Day2 extends App {
+object Day2 extends DayApp {
+  override val day: Int = 2
+
   var totalPaper = 0
   var totalRibbon = 0
 
@@ -11,6 +13,6 @@ object Day2 extends App {
     totalRibbon += (l + l + w + w) + (l * w * h)
   }
 
-  println(s"total square feet of wrapping paper: $totalPaper")
-  println(s"total feet of ribbon: $totalRibbon")
+  printDayPart(1, s"total square feet of wrapping paper: $totalPaper")
+  printDayPart(2, s"total feet of ribbon: $totalRibbon")
 }

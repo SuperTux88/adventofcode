@@ -1,6 +1,8 @@
 package adventofcode
 
-object Day7 extends App {
+object Day7 extends DayApp {
+  override val day: Int = 7
+
   val InstructionRE = """([\w ]+) -> (\w+)""".r
   val SignalRE = """(\d+)""".r
   val WireRE = """(\w+)""".r
@@ -16,7 +18,7 @@ object Day7 extends App {
 
   var signals = Map.empty[String, Int]
 
-  def input(wire: String): Int =
+  private def input(wire: String): Int =
     signals.getOrElse(wire, {
       implicit def stringToInt(x: String): Int = augmentString(x).toInt
 
@@ -43,5 +45,6 @@ object Day7 extends App {
   signals = Map.empty[String, Int]
   val part2 = input("a")
 
-  println(s"PART 1: $part1 | PART 2: $part2")
+  printDayPart(1, part1)
+  printDayPart(2, part2)
 }

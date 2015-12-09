@@ -3,39 +3,35 @@ package adventofcode
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
 
+import scala.compat.Platform._
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-object Day4 extends App {
+object Day4 extends DayApp {
+  override val day: Int = 4
+
   val input = Input(4).string
 
-  calculate(5)
-  calculate(6)
-  calculateParallel(5)
-  calculateParallel(6)
+  //calculate(5)
+  //calculate(6)
+  printDayPart(1, calculateParallel(5))
+  printDayPart(2, calculateParallel(6))
 
-  // second run after JIT
-  calculate(5)
-  calculate(6)
-  calculateParallel(5)
-  calculateParallel(6)
-
-  private def calculate(numberOfZeroes: Int) = {
+  private def calculate(numberOfZeroes: Int): Int = {
     implicit val expectedResult = ExpectedResult(numberOfZeroes)
 
     var counter = 0
     def nextCounter = { counter += 1; counter }
 
-    val start = System.currentTimeMillis
+    val start = currentTime
 
     while(!calculateStringAndMatch(input + nextCounter)) {}
 
-    val end = System.currentTimeMillis
-
-    println(s"first number with $numberOfZeroes zeroes: $counter | calculated in ${end - start}ms")
+    printDebug(s"with $numberOfZeroes zeros | calculated in ${currentTime - start}ms")
+    counter
   }
 
-  private def calculateParallel(numberOfZeroes: Int) = {
+  private def calculateParallel(numberOfZeroes: Int): Int = {
     implicit val expectedResult = ExpectedResult(numberOfZeroes)
     val batchSize = 5000
 
@@ -44,12 +40,12 @@ object Day4 extends App {
     var result: List[Int] = Nil
     val queue = new LinkedBlockingQueue[Future[Int]](15)
 
-    val start = System.currentTimeMillis
+    val start = currentTime
 
     import ExecutionContext.Implicits.global
     do {
       val future = Future[Int] {
-        calculatefirstInBatch(nextOffset, batchSize)
+        calculateFirstInBatch(nextOffset, batchSize)
       }
       future.onSuccess {
         case -1 => queue.remove(future)
@@ -60,16 +56,15 @@ object Day4 extends App {
       queue.put(future)
     } while(result.isEmpty)
 
-    val first = System.currentTimeMillis
+    val first = currentTime
 
     while(!queue.isEmpty) { Await.result(queue.poll, 2 seconds) }
 
-    val end = System.currentTimeMillis
-
-    println(s"first number with $numberOfZeroes zeroes: ${result.sorted.head} | first result after in ${first - start}ms | finished after ${end - start}ms")
+    printDebug(s"with $numberOfZeroes zeros | first result after in ${first - start}ms | finished after ${currentTime - start}ms")
+    result.sorted.head
   }
 
-  private def calculatefirstInBatch(offset: Int, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
+  private def calculateFirstInBatch(offset: Int, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
     (offset to offset+batchSize).find( counter => calculateStringAndMatch(input + counter)).getOrElse(-1)
   }
 

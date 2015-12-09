@@ -1,6 +1,8 @@
 package adventofcode
 
-object Day1 extends App {
+object Day1 extends DayApp {
+  override val day: Int = 1
+
   var floor = 0
   var basementIndex = 0
 
@@ -13,6 +15,6 @@ object Day1 extends App {
     if (floor < 0 && basementIndex == 0) basementIndex = index+1
   }
 
-  println(s"end floor: $floor")
-  println(s"first in basement after: $basementIndex")
+  printDayPart(1, s"end floor: $floor")
+  printDayPart(2, s"first in basement after: $basementIndex")
 }
