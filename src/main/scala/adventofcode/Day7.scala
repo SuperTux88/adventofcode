@@ -1,14 +1,14 @@
 package adventofcode
 
 object Day7 extends App {
-  val InstructionRE = "([\\w ]+) -> (\\w+)".r
-  val SignalRE = "(\\d+)".r
-  val WireRE = "(\\w+)".r
-  val AndRE = "(\\w+) AND (\\w+)".r
-  val OrRE = "(\\w+) OR (\\w+)".r
-  val LShiftRE = "(\\w+) LSHIFT (\\d+)".r
-  val RShiftRE = "(\\w+) RSHIFT (\\d+)".r
-  val NotRE = "NOT (\\w+)".r
+  val InstructionRE = """([\w ]+) -> (\w+)""".r
+  val SignalRE = """(\d+)""".r
+  val WireRE = """(\w+)""".r
+  val AndRE = """(\w+) AND (\w+)""".r
+  val OrRE = """(\w+) OR (\w+)""".r
+  val LShiftRE = """(\w+) LSHIFT (\d+)""".r
+  val RShiftRE = """(\w+) RSHIFT (\d+)""".r
+  val NotRE = """NOT (\w+)""".r
 
   var wires = Input(7).lines.map {
     case InstructionRE(inputs, output) => output -> inputs

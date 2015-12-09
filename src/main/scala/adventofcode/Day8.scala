@@ -1,8 +1,8 @@
 package adventofcode
 
 object Day8 extends App {
-  val AsciiRE = "(\\\\x..|\\\\\"|\\\\\\\\)".r
-  val charsToEscape = Seq('\\', '"')
+  val AsciiRE = """(\\x..|\\\"|\\\\)""".r
+  val charsToEscape = Set('\\', '"')
 
   val total1 = Input(8).lines.map { line =>
     line.length - AsciiRE.replaceAllIn(line, " ").length + 2
@@ -25,7 +25,7 @@ object Day8 extends App {
   }.sum
 
   val total2 = Input(8).lines.map { line =>
-    line.count(charsToEscape.contains(_)) + 2
+    line.count(charsToEscape) + 2
   }.sum
 
   println(s"PART 1: $total1")

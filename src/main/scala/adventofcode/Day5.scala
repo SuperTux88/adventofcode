@@ -5,18 +5,13 @@ object Day5 extends App {
   part2()
 
   def part1() {
-    val vowels = List('a', 'e', 'i', 'o', 'u')
+    val vowels = "aeiou".toSet
     val badStringsRE = "(ab|cd|pq|xy)".r
 
     val niceWords = Input(5).lines.count(string => {
-      var lastChar = '-'
-
       badStringsRE.findFirstIn(string).isEmpty &&
-        string.count(vowels.contains(_)) >= 3 &&
-        string.exists( char =>
-          if (lastChar == char) true
-          else { lastChar = char; false }
-        )
+        string.count(vowels) >= 3 &&
+        string.sliding(2).exists { s => s(0) == s(1) }
     })
 
     println(s"PART 1: there are $niceWords nice strings")
@@ -24,20 +19,8 @@ object Day5 extends App {
 
   def part2(): Unit = {
     val niceWords = Input(5).lines.count(string => {
-      var pairs: List[String] = List("--")
-
-      var containsTwoLetterPairs, containsLetterPairWithOneLetterBetween = false
-
-      string.foreach( char => {
-        val pair = s"${pairs.head.tail}$char"
-
-        if (pairs.head.head == char) containsLetterPairWithOneLetterBetween = true
-        if (pairs.drop(1).indexOf(pair) >= 0) containsTwoLetterPairs = true
-
-        pairs ::= pair
-      })
-
-      containsTwoLetterPairs && containsLetterPairWithOneLetterBetween
+      string.sliding(2).exists { s => string.indexOf(s) < string.lastIndexOf(s)-1} &&
+        string.sliding(3).exists { s => s(0) == s(2) }
     })
 
     println(s"PART 2: there are $niceWords nice strings")
