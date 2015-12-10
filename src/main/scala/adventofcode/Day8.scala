@@ -10,11 +10,11 @@ object Day8 extends DayApp {
   printDayPart(1, part1NoRegex)
   printDayPart(2, part2)
 
-  private def part1 = Input(8).lines.map { line =>
+  private def part1 = input.getLines().map { line =>
     line.length - AsciiRE.replaceAllIn(line, " ").length + 2
   }.sum
 
-  private def part1NoRegex = Input(8).lines.map(_.toCharArray).map { line =>
+  private def part1NoRegex = input.getLines().map(_.toCharArray).map { line =>
     var count = 0
     val it = line.iterator
     while(it.hasNext) {
@@ -30,7 +30,7 @@ object Day8 extends DayApp {
     count
   }.sum
 
-  private def part2 = Input(8).lines.map { line =>
+  private def part2 = input.getLines().map { line =>
     line.count(charsToEscape) + 2
   }.sum
 }

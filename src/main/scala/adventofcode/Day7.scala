@@ -12,38 +12,37 @@ object Day7 extends DayApp {
   val RShiftRE = """(\w+) RSHIFT (\d+)""".r
   val NotRE = """NOT (\w+)""".r
 
-  var wires = Input(7).lines.map {
+  var wires = input.getLines().map {
     case InstructionRE(inputs, output) => output -> inputs
   }.toMap
 
   var signals = Map.empty[String, Int]
 
-  private def input(wire: String): Int =
-    signals.getOrElse(wire, {
+  private def wire(wireName: String): Int =
+    signals.getOrElse(wireName, {
       implicit def stringToInt(x: String): Int = augmentString(x).toInt
 
-      wire match {
+      wireName match {
         case SignalRE(in) => in
-        case wire: String => {
-          val signal: Int = wires(wire) match {
-            case WireRE(in) => input(in)
-            case AndRE(in1, in2) => input(in1) & input(in2)
-            case OrRE(in1, in2) => input(in1) | input(in2)
-            case LShiftRE(in, positions) => input(in) << positions
-            case RShiftRE(in, positions) => input(in) >> positions
-            case NotRE(in) => ~input(in)
+        case wireName: String =>
+          val signal: Int = wires(wireName) match {
+            case WireRE(in) => wire(in)
+            case AndRE(in1, in2) => wire(in1) & wire(in2)
+            case OrRE(in1, in2) => wire(in1) | wire(in2)
+            case LShiftRE(in, positions) => wire(in) << positions
+            case RShiftRE(in, positions) => wire(in) >> positions
+            case NotRE(in) => ~wire(in)
           }
-          signals += wire -> signal
+          signals += wireName -> signal
           signal
-        }
       }
     })
 
-  val part1 = input("a")
+  val part1 = wire("a")
 
   wires += ("b" -> part1.toString)
   signals = Map.empty[String, Int]
-  val part2 = input("a")
+  val part2 = wire("a")
 
   printDayPart(1, part1)
   printDayPart(2, part2)

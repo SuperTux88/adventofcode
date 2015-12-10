@@ -6,7 +6,7 @@ object Day1 extends DayApp {
   var floor = 0
   var basementIndex = 0
 
-  Input(1).withIndex.foreach { case (char, index) =>
+  input.zipWithIndex.foreach { case (char, index) =>
     char match {
       case '(' => floor += 1
       case ')' => floor -= 1

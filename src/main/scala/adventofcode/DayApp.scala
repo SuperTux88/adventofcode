@@ -1,7 +1,11 @@
 package adventofcode
 
+import scala.io.Source
+
 trait DayApp extends App {
   val day: Int
+
+  def input = Source.fromInputStream(getClass.getResourceAsStream(s"/input/day$day.txt"))
 
   def printDayPart(part: Int, result: Int): Unit = printDayPart(part, result.toString)
   def printDayPart(part: Int, text: String) {

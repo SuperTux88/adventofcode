@@ -8,13 +8,13 @@ object Day3 extends DayApp {
 
   private def part1: Int = {
     val pos = Pos(0, 0)
-    (Pos(0, 0) :: Input(3).source.map(move(_, pos)).toList).distinct.size
+    (Pos(0, 0) :: input.map(move(_, pos)).toList).distinct.size
   }
 
   private def part2: Int = {
     val santaPos, roboSantaPos = Pos(0, 0)
 
-    val houses = Pos(0, 0) :: Input(3).withIndex.map { case (char, index) =>
+    val houses = Pos(0, 0) :: input.zipWithIndex.map { case (char, index) =>
       val pos = if (index % 2 == 0) santaPos else roboSantaPos
       move(char, pos)
     }.toList

@@ -20,7 +20,7 @@ object Main extends App {
       (System.nanoTime - start).toFloat / 1000 / 1000
     }
     println(f"min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms")
-    //times.foreach(time => print(f"$time%.3f"))
+    //println(times.map(time => f"$time%.3f").mkString(", "))
   }
 
 }

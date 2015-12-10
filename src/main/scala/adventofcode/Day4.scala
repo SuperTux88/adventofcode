@@ -10,7 +10,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 object Day4 extends DayApp {
   override val day: Int = 4
 
-  val input = Input(4).string
+  val inputStr = input.mkString
 
   //calculate(5)
   //calculate(6)
@@ -25,7 +25,7 @@ object Day4 extends DayApp {
 
     val start = currentTime
 
-    while(!calculateStringAndMatch(input + nextCounter)) {}
+    while(!calculateStringAndMatch(inputStr + nextCounter)) {}
 
     printDebug(s"with $numberOfZeroes zeros | calculated in ${currentTime - start}ms")
     counter
@@ -36,7 +36,7 @@ object Day4 extends DayApp {
     val batchSize = 5000
 
     var counter = 0
-    def nextOffset = this.synchronized { val ret = counter; counter += batchSize; ret }
+    def nextBatch = this.synchronized { val oldCounter = counter; counter += batchSize; oldCounter to counter }
     var result: List[Int] = Nil
     val queue = new LinkedBlockingQueue[Future[Int]](15)
 
@@ -45,7 +45,7 @@ object Day4 extends DayApp {
     import ExecutionContext.Implicits.global
     do {
       val future = Future[Int] {
-        calculateFirstInBatch(nextOffset, batchSize)
+        calculateFirstInBatch(nextBatch, batchSize)
       }
       future.onSuccess {
         case -1 => queue.remove(future)
@@ -64,8 +64,8 @@ object Day4 extends DayApp {
     result.sorted.head
   }
 
-  private def calculateFirstInBatch(offset: Int, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
-    (offset to offset+batchSize).find( counter => calculateStringAndMatch(input + counter)).getOrElse(-1)
+  private def calculateFirstInBatch(batch: Range, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
+    batch.find( counter => calculateStringAndMatch(inputStr + counter)).getOrElse(-1)
   }
 
   private def calculateStringAndMatch(string: String)(implicit expectedResult: ExpectedResult): Boolean = {
