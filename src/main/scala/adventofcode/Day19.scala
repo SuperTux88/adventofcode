@@ -11,11 +11,26 @@ object Day19 extends DayApp {
   }.toList
   val medicine = lines.next()
 
-  val distinctMolecules = replacements.flatMap { case (from, to) =>
-    medicine.sliding(from.length).zipWithIndex.collect {
-      case (`from`, index) => medicine.take(index) + to + medicine.drop(index + from.length)
-    }
+  val distinctMolecules = replacements.flatMap {
+    case (from, to) => transition(from, to, medicine)
   }.distinct
 
+  var counter = 0
+  var molecule = medicine
+
   printDayPart(1, distinctMolecules.size)
+
+  do {
+    molecule = replacements.flatMap {
+      case (from, to) => transition(to, from, molecule)
+    }.distinct.sortBy(_.length).head
+    counter += 1
+  } while(molecule != "e") // why does this work? :D
+
+  printDayPart(2, counter)
+
+  def transition(from: String, to: String, molecule: String) =
+    molecule.sliding(from.length).zipWithIndex.collect {
+      case (`from`, x) => molecule.take(x) + to + molecule.drop(x + from.length)
+    }
 }
