@@ -38,8 +38,8 @@ object Day21 extends DayApp {
   } yield Player.player(weapon, armor, ring1, ring2)
   val sortedCombinations = combinations.toSeq.sortBy(_.cost)
 
-  printDayPart(1, sortedCombinations.dropWhile(!simulate(_, boss)).head.cost)
-  printDayPart(2, sortedCombinations.reverse.dropWhile(simulate(_, boss)).head.cost)
+  printDayPart(1, sortedCombinations.dropWhile(!simulate(_, boss)).head.cost, "cheapest win: %s")
+  printDayPart(2, sortedCombinations.reverse.dropWhile(simulate(_, boss)).head.cost, "most expensive to lose: %s")
 
   @tailrec
   def simulate(attacker: Player, enemy: Player): Boolean =

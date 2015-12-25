@@ -3,8 +3,8 @@ package adventofcode
 object Day3 extends DayApp {
   override val day: Int = 3
 
-  printDayPart(1, s"total $part1 visits in unique houses")
-  printDayPart(2, s"total $part2 visits in unique houses")
+  printDayPart(1, part1, "total %s visits in unique houses")
+  printDayPart(2, part2, "total %s visits in unique houses")
 
   private def part1: Int = {
     val pos = Pos(0, 0)

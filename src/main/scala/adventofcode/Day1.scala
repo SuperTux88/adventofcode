@@ -15,6 +15,6 @@ object Day1 extends DayApp {
     if (floor < 0 && basementIndex == 0) basementIndex = index+1
   }
 
-  printDayPart(1, s"end floor: $floor")
-  printDayPart(2, s"first in basement after: $basementIndex")
+  printDayPart(1, floor, "end floor: %s")
+  printDayPart(2, basementIndex, "first in basement after: %s")
 }

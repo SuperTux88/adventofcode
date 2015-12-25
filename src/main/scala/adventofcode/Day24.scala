@@ -7,8 +7,8 @@ object Day24 extends DayApp {
 
   val packages = input.getLines().map(_.toInt).toList
 
-  printDayPart(1, s"quantum entanglement of group in compartment: ${minQuantumEntanglementInCompartment(3)}")
-  printDayPart(2, s"quantum entanglement of group in compartment: ${minQuantumEntanglementInCompartment(4)}")
+  printDayPart(1, minQuantumEntanglementInCompartment(3).toString(), "quantum entanglement of group in compartment: %s")
+  printDayPart(2, minQuantumEntanglementInCompartment(4).toString(), "quantum entanglement of group in compartment: %s")
 
   def minQuantumEntanglementInCompartment(groupSize: Int) = {
     val groupWeight = packages.sum / groupSize

@@ -4,8 +4,8 @@ object Day11 extends DayApp {
   override val day: Int = 11
 
   val part1 = nextValidPassword(input.mkString)
-  printDayPart(1, s"next valid password: $part1")
-  printDayPart(2, s"next valid password: ${nextValidPassword(part1)}")
+  printDayPart(1, part1, "next valid password: %s")
+  printDayPart(2, nextValidPassword(part1), "next valid password: %s")
 
   private def nextValidPassword(oldPassword: String) = {
     var reversePassword = oldPassword.toList.reverse

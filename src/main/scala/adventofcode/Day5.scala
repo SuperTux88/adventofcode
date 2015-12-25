@@ -6,8 +6,8 @@ object Day5 extends DayApp {
   val vowels = "aeiou".toSet
   val badStringsRE = "(ab|cd|pq|xy)".r
 
-  printDayPart(1, s"there are $part1 nice strings")
-  printDayPart(2, s"there are $part2 nice strings")
+  printDayPart(1, part1, "there are %s nice strings")
+  printDayPart(2, part2, "there are %s nice strings")
 
   private def part1 = input.getLines().count(string => {
     badStringsRE.findFirstIn(string).isEmpty &&

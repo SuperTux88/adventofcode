@@ -11,7 +11,7 @@ object Day25 extends DayApp {
 
   val startCode = (2 to indexOf(row, col)).foldLeft(BigInt(20151125))((code, index) => code * 252533 % 33554393)
 
-  printDayPart(1, startCode.toInt)
+  printDayPart(1, startCode.toInt, "the start code is: %s")
 
   def indexOf(row: Int, col: Int) = {
     val maxRow = row + col - 1

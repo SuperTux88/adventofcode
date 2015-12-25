@@ -13,12 +13,12 @@ object Day18 extends DayApp {
   val gridAfter100Steps = (1 to 100).foldLeft(initialGrid) {
     (currentGrid, step) => nextGrid(currentGrid)
   }
-  printDayPart(1, gridAfter100Steps.values.count(identity))
+  printDayPart(1, gridAfter100Steps.values.count(identity), "total lights on after 100 steps: %s")
 
   val gridWithStuckLightsAfter100Steps = (1 to 100).foldLeft(withStuckLights(initialGrid)) {
     (currentGrid, step) => withStuckLights(nextGrid(currentGrid))
   }
-  printDayPart(2, gridWithStuckLightsAfter100Steps.values.count(identity))
+  printDayPart(2, gridWithStuckLightsAfter100Steps.values.count(identity), "total lights on with stuck lights: %s")
 
   def neighbors(x: Int, y: Int) =
     for {

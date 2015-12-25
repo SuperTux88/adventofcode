@@ -8,8 +8,10 @@ object Day22 extends DayApp {
   val bossStats = input.getLines().map(_.split(':')(1).trim.toInt)
   val boss = Boss(bossStats.next(), bossStats.next())
 
-  printDayPart(1, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = false))
-  printDayPart(2, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = true))
+  printDayPart(1, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = false),
+    "least amount of mana: %s")
+  printDayPart(2, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = true),
+    "least amount of mana in hard mode: %s")
 
   @tailrec
   def simulate(games: Seq[GameState], bestGameMana: Int, hard: Boolean): Int = games match {

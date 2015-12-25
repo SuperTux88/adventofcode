@@ -19,6 +19,6 @@ object Day9 extends DayApp {
     }.sum
   }.toSeq
 
-  printDayPart(1, s"shortest route: ${routeResults.min}")
-  printDayPart(2, s"longest route: ${routeResults.max}")
+  printDayPart(1, routeResults.min, "shortest route: %s")
+  printDayPart(2, routeResults.max, "longest route: %s")
 }

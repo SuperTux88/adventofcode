@@ -13,6 +13,6 @@ object Day2 extends DayApp {
     totalRibbon += (l + l + w + w) + (l * w * h)
   }
 
-  printDayPart(1, s"total square feet of wrapping paper: $totalPaper")
-  printDayPart(2, s"total feet of ribbon: $totalRibbon")
+  printDayPart(1, totalPaper, "total square feet of wrapping paper: %s")
+  printDayPart(2, totalRibbon, "total feet of ribbon: %s")
 }

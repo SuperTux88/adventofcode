@@ -15,8 +15,8 @@ object Day14 extends DayApp {
     reindeer.filter(_.distance == reindeer.map(_.distance).max).foreach(_.addPoint())
   }
 
-  printDayPart(1, s"distance of the winner: ${reindeer.map(_.distance).max}")
-  printDayPart(2, s"points of the winner: ${reindeer.map(_.points).max}")
+  printDayPart(1, reindeer.map(_.distance).max, "distance of the winner: %s")
+  printDayPart(2, reindeer.map(_.points).max, "points of the winner: %s")
 
   case class Reindeer(name: String, flySpeed: Int, flySeconds: Int, restSeconds: Int) {
     var distance = 0

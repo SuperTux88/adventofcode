@@ -11,8 +11,8 @@ object Day12 extends DayApp {
 
   val jsonString = input.mkString
 
-  printDayPart(1, s"sum of all numbers: ${sum(jsonString)}")
-  printDayPart(2, s"sum of all numbers: $part2")
+  printDayPart(1, sum(jsonString), "sum of all numbers: %s")
+  printDayPart(2, part2, "sum of all numbers: %s")
 
   // slow
 //  private def part2WithJsonParse = {

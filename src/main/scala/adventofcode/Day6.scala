@@ -21,6 +21,6 @@ object Day6 extends DayApp {
         }
   }
 
-  printDayPart(1, s"total ${matrix.map(_.count(_._1)).sum} lights are lit")
-  printDayPart(2, s"total brightness: ${matrix.map(_.map(_._2).sum).sum}")
+  printDayPart(1, matrix.map(_.count(_._1)).sum, "total %s lights are lit")
+  printDayPart(2, matrix.map(_.map(_._2).sum).sum, "total brightness: %s")
 }

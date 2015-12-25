@@ -8,19 +8,19 @@ object Day13 extends DayApp {
   val guestsHappiness = input.getLines().map {
     case HappinessRE(a, loseGain, happiness, b) =>
       (a, b) -> (if (loseGain == "lose") happiness.toInt * -1 else happiness.toInt)
-  }.toMap
+  }.toMap.withDefaultValue(0)
 
   val guests = guestsHappiness.flatMap {
     case ((a, b), _) => Seq(a, b)
   }.toList.distinct
 
-  printDayPart(1, s"best happiness change: ${calculateBestHappinessChangeForGuests(guests)}")
-  printDayPart(2, s"best happiness change including me: ${calculateBestHappinessChangeForGuests("Me" :: guests)}")
+  printDayPart(1, calculateBestHappinessChangeForGuests(guests), "best happiness change: %s")
+  printDayPart(2, calculateBestHappinessChangeForGuests("Me" :: guests), "best happiness change including me: %s")
 
   private def calculateBestHappinessChangeForGuests(people: List[String]) =
     people.permutations.map { arrangement =>
       (arrangement.last :: arrangement).sliding(2).map {
-        case Seq(a, b) => guestsHappiness.getOrElse((a, b), 0) + guestsHappiness.getOrElse((b, a), 0)
+        case Seq(a, b) => guestsHappiness(a, b) + guestsHappiness(b, a)
       }.sum
     }.toSeq.max
 }
