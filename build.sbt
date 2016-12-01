@@ -1,8 +1,8 @@
 name := "adventofcode"
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.0"
 
 mainClass in assembly := Some("adventofcode.Main")
 
