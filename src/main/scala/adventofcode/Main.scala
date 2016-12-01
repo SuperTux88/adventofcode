@@ -3,18 +3,35 @@ package adventofcode
 import scala.io.StdIn
 
 object Main extends App {
-  val allDays = List(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9, Day10, Day11, Day12, Day13, Day14, Day15, Day16, Day17, Day18, Day19, Day20, Day21, Day22, Day23, Day24, Day25)
+  val allDays2015 = List(y2015.Day1, y2015.Day2, y2015.Day3, y2015.Day4, y2015.Day5, y2015.Day6, y2015.Day7, y2015.Day8, y2015.Day9, y2015.Day10, y2015.Day11, y2015.Day12, y2015.Day13, y2015.Day14, y2015.Day15, y2015.Day16, y2015.Day17, y2015.Day18, y2015.Day19, y2015.Day20, y2015.Day21, y2015.Day22, y2015.Day23, y2015.Day24, y2015.Day25)
+  val allDays2016 = List()
 
   Logging.debug = false
 
   print(
-    """Advent of Code 2015
-      |===================
+    """Advent of Code
+      |==============
+      |
+      |Select year:
+      |
+      |  - 2015
+      |  - 2016 (default)
+      |
+      |Year: """.stripMargin)
+
+  val allDays = readInput {
+    case "2015" => Some(allDays2015)
+    case "2016"|"" => Some(allDays2016)
+    case _ => None
+  }
+
+  print(
+    """Select mode:
       |
       |  1) run and print result (default)
       |  2) run benchmarks
       |
-      |Select: """.stripMargin)
+      |Mode: """.stripMargin)
 
   readInput {
     case "1"|"" => Some(ResultMode)

@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day2 extends DayApp {
+object Day2 extends Year2015 {
   override val day: Int = 2
 
   var totalPaper = 0

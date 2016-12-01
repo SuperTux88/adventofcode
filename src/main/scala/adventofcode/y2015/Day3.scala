@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day3 extends DayApp {
+object Day3 extends Year2015 {
   override val day: Int = 3
 
   printDayPart(1, part1, "total %s visits in unique houses")

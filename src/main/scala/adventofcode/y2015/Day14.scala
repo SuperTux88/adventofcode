@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day14 extends DayApp {
+object Day14 extends Year2015 {
   override val day: Int = 14
 
   val ReindeerRE = """(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.""".r

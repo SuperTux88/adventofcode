@@ -1,8 +1,8 @@
-package adventofcode
+package adventofcode.y2015
 
 import scala.annotation.tailrec
 
-object Day22 extends DayApp {
+object Day22 extends Year2015 {
   override val day: Int = 22
   val spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
   val bossStats = input.getLines().map(_.split(':')(1).trim.toInt)

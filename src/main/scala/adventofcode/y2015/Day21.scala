@@ -1,8 +1,8 @@
-package adventofcode
+package adventofcode.y2015
 
 import scala.annotation.tailrec
 
-object Day21 extends DayApp {
+object Day21 extends Year2015 {
   override val day: Int = 21
 
   val weapons = Set(

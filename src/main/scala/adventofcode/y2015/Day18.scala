@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day18 extends DayApp {
+object Day18 extends Year2015 {
   override val day: Int = 18
 
   val initialGrid = input.getLines().zipWithIndex.flatMap {

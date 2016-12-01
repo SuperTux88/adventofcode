@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day20 extends DayApp {
+object Day20 extends Year2015 {
   override val day: Int = 20
 
   val targetNumberOfPresents = input.mkString.toInt

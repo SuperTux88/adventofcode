@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day5 extends DayApp {
+object Day5 extends Year2015 {
   override val day: Int = 5
 
   val vowels = "aeiou".toSet

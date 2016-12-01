@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day6 extends DayApp {
+object Day6 extends Year2015 {
   override val day: Int = 6
 
   val ActionRE = """([a-z\s]+) (\d+),(\d+) through (\d+),(\d+)""".r

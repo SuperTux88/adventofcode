@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day17 extends DayApp {
+object Day17 extends Year2015 {
   override val day: Int = 17
 
   val containers = input.getLines().map(_.toInt).toList

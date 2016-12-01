@@ -1,18 +1,20 @@
 package adventofcode
 
-import scala.io.Source
+import scala.collection.mutable
+import scala.io.{BufferedSource, Source}
 
 trait DayApp extends App {
   val day: Int
+  val year: Int
 
-  def input = Source.fromInputStream(getClass.getResourceAsStream(s"/input/day$day.txt"))
+  def input: BufferedSource = Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/day$day.txt"))
 
   def printDayPart(part: Int, solution: Int, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
   def printDayPart(part: Int, solution: String, formatString: String) {
     if (Logging.results) {
       println(s"Day $day - Part $part: ${String.format(formatString, solution)}")
-      Solutions.check(day, part, solution)
+      Solutions.check(day, year, part, solution)
     }
   }
 
@@ -25,11 +27,13 @@ object Logging {
   var results = true
 }
 object Solutions {
-  val solutions = Source.fromInputStream(getClass.getResourceAsStream(s"/input/solutions.txt")).getLines().toList
-
-  def check(day: Int, part: Int, solution: String) {
-    val correctSolution = solutions((day-1)*2 + part-1)
+  def check(day: Int, year: Int, part: Int, solution: String) {
+    val correctSolution = solutions(year)((day-1)*2 + part-1)
     if (solution != correctSolution)
       println(s"$solution is wrong, the expected solution is: $correctSolution")
   }
+
+  private val solutionsMap = mutable.Map[Int, List[String]]()
+  private def solutions(year: Int) = solutionsMap.getOrElseUpdate(year,
+    Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/solutions.txt")).getLines().toList)
 }

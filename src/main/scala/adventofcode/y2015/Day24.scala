@@ -1,8 +1,8 @@
-package adventofcode
+package adventofcode.y2015
 
 import scala.annotation.tailrec
 
-object Day24 extends DayApp {
+object Day24 extends Year2015 {
   override val day: Int = 24
 
   val packages = input.getLines().map(_.toInt).toList

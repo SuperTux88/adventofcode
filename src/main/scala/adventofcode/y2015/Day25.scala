@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day25 extends DayApp {
+object Day25 extends Year2015 {
   override val day: Int = 25
 
   val InputRE = """Enter the code at row (\d+), column (\d+).""".r.unanchored

@@ -1,8 +1,8 @@
-package adventofcode
+package adventofcode.y2015
 
 // import scala.util.parsing.json.JSON
 
-object Day12 extends DayApp {
+object Day12 extends Year2015 {
   override val day: Int = 12
 
   val IntRE = """-?\d+""".r

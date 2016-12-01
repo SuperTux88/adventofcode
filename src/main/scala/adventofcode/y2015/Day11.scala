@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day11 extends DayApp {
+object Day11 extends Year2015 {
   override val day: Int = 11
 
   val part1 = nextValidPassword(input.mkString)

@@ -1,4 +1,4 @@
-package adventofcode
+package adventofcode.y2015
 
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
@@ -7,7 +7,7 @@ import scala.compat.Platform._
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-object Day4 extends DayApp {
+object Day4 extends Year2015 {
   override val day: Int = 4
 
   val inputStr = input.mkString

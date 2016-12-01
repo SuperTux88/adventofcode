@@ -1,10 +1,10 @@
 name := "adventofcode"
 
-version := "1.1"
+version := "2.0"
 
 scalaVersion := "2.12.0"
 
 mainClass in assembly := Some("adventofcode.Main")
 
-// used for json solution in day 12
+// used for json solution in day 12 2015
 //libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"

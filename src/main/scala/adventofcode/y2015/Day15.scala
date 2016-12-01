@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day15 extends DayApp {
+object Day15 extends Year2015 {
   override val day: Int = 15
 
   val IngredientRE = """([\w]+): capacity ([-\d]+), durability ([-\d]+), flavor ([-\d]+), texture ([-\d]+), calories ([-\d]+)""".r

@@ -1,6 +1,6 @@
-package adventofcode
+package adventofcode.y2015
 
-object Day13 extends DayApp {
+object Day13 extends Year2015 {
   override val day: Int = 13
 
   val HappinessRE = """(\w+) would (lose|gain) (\d+) happiness units by sitting next to (\w+).""".r
