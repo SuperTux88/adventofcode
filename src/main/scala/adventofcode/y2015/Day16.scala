@@ -19,7 +19,7 @@ object Day16 extends Year2015 {
     "perfumes" -> 1
   )
 
-  val sues = input.getLines().map {
+  private val sues = input.getLines().map {
     case SueRE(number, compounds) =>
       Sue(number.toInt, compounds.split(',').map {
         case CompoundRE(thing, value) => thing -> value.toInt
@@ -29,11 +29,11 @@ object Day16 extends Year2015 {
   printDayPart(1, sues.find(_.matchesCompounds(searchedSueCompounds)).get.number)
   printDayPart(2, sues.find(_.isRealSue(searchedSueCompounds)).get.number)
 
-  case class Sue(number: Int, compounds: Map[String, Int]) {
-    def matchesCompounds(searchedCompounds: Map[String, Int]) =
+  private case class Sue(number: Int, compounds: Map[String, Int]) {
+    def matchesCompounds(searchedCompounds: Map[String, Int]): Boolean =
       !compounds.exists(c => searchedCompounds(c._1) != c._2)
 
-    def isRealSue(searchedCompounds: Map[String, Int]) =
+    def isRealSue(searchedCompounds: Map[String, Int]): Boolean =
       !compounds.exists(c => c._1 match {
         case "cats" | "trees" => searchedCompounds(c._1) >= c._2
         case "pomeranians" | "goldfish" => searchedCompounds(c._1) <= c._2

@@ -13,7 +13,7 @@ object Day25 extends Year2015 {
 
   printDayPart(1, startCode.toInt, "the start code is: %s")
 
-  def indexOf(row: Int, col: Int) = {
+  private def indexOf(row: Int, col: Int) = {
     val maxRow = row + col - 1
     val topRight = maxRow * (maxRow+1) / 2
     topRight - row

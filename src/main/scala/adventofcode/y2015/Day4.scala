@@ -47,7 +47,7 @@ object Day4 extends Year2015 {
       val future = Future[Int] {
         calculateFirstInBatch(nextBatch, batchSize)
       }
-      future.onSuccess {
+      future.foreach {
         case -1 => queue.remove(future)
         case value: Int =>
           result = value :: result
@@ -58,6 +58,7 @@ object Day4 extends Year2015 {
 
     val first = currentTime
 
+    import scala.language.postfixOps
     while(!queue.isEmpty) { Await.result(queue.poll, 2 seconds) }
 
     printDebug(s"with $numberOfZeroes zeros | first result after in ${first - start}ms | finished after ${currentTime - start}ms")

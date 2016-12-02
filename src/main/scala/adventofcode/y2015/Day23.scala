@@ -7,7 +7,7 @@ object Day23 extends Year2015 {
   val JumpCommandRE = """jmp ([+-]\d+)""".r
   val JumpIfCommandRE = """(ji[oe]) ([ab]), ([+-]\d+)""".r
 
-  val commands = input.getLines().map {
+  private val commands = input.getLines().map {
     case CommandRE(command, register) => Command(command, Some(register(0)), None)
     case JumpCommandRE(offset) => Command("jmp", None, Some(offset.toInt))
     case JumpIfCommandRE(command, register, offset) => Command(command, Some(register(0)), Some(offset.toInt))
@@ -16,7 +16,7 @@ object Day23 extends Year2015 {
   printDayPart(1, runCommands(Map())('b').toInt)
   printDayPart(2, runCommands(Map('a' -> 1l))('b').toInt)
 
-  def runCommands(initialRegisters: Map[Char, Long]) = {
+  private def runCommands(initialRegisters: Map[Char, Long]) = {
     var registers = initialRegisters.withDefaultValue(0l)
     var currentCommand = 0
 
@@ -34,11 +34,12 @@ object Day23 extends Year2015 {
         case Command("jmp", _, Some(offset)) => currentCommand += offset
         case Command("jie", Some(reg), Some(offset)) => currentCommand += (if(registers(reg) % 2 == 0) offset else 1)
         case Command("jio", Some(reg), Some(offset)) => currentCommand += (if(registers(reg) == 1) offset else 1)
+        case command => throw new MatchError(s"Invalid $command")
       }
     }
 
     registers
   }
 
-  case class Command(command: String, register: Option[Char], offset: Option[Int])
+  private case class Command(command: String, register: Option[Char], offset: Option[Int])
 }

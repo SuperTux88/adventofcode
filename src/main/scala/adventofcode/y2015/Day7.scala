@@ -20,6 +20,7 @@ object Day7 extends Year2015 {
 
   private def wire(wireName: String): Int =
     signals.getOrElse(wireName, {
+      import language.implicitConversions
       implicit def stringToInt(x: String): Int = augmentString(x).toInt
 
       wireName match {

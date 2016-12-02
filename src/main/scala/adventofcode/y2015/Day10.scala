@@ -11,7 +11,7 @@ object Day10 extends Year2015 {
 
   private def transform(inputStr: String, iterations: Int) = {
     var string = inputStr
-    (1 to iterations).foreach { i =>
+    (1 to iterations).foreach { _ =>
       string = transformOnce(string)
     }
     string
