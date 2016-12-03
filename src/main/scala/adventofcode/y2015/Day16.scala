@@ -19,7 +19,7 @@ object Day16 extends Year2015 {
     "perfumes" -> 1
   )
 
-  private val sues = input.getLines().map {
+  private val sues = input.getLines.map {
     case SueRE(number, compounds) =>
       Sue(number.toInt, compounds.split(',').map {
         case CompoundRE(thing, value) => thing -> value.toInt

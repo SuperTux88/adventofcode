@@ -3,7 +3,7 @@ package adventofcode.y2015
 object Day18 extends Year2015 {
   override val day: Int = 18
 
-  val initialGrid = input.getLines().zipWithIndex.flatMap {
+  val initialGrid = input.getLines.zipWithIndex.flatMap {
     case (line, x) => line.zipWithIndex.map {
       case ('#', y) => (x, y) -> true
       case ('.', y) => (x, y) -> false

@@ -3,7 +3,7 @@ package adventofcode.y2016
 object Day2 extends Year2016 {
   override val day: Int = 2
 
-  val instructions = input.getLines().toList
+  val instructions = input.getLines.toList
 
   val directions = Map('R' -> (1, 0), 'D' -> (0, 1), 'L' -> (-1, 0), 'U' -> (0, -1))
 

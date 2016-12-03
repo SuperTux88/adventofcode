@@ -5,7 +5,7 @@ object Day9 extends Year2015 {
 
   val DistanceRE = """(\w+) to (\w+) = (\d+)""".r
 
-  val distances = input.getLines().map {
+  val distances = input.getLines.map {
     case DistanceRE(a, b, distance) => (a, b) -> distance.toInt
   }.toMap
 

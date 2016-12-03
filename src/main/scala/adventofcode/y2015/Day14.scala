@@ -5,7 +5,7 @@ object Day14 extends Year2015 {
 
   val ReindeerRE = """(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.""".r
 
-  private val reindeer = input.getLines().map {
+  private val reindeer = input.getLines.map {
     case ReindeerRE(name, flySpeed, flySeconds, restSeconds) =>
       Reindeer(name, flySpeed.toInt, flySeconds.toInt, restSeconds.toInt)
   }.toList

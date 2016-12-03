@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day22 extends Year2015 {
   override val day: Int = 22
   private val spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
-  private val bossStats = input.getLines().map(_.split(':')(1).trim.toInt)
+  private val bossStats = input.getLines.map(_.split(':')(1).trim.toInt)
   private val boss = Boss(bossStats.next(), bossStats.next())
 
   printDayPart(1, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = false),

@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day24 extends Year2015 {
   override val day: Int = 24
 
-  val packages = input.getLines().map(_.toInt).toList
+  val packages = input.getLines.map(_.toInt).toList
 
   printDayPart(1, minQuantumEntanglementInCompartment(3).toString(), "quantum entanglement of group in compartment: %s")
   printDayPart(2, minQuantumEntanglementInCompartment(4).toString(), "quantum entanglement of group in compartment: %s")

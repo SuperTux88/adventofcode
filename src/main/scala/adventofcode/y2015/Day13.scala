@@ -5,7 +5,7 @@ object Day13 extends Year2015 {
 
   val HappinessRE = """(\w+) would (lose|gain) (\d+) happiness units by sitting next to (\w+).""".r
 
-  val guestsHappiness = input.getLines().map {
+  val guestsHappiness = input.getLines.map {
     case HappinessRE(a, loseGain, happiness, b) =>
       (a, b) -> (if (loseGain == "lose") happiness.toInt * -1 else happiness.toInt)
   }.toMap.withDefaultValue(0)

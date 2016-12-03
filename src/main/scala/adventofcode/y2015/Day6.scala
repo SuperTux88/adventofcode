@@ -7,7 +7,7 @@ object Day6 extends Year2015 {
 
   val matrix = Array.fill(1000, 1000)((false, 0))
 
-  input.getLines().foreach {
+  input.getLines.foreach {
     case ActionRE(action, startX, startY, endX, endY) =>
       for (x <- startX.toInt to endX.toInt;
            y <- startY.toInt to endY.toInt)
