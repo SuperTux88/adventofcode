@@ -9,7 +9,7 @@ trait DayApp extends App {
 
   def input: BufferedSource = Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/day$day.txt"))
 
-  def printDayPart(part: Int, solution: Int, formatString: String = "%s"): Unit =
+  def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
   def printDayPart(part: Int, solution: String, formatString: String) {
     if (Logging.results) {
