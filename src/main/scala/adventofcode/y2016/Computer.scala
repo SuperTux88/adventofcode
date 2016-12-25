@@ -9,24 +9,29 @@ class Computer(instructionLines: Iterator[String]) {
   private val DecRE = """dec (\w)""".r
   private val JnzRE = """jnz (\w+) ([\w-]+)""".r
   private val TglRE = """tgl (\w+)""".r
+  private val OutRE = """out (\w+)""".r
 
   private val ValRE = """(-?\d+)""".r
   private val RegRE = """(\w)""".r
 
-  private val instructions = instructionLines.map {
+  private val instructions: List[Instruction] = instructionLines.map {
     case CpyRE(from, to)    => Copy(valueOrRegisterKey(from), to)
     case IncRE(reg)         => Inc(reg)
     case DecRE(reg)         => Dec(reg)
     case JnzRE(cond, steps) => Jump(valueOrRegisterKey(cond), valueOrRegisterKey(steps))
     case TglRE(target)      => Toggle(valueOrRegisterKey(target))
+    case OutRE(reg)         => Out(reg)
   }.toList
 
-  def run(startRegisters: Map[String, Int]): Map[String, Int] =
-    runInstructions(startRegisters, instructions)
+  val registers = Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0)
 
-  private def runInstructions(startRegisters: Map[String, Int], startInstructions: List[Instruction]) = {
-    var registers = startRegisters
-    var instructions = startInstructions
+  def run: Map[String, Int] = runInstructions(None, i => println(i))
+  def run(initValue: (String, Int), out: Int => Unit = i => println(i)): Map[String, Int] =
+    runInstructions(Some(initValue), out)
+
+  private def runInstructions(initValue: Option[(String, Int)], out: Int => Unit) = {
+    var registers = if (initValue.isDefined) this.registers + initValue.get else this.registers
+    var instructions = this.instructions
     var currentPos = 0
 
     while (currentPos < instructions.length) {
@@ -44,6 +49,7 @@ class Computer(instructionLines: Iterator[String]) {
           val targetInst = valueOrRegisterValue(target, registers) + currentPos
           if (instructions.length > targetInst)
             instructions = instructions.updated(targetInst, instructions(targetInst).toggle)
+        case Out(reg) => out(registers(reg))
         case inst => if (Logging.debug) println(s"skipped $inst")
       }
       currentPos += 1
@@ -79,5 +85,8 @@ class Computer(instructionLines: Iterator[String]) {
   }
   private case class Toggle(target: Any) extends Instruction {
     override def toggle = Inc(target.toString)
+  }
+  private case class Out(reg: String) extends Instruction {
+    override def toggle = Inc(reg)
   }
 }
