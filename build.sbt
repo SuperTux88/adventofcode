@@ -2,7 +2,7 @@ name := "adventofcode"
 
 version := "2.0"
 
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.7"
 
 mainClass in assembly := Some("adventofcode.Main")
 
