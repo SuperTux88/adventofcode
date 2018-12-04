@@ -6,25 +6,23 @@ object Day4 extends Year2018 {
   val EventRE = """\[\d{4}-\d{2}-\d{2} \d{2}:(\d{2})\] ([\w\s#]+)""".r
   val ShiftRE = """Guard #(\d+) begins shift""".r
 
-  var currentGuard = 0
-  var guardSleepMinutes = Map[Int, List[Int]]().withDefaultValue(List())
-  var fallenAsleep: Option[Int] = None
+  val guardSleepMinutes = input.getLines().toList.sorted
+    .foldLeft(Map[Int, List[Int]]().withDefaultValue(List()), None:Option[Int], None:Option[Int]) { (state, event) =>
+    val (guardSleepMinutes, currentGuard, fallenAsleep) = state
 
-  input.getLines().toList.sorted.foreach {
-    case EventRE(minute, text) => {
-      text match {
-        case ShiftRE(guard) =>
-          currentGuard = guard.toInt
-          fallenAsleep = None
-        case "falls asleep" =>
-          fallenAsleep = Some(minute.toInt)
-        case "wakes up" =>
-          val sleepMinutes = (fallenAsleep.get until minute.toInt).toList
-          guardSleepMinutes += (currentGuard -> (guardSleepMinutes(currentGuard) ++ sleepMinutes))
-          fallenAsleep = None
-      }
+    event match {
+      case EventRE(minute, text) =>
+        text match {
+          case ShiftRE(guard) =>
+            (guardSleepMinutes, Some(guard.toInt), fallenAsleep)
+          case "falls asleep" =>
+            (guardSleepMinutes, currentGuard, Some(minute.toInt))
+          case "wakes up" =>
+            val sleepMinutes = guardSleepMinutes(currentGuard.get) ++ (fallenAsleep.get until minute.toInt).toList
+            (guardSleepMinutes + (currentGuard.get -> sleepMinutes), currentGuard, None)
+        }
     }
-  }
+  }._1
 
   val guardMostAsleep = guardSleepMinutes.toSeq.maxBy(_._2.length)
   val minuteMostAsleep = guardMostAsleep._2.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
