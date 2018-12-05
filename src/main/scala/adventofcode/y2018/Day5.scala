@@ -4,18 +4,10 @@ object Day5 extends Year2018 {
   override val day = 5
 
   def react(polymer: String) = {
-    var currentPolymer = polymer
-    var reduced = true
-
-    while (reduced) {
-      reduced = false
-      for (c <- 'a' to 'z') {
-        val nextPolymer = currentPolymer.replaceAll(s"$c${c.toUpper}", "").replaceAll(s"${c.toUpper}$c", "")
-        if (nextPolymer != currentPolymer) reduced = true
-        currentPolymer = nextPolymer
-      }
-    }
-    currentPolymer
+    polymer.foldLeft(List[Char]())({
+      case (lastUnit :: otherUnits, unit) if lastUnit != unit && lastUnit.toLower == unit.toLower => otherUnits
+      case (otherUnits, unit) => unit :: otherUnits
+    }).reverse.mkString
   }
 
   val polymerAfterPart1 = react(input.mkString)
