@@ -29,21 +29,20 @@ object Day7 extends Year2018 {
 
   var stepsTodo = allSteps
   var workers = Map[Char, Int]()
-  var duration = -1
 
-  while (stepsTodo.nonEmpty || workers.nonEmpty) {
+  while (stepsTodo.nonEmpty) {
+    val duration = if (workers.nonEmpty) workers.minBy(_._2)._2 else 0
+
     val doneTasks = workers.filter(_._2 == duration).keys
     instructions = instructions.mapValues(_ -- doneTasks).filter(_._2.nonEmpty)
     workers --= doneTasks
 
-    duration += 1
-
     while (workers.size < 5 && !stepsTodo.forall(instructions.contains(_))) {
       val next = stepsTodo.filterNot(instructions.contains(_)).min
       stepsTodo -= next
-      workers += (next -> (next - 5 + duration))
+      workers += (next -> (next - 4 + duration))
     }
   }
 
-  printDayPart(2, duration)
+  printDayPart(2, workers.maxBy(_._2)._2)
 }
