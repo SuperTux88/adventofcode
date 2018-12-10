@@ -2,8 +2,6 @@ package adventofcode.y2018
 
 import adventofcode.Logging
 
-import scala.annotation.tailrec
-
 object Day10 extends Year2018 {
   override val day = 10
 
@@ -13,25 +11,21 @@ object Day10 extends Year2018 {
     case PointRE(x, y, xVelocity, yVelocity) => Point(x.toInt, y.toInt, xVelocity.toInt, yVelocity.toInt)
   }.toList
 
-  private val (message, time) = searchMessage(points)
+  private val (minY, maxY) = (points.minBy(_.y).y, points.maxBy(_.y).y)
+  private val (minVelY, maxVelY) = (points.minBy(_.yVelocity).yVelocity, points.maxBy(_.yVelocity).yVelocity)
+  private val timeNeeded = (maxY - minY) / (minVelY - maxVelY).abs
+
+  private val message = getMessage(points.map(_.move(timeNeeded)))
 
   if (Logging.debug) message.foreach(line => println(line.map(if (_) "█" else " ").mkString))
 
   private val chars = (0 until (message.head.length + 2) / 8).map(pos => getCharAt(message, pos))
   printDayPart(1, chars.map(OCR.readChar).mkString, "parsed message: %s")
-  printDayPart(2, time)
+  printDayPart(2, timeNeeded)
 
-  @tailrec
-  private def searchMessage(points: List[Point], time: Int = 0): (Seq[Seq[Boolean]], Int) = {
+  private def getMessage(points: List[Point]) = {
     val (minX, maxX, minY, maxY) = (points.minBy(_.x).x, points.maxBy(_.x).x, points.minBy(_.y).y, points.maxBy(_.y).y)
-    val diffY = maxY - minY
-
-    if (diffY < 10) {
-      val message = (minY to maxY).map(y => (minX to maxX).map(x => points.exists(p => p.x == x && p.y == y)))
-      (message, time)
-    } else {
-      searchMessage(points.map(_.move()), time + 1)
-    }
+    (minY to maxY).map(y => (minX to maxX).map(x => points.exists(p => p.x == x && p.y == y)).toList).toList
   }
 
   private def getCharAt(message: Seq[Seq[Boolean]], position: Int) = {
