@@ -1,5 +1,7 @@
 package adventofcode.y2018
 
+import scala.annotation.tailrec
+
 object Day7 extends Year2018 {
   override val day = 7
 
@@ -15,34 +17,27 @@ object Day7 extends Year2018 {
       }
   }
 
-  var instructions = allInstructions
-
-  val order = allSteps.foldLeft(List[Char]()) { (order, _) =>
-    val next = allSteps.filterNot(s => instructions.contains(s) || order.contains(s)).min
-    instructions = instructions.mapValues(_ - next).filter(_._2.nonEmpty)
-    next :: order
-  }.reverse
+  val order = allSteps.foldLeft(List[Char](), allInstructions) { (state, _) =>
+    val next = allSteps.filterNot(s => state._2.contains(s) || state._1.contains(s)).min
+    (next :: state._1, state._2.mapValues(_ - next).filter(_._2.nonEmpty))
+  }._1.reverse
 
   printDayPart(1, order.mkString, "order: %s")
 
-  instructions = allInstructions
-
-  var stepsTodo = allSteps
-  var workers = Map[Char, Int]()
-
-  while (stepsTodo.nonEmpty) {
-    val duration = if (workers.nonEmpty) workers.minBy(_._2)._2 else 0
-
-    val doneTasks = workers.filter(_._2 == duration).keys
-    instructions = instructions.mapValues(_ -- doneTasks).filter(_._2.nonEmpty)
-    workers --= doneTasks
-
-    while (workers.size < 5 && !stepsTodo.forall(instructions.contains(_))) {
-      val next = stepsTodo.filterNot(instructions.contains(_)).min
-      stepsTodo -= next
-      workers += (next -> (next - 4 + duration))
+  @tailrec
+  def workParallel(stepsTodo: Set[Char], instructions: Map[Char, Set[Char]], workers: Map[Char, Int] = Map(), time: Int = 0): Int = {
+    if (stepsTodo.isEmpty) {
+      workers.maxBy(_._2)._2
+    } else if (workers.size < 5 && !stepsTodo.forall(instructions.contains)) {
+      val next = stepsTodo.filterNot(instructions.contains).min
+      workParallel(stepsTodo - next, instructions, workers + (next -> (next - 4 + time)), time)
+    } else {
+      val newTime = workers.minBy(_._2)._2
+      val doneTasks = workers.filter(_._2 == newTime).keys
+      val newInstructions = instructions.mapValues(_ -- doneTasks).filter(_._2.nonEmpty)
+      workParallel(stepsTodo, newInstructions, workers -- doneTasks, newTime)
     }
   }
 
-  printDayPart(2, workers.maxBy(_._2)._2)
+  printDayPart(2, workParallel(allSteps, allInstructions))
 }
