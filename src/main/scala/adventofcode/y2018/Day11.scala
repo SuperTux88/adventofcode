@@ -15,7 +15,7 @@ object Day11 extends Year2018 {
   def sumSquare(x: Int, y: Int, size: Int = 3) =
     partialSums(x+size-1, y+size-1) - partialSums(x-1, y+size-1) - partialSums(x+size-1, y-1) + partialSums(x-1, y-1)
 
-  val largestBySize = (1 to 300).map { size =>
+  val largestBySize = (1 to 300).par.map { size =>
     val powerSums = for (x <- 1 to 301 - size; y <- 1 to 301 - size)
       yield (x, y, size, sumSquare(x, y, size))
     size -> powerSums.maxBy(_._4)
