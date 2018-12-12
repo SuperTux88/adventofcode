@@ -39,14 +39,9 @@ object Day12 extends Year2018 {
   def findPattern(pots: List[Boolean], steps: Int, pattern: Int = 0): (Int, Int, Int) = {
     val nextPots = transformPots(pots)
 
-    if (nextPots.containsSlice(trimEmptyPots(pots))) {
+    if (trimEmptyPots(nextPots) == trimEmptyPots(pots)) {
       val sum = sumPots(pots)
-      val foundPattern = sumPots(nextPots) - sum
-      if (foundPattern == pattern) {
-        (sum, steps, foundPattern)
-      } else {
-        findPattern(nextPots, steps + 1, foundPattern)
-      }
+      (sum, steps, sumPots(nextPots) - sum)
     } else {
       findPattern(nextPots, steps + 1)
     }
