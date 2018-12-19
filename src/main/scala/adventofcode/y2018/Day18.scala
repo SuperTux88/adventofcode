@@ -5,19 +5,19 @@ import scala.annotation.tailrec
 object Day18 extends Year2018 {
   override val day = 18
 
-  type Acres = List[List[Char]]
+  type Acres = Vector[Vector[Char]]
 
   private val acreOffsets = Seq((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
 
-  private val map = input.getLines.map(_.toList).toList
+  private val map = input.getLines.map(_.toVector).toVector
 
   private val map10 = (1 to 10).foldLeft(map) { (currentMap, _) => transform(currentMap) }
 
   printDayPart(1, count(map10, '|') * count(map10, '#'))
 
-  val (seenStates, repeatOffset, repeatPattern) = findRepeatOffset(map10, 11)
+  private val (seenStates, repeatOffset, repeatPattern) = findRepeatOffset(map10, 11)
 
-  val resultOffset = (1000000000 - repeatOffset) % repeatPattern + repeatOffset
+  private val resultOffset = (1000000000 - repeatOffset) % repeatPattern + repeatOffset
   printDayPart(2, count(seenStates(resultOffset), '|') * count(seenStates(resultOffset), '#'))
 
   @tailrec
