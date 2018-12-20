@@ -98,7 +98,7 @@ object Day15 extends Year2018 {
   private case class Pos(x: Int, y: Int) extends Ordered [Pos] {
     def nearest(other: Seq[Pos])(implicit players: Seq[Enemy]): Seq[Pos] = {
       @tailrec
-      def step(visited: List[Pos], current: List[Pos], steps: Int = 0): List[Pos] = {
+      def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
         val nextSteps = current.flatMap { pos =>
           Pos.directions.map(pos + _).filter(pos => map.isFree(pos) && !visited.contains(pos))
         }.distinct
