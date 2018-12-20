@@ -10,7 +10,7 @@ object Day19 extends Year2018 {
   val ip = lines.take(1).mkString.split(" ")(1).toInt
 
   val program = lines.map {
-    case InstructionRE(opcode, a, b, c) => (opcode, a.toInt, b.toInt, c.toInt)
+    case InstructionRE(opcode, a, b, c) => (opcode, Vector(a.toInt, b.toInt, c.toInt))
   }.toVector
 
   var registers = Vector.fill(6)(0)
@@ -25,34 +25,10 @@ object Day19 extends Year2018 {
 
   printDayPart(2, factors(registers(1)).sum)
 
-  def runInstruction(registers: Vector[Int]):Vector[Int] = {
+  def runInstruction(registers: Vector[Int]): Vector[Int] = {
     val instruction = program(registers(ip))
-    val newRegisters = execute(instruction._1, instruction._2, instruction._3, instruction._4, registers)
+    val newRegisters = ElfCode.execute(instruction._1, instruction._2, registers)
     newRegisters.updated(ip, newRegisters(ip) + 1)
-  }
-
-  def execute(opcode: String, a: Int, b: Int, c: Int, reg: Vector[Int]): Vector[Int] = {
-    implicit def bool2int(bool: Boolean): Int = if (bool) 1 else 0
-
-    val result: Int = opcode match {
-      case "addr" => reg(a) + reg(b)
-      case "addi" => reg(a) + b
-      case "mulr" => reg(a) * reg(b)
-      case "muli" => reg(a) * b
-      case "banr" => reg(a) & reg(b)
-      case "bani" => reg(a) & b
-      case "borr" => reg(a) | reg(b)
-      case "bori" => reg(a) | b
-      case "setr" => reg(a)
-      case "seti" => a
-      case "gtir" => a > reg(b)
-      case "gtri" => reg(a) > b
-      case "gtrr" => reg(a) > reg(b)
-      case "eqir" => a == reg(b)
-      case "eqri" => reg(a) == b
-      case "eqrr" => reg(a) == reg(b)
-    }
-    reg.updated(c, result)
   }
 
   def factors(num: Int) = {
