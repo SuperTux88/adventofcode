@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 object Day20 extends Year2018 {
   override val day = 20
 
-  private val map = process(input.drop(1))._1
+  private val map = process(input.drop(1))
 
   printMap(map)
 
@@ -16,7 +16,14 @@ object Day20 extends Year2018 {
   printDayPart(1, distances.maxBy(_._2)._2)
   printDayPart(2, distances.count(_._2 >= 1000))
 
-  private def process(regex: Iterator[Char], map: Map[Pos, Char] = Map(Pos(0, 0) -> 'X'), positions: Set[Pos] = Set(Pos(0, 0))): (Map[Pos, Char], Set[Pos], Char) = {
+  @tailrec
+  private def process(
+                       regex: Iterator[Char],
+                       map: Map[Pos, Char] = Map(Pos(0, 0) -> 'X'),
+                       positions: Set[Pos] = Set(Pos(0, 0)),
+                       branches: List[Set[Pos]] = List(Set(Pos(0, 0))),
+                       branchPositions: List[Set[Pos]] = List.empty
+                     ): Map[Pos, Char] = {
     regex.next match {
       case direction@('N'|'E'|'S'|'W') =>
         val (nextMap, nextPos) = positions.foldLeft(map, Set[Pos]()) { (state, pos) =>
@@ -25,18 +32,14 @@ object Day20 extends Year2018 {
           val nextPos = doorPos + dir.dir
           (state._1 + (doorPos -> dir.doorChar) + (nextPos -> '.'), state._2 + nextPos)
         }
-        process(regex, nextMap, nextPos)
+        process(regex, nextMap, nextPos, branches, branchPositions)
       case '(' =>
-        var (nextMap, nextPos, endChar) = process(regex, map, positions)
-        var branch = endChar == '|'
-        while(branch) {
-          val (nextMap2, nextPos2, endChar2) = process(regex, nextMap, positions)
-          nextMap = nextMap2
-          nextPos ++= nextPos2
-          branch = endChar2 == '|'
-        }
-        process(regex, nextMap, nextPos)
-      case ret@('|'|')'|'$') => (map, positions, ret)
+        process(regex, map, positions, positions :: branches, Set[Pos]() :: branchPositions)
+      case '|' =>
+        process(regex, map, branches.head, branches, (branchPositions.head ++ positions) :: branchPositions.tail)
+      case ')' =>
+        process(regex, map, branchPositions.head ++ positions, branches.tail, branchPositions.tail)
+      case '$' => map
     }
   }
 
