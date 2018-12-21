@@ -1,34 +1,23 @@
 package adventofcode.y2018
 
+import scala.annotation.tailrec
+
 object Day19 extends Year2018 {
   override val day = 19
 
-  val InstructionRE = """(\w+) (\d+) (\d+) (\d+)""".r
+  val elfCode = new ElfCode(input.getLines)
 
-  val lines = input.getLines
+  val registerWithNumberToFactor = 1 // TODO get this from the input
 
-  val ip = lines.take(1).mkString.split(" ")(1).toInt
+  printDayPart(1, elfCode.runProgram().head)
+  printDayPart(2, factors(findNumberToFactor(Vector(1, 0, 0, 0, 0, 0))).sum)
 
-  val program = lines.map {
-    case InstructionRE(opcode, a, b, c) => (opcode, Vector(a.toInt, b.toInt, c.toInt))
-  }.toVector
-
-  var registers = Vector.fill(6)(0)
-
-  while(registers(ip) < program.size) { registers = runInstruction(registers) }
-
-  printDayPart(1, registers.head)
-
-  registers = Vector(1, 0, 0, 0, 0, 0)
-
-  while(registers(ip) != 1) { registers = runInstruction(registers) }
-
-  printDayPart(2, factors(registers(1)).sum)
-
-  def runInstruction(registers: Vector[Int]): Vector[Int] = {
-    val instruction = program(registers(ip))
-    val newRegisters = ElfCode.execute(instruction._1, instruction._2, registers)
-    newRegisters.updated(ip, newRegisters(ip) + 1)
+  @tailrec
+  final def findNumberToFactor(registers: Vector[Int]): Int = {
+    if (registers(elfCode.ip) != 1)
+      findNumberToFactor(elfCode.runInstruction(registers))
+    else
+      registers(registerWithNumberToFactor)
   }
 
   def factors(num: Int) = {

@@ -1,5 +1,33 @@
 package adventofcode.y2018
 
+import scala.annotation.tailrec
+
+class ElfCode(private val lines: Iterator[String]) {
+  private val InstructionRE = """(\w+) (\d+) (\d+) (\d+)""".r
+
+  val ip: Int = lines.take(1).mkString.split(" ")(1).toInt
+
+  val program: Vector[(String, Vector[Int])] = lines.map {
+    case InstructionRE(opcode, a, b, c) => (opcode, Vector(a.toInt, b.toInt, c.toInt))
+  }.toVector
+
+  def size: Int = program.size
+
+  @tailrec
+  final def runProgram(registers: Vector[Int] = Vector.fill(6)(0)): Vector[Int] = {
+    if (registers(ip) < size)
+      runProgram(runInstruction(registers))
+    else
+      registers
+  }
+
+  def runInstruction(registers: Vector[Int]): Vector[Int] = {
+    val instruction = program(registers(ip))
+    val newRegisters = ElfCode.execute(instruction._1, instruction._2, registers)
+    newRegisters.updated(ip, newRegisters(ip) + 1)
+  }
+}
+
 object ElfCode {
   val opcodes: Set[String] = Set(
     "addr", "addi",
