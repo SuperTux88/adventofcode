@@ -1,5 +1,7 @@
 package adventofcode.y2015
 
+import adventofcode.common.Pos
+
 object Day3 extends Year2015 {
   override val day: Int = 3
 
@@ -7,30 +9,25 @@ object Day3 extends Year2015 {
   printDayPart(2, part2, "total %s visits in unique houses")
 
   private def part1: Int = {
-    val pos = Pos(0, 0)
-    (Pos(0, 0) :: input.map(move(_, pos)).toList).distinct.size
+    input.foldLeft(List(Pos(0, 0))) { (positions, dir) =>
+      positions.head.move(dir) :: positions
+    }.distinct.size
   }
 
   private def part2: Int = {
-    val santaPos, roboSantaPos = Pos(0, 0)
+    var santaPos, roboSantaPos = Pos(0, 0)
 
-    val houses = Pos(0, 0) :: input.zipWithIndex.map { case (char, index) =>
-      val pos = if (index % 2 == 0) santaPos else roboSantaPos
-      move(char, pos)
+    val houses = Pos(0, 0) :: input.zipWithIndex.map {
+      case (char, index) =>
+        if (index % 2 == 0) {
+          santaPos = santaPos.move(char)
+          santaPos
+        } else {
+          roboSantaPos = roboSantaPos.move(char)
+          roboSantaPos
+        }
     }.toList
 
     houses.distinct.size
   }
-
-  private def move(c: Char, pos: Pos): Pos = {
-    c match {
-      case 'v' => pos.y -= 1
-      case '^' => pos.y += 1
-      case '<' => pos.x -= 1
-      case '>' => pos.x += 1
-    }
-    pos.copy()
-  }
-
-  private case class Pos(var x: Int, var y: Int)
 }

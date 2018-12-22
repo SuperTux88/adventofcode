@@ -1,27 +1,31 @@
 package adventofcode.y2016
 
+import adventofcode.common.Pos
+
 import scala.annotation.tailrec
 
 object Day1 extends Year2016 {
   override val day: Int = 1
 
-  val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
+  val (startPos, startDirection) = Pos(0, 0) -> 2 // 0, 0 -> moving down
 
-  private val (positions, _) = input.mkString.split(", ").map(_.splitAt(1)).foldLeft(Seq(Pos(0, 0)), 0)(move)
+  private val (positions, _) = input.mkString.split(", ").map(_.splitAt(1))
+    .foldLeft(Seq(startPos), startDirection)(move)
 
-  printDayPart(1, positions.last.distance)
-  printDayPart(2, findFirstDuplicate(positions).distance)
+  printDayPart(1, positions.last.distance(startPos))
+  printDayPart(2, findFirstDuplicate(positions).distance(startPos))
 
   private def move(currentState: (Seq[Pos], Int), instruction: (String, String)) = {
     val (positions, direction) = currentState
     val (turn, blocks) = instruction
 
     val newDirection = turn match {
-      case "R" => (direction + 1) % 4
-      case "L" => (direction + 3) % 4
+      case "R" => (direction + 3) % 4
+      case "L" => (direction + 1) % 4
     }
 
-    val newPositions = (1 to blocks.toInt).scanLeft(positions.last)((pos, _) => pos.walk(newDirection)).tail
+    val newPositions = (1 to blocks.toInt)
+      .scanLeft(positions.last)((pos, _) => pos.moveDirectionIndex(newDirection)).tail
     (positions ++ newPositions, newDirection)
   }
 
@@ -29,11 +33,5 @@ object Day1 extends Year2016 {
   private def findFirstDuplicate(positions: Seq[Pos]): Pos = positions match {
     case head :: tail if tail.contains(head) => head
     case _ :: tail => findFirstDuplicate(tail)
-  }
-
-  private case class Pos(x: Int, y: Int) {
-    def distance: Int = x.abs + y.abs
-
-    def walk(direction: Int): Pos = Pos(x + directions(direction)._1, y + directions(direction)._2)
   }
 }

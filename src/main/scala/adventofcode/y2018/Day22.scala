@@ -1,7 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
-import adventofcode.common.Dijkstra
+import adventofcode.common.{Dijkstra, Pos}
 
 import scala.collection.mutable
 
@@ -43,16 +43,6 @@ object Day22 extends Year2018 {
     Region(geologicIndex, erosionLevel)
   }
 
-  private case class Pos(x: Int, y: Int) {
-    def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
-    def up: Pos = copy(y = y - 1)
-    def left: Pos = copy(x = x - 1)
-  }
-
-  private object Pos {
-    val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
-  }
-
   private case class Region(geologicIndex: Int, erosionLevel: Int) {
     def riskLevel: Int = erosionLevel % 3
     def regionType: RegionType = {
@@ -71,7 +61,7 @@ object Day22 extends Year2018 {
       }.get
 
       (7, State(pos, newTool)) :: Pos.directions.map(pos + _).filter { newPos =>
-        newPos.x >= 0 && newPos.y >= 0 && getRegion(newPos).regionType.valid(tool)
+        newPos.positive && getRegion(newPos).regionType.valid(tool)
       }.map(newPos => (1, State(newPos, tool)))
     }
   }

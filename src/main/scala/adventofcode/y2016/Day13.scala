@@ -1,5 +1,7 @@
 package adventofcode.y2016
 
+import adventofcode.common.Pos
+
 object Day13 extends Year2016 {
   override val day: Int = 13
 
@@ -15,7 +17,7 @@ object Day13 extends Year2016 {
 
   while(!mazeSteps.contains(target)) {
     currentPositions = currentPositions.flatMap { pos =>
-      directions.map(pos + _).filter(pos => pos.positive && !pos.isWall && !mazeSteps.contains(pos))
+      directions.map(pos + _).filter(pos => pos.positive && !isWall(pos) && !mazeSteps.contains(pos))
     }.distinct
     steps += 1
     mazeSteps ++= currentPositions.map(_ -> steps)
@@ -24,14 +26,13 @@ object Day13 extends Year2016 {
   printDayPart(1, mazeSteps(target))
   printDayPart(2, mazeSteps.count(_._2 <= 50))
 
-  private case class Pos(x: Int, y: Int) {
-    def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
-    def positive: Boolean = x >= 0 && y >= 0
-    def isWall: Boolean = countBinary(x*x + 3*x + 2*x*y + y + y*y + favoriteNumber) % 2 == 1
-
-    private def countBinary(i: Int): Int = i match {
+  private def isWall(pos: Pos): Boolean = {
+    def countBinary(i: Int): Int = i match {
       case 0|1 => i
       case _ => countBinary(i/2) + i%2
     }
+
+    val Pos(x, y) = pos
+    countBinary(x*x + 3*x + 2*x*y + y + y*y + favoriteNumber) % 2 == 1
   }
 }

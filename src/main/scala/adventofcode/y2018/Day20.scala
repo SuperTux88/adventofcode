@@ -1,6 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
+import adventofcode.common.Pos
 
 import scala.annotation.tailrec
 
@@ -41,14 +42,6 @@ object Day20 extends Year2018 {
         process(regex, map, branchPositions.head ++ positions, branches.tail, branchPositions.tail)
       case '$' => map
     }
-  }
-
-  private case class Pos(x: Int, y: Int) {
-    def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
-  }
-
-  private object Pos {
-    val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
   }
 
   private case class Dir(dir: (Int, Int), doorChar: Char)

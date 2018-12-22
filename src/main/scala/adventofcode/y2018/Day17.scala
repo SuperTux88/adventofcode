@@ -1,6 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
+import adventofcode.common.Pos
 
 object Day17 extends Year2018 {
   override val day = 17
@@ -46,12 +47,6 @@ object Day17 extends Year2018 {
         } else flowDown
       } else water
     } else water
-  }
-
-  private case class Pos(x: Int, y: Int) {
-    def left: Pos = copy(x = x - 1)
-    def right: Pos = copy(x = x + 1)
-    def down: Pos = copy(y = y + 1)
   }
 
   private def printMap(water: Map[Pos, Boolean]): Unit = if (Logging.debug) {

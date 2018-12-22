@@ -1,6 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
+import adventofcode.common.Pos
 
 import scala.annotation.tailrec
 
@@ -40,10 +41,10 @@ object Day15 extends Year2018 {
           val freeEnemyPositions = targets.flatMap(_.freeNeighbors)
 
           if (!freeEnemyPositions.contains(newPos)) {
-            val newPositions = currentPlayer.pos.nearest(freeEnemyPositions)
+            val newPositions = findNearestPosition(currentPlayer.pos, freeEnemyPositions)
             if (newPositions.nonEmpty) {
               val possibleDirections = Pos.directions.map(currentPlayer.pos + _).filter(pos => map.isFree(pos))
-              val nearestDirection = newPositions.min.nearest(possibleDirections)
+              val nearestDirection = findNearestPosition(newPositions.min, possibleDirections)
               if (nearestDirection.nonEmpty) newPos = nearestDirection.min
             }
           }
@@ -95,32 +96,21 @@ object Day15 extends Year2018 {
       case None => players
     }
 
-  private case class Pos(x: Int, y: Int) extends Ordered [Pos] {
-    def nearest(other: Seq[Pos])(implicit players: Seq[Enemy]): Seq[Pos] = {
-      @tailrec
-      def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
-        val nextSteps = current.flatMap { pos =>
-          Pos.directions.map(pos + _).filter(pos => map.isFree(pos) && !visited.contains(pos))
-        }.distinct
+  def findNearestPosition(pos: Pos, targets: Seq[Pos])(implicit players: Seq[Enemy]): Seq[Pos] = {
+    @tailrec
+    def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
+      val nextSteps = current.flatMap { pos =>
+        Pos.directions.map(pos + _).filter(pos => map.isFree(pos) && !visited.contains(pos))
+      }.distinct
 
-        val found = nextSteps.intersect(other)
-        if (found.nonEmpty || nextSteps.isEmpty)
-          found
-        else
-          step(visited ::: nextSteps, nextSteps)
-      }
-
-      if (other.contains(this)) List(this) else step(List(this), List(this))
+      val found = nextSteps.intersect(targets)
+      if (found.nonEmpty || nextSteps.isEmpty)
+        found
+      else
+        step(visited ::: nextSteps, nextSteps)
     }
 
-    def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
-
-    import scala.math.Ordered.orderingToOrdered
-    override def compare(that: Pos): Int = (this.y, this.x) compare (that.y, that.x)
-  }
-
-  private object Pos {
-    val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
+    if (targets.contains(pos)) List(pos) else step(List(pos), List(pos))
   }
 
   private case class Enemy(pos: Pos, symbol: Char, hp: Int = 200) {

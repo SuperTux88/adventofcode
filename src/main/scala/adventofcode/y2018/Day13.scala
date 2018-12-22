@@ -1,5 +1,7 @@
 package adventofcode.y2018
 
+import adventofcode.common.Pos
+
 object Day13 extends Year2018 {
   override val day = 13
 
@@ -48,11 +50,6 @@ object Day13 extends Year2018 {
   }
 
   private def getMapAt(pos: Pos) = map(pos.y)(pos.x)
-
-  private case class Pos(x: Int, y: Int) {
-    def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
-    override def toString = s"$x,$y"
-  }
 
   private case class Cart(pos: Pos, direction: (Int, Int), nextTurn: Int = -1) {
     def forward: Cart = copy(pos = pos + direction)

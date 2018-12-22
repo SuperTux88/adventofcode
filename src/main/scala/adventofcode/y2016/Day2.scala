@@ -1,11 +1,11 @@
 package adventofcode.y2016
 
+import adventofcode.common.Pos
+
 object Day2 extends Year2016 {
   override val day: Int = 2
 
   val instructions = input.getLines.toList
-
-  val directions = Map('R' -> (1, 0), 'D' -> (0, 1), 'L' -> (-1, 0), 'U' -> (0, -1))
 
   val keyPad1 = List(List('1','2','3'),
                      List('4','5','6'),
@@ -36,8 +36,4 @@ object Day2 extends Year2016 {
 
   private def keyAtPos(pos: Pos, keyPad: List[List[Char]]): Char =
     keyPad.lift(pos.y).getOrElse(List()).lift(pos.x).getOrElse(' ')
-
-  private case class Pos(x: Int, y: Int) {
-    def move(direction: Char): Pos = Pos(x + directions(direction)._1, y + directions(direction)._2)
-  }
 }
