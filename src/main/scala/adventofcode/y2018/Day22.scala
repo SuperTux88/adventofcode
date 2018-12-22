@@ -21,11 +21,11 @@ object Day22 extends Year2018 {
 
   printDayPart(1, map.map(_._2.riskLevel).sum)
 
-  private val (duration, _) = Dijkstra(
-    State(Pos(0, 0), Torch()),
-    State(target, Torch()),
+  private val duration = Dijkstra(
+    State(Pos(0, 0), Torch),
+    State(target, Torch),
     {state: State => state.neighbors()}
-  )
+  )._1
 
   printDayPart(2, duration)
 
@@ -47,16 +47,16 @@ object Day22 extends Year2018 {
     def riskLevel: Int = erosionLevel % 3
     def regionType: RegionType = {
       riskLevel match {
-        case 0 => Rocky()
-        case 1 => Wet()
-        case 2 => Narrow()
+        case 0 => Rocky
+        case 1 => Wet
+        case 2 => Narrow
       }
     }
   }
 
   private case class State(pos: Pos, tool: Tool) {
     def neighbors(): List[(Int, State)] = {
-      val newTool = Seq(Torch(), ClimbingGear(), Neither()).find {
+      val newTool = Seq(Torch, ClimbingGear, Neither).find {
         t => t != tool && getRegion(pos).regionType.valid(t)
       }.get
 
@@ -67,23 +67,23 @@ object Day22 extends Year2018 {
   }
 
   sealed trait Tool
-  private case class Torch() extends Tool
-  private case class ClimbingGear() extends Tool
-  private case class Neither() extends Tool
+  private case object Torch extends Tool
+  private case object ClimbingGear extends Tool
+  private case object Neither extends Tool
 
   sealed trait RegionType {
     def valid(tool: Tool): Boolean
   }
-  private case class Rocky() extends RegionType {
-    override def valid(tool: Tool): Boolean = tool != Neither()
+  private case object Rocky extends RegionType {
+    override def valid(tool: Tool): Boolean = tool != Neither
     override def toString: String = "."
   }
-  private case class Wet() extends RegionType {
-    override def valid(tool: Tool): Boolean = tool != Torch()
+  private case object Wet extends RegionType {
+    override def valid(tool: Tool): Boolean = tool != Torch
     override def toString: String = "="
   }
-  private case class Narrow() extends RegionType {
-    override def valid(tool: Tool): Boolean = tool != ClimbingGear()
+  private case object Narrow extends RegionType {
+    override def valid(tool: Tool): Boolean = tool != ClimbingGear
     override def toString: String = "|"
   }
 
