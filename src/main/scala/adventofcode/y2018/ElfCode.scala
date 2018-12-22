@@ -11,6 +11,10 @@ class ElfCode(private val lines: Iterator[String]) {
     case InstructionRE(opcode, a, b, c) => (opcode, Vector(a.toInt, b.toInt, c.toInt))
   }.toVector
 
+  private val parsedInstructions = program.map {
+    case (opcode, params) => ElfCode.getInstruction(opcode, params)
+  }
+
   def size: Int = program.size
 
   @tailrec
@@ -22,8 +26,7 @@ class ElfCode(private val lines: Iterator[String]) {
   }
 
   def runInstruction(registers: Vector[Int]): Vector[Int] = {
-    val instruction = program(registers(ip))
-    val newRegisters = ElfCode.execute(instruction._1, instruction._2, registers)
+    val newRegisters = parsedInstructions(registers(ip))(registers)
     newRegisters.updated(ip, newRegisters(ip) + 1)
   }
 }
@@ -39,28 +42,32 @@ object ElfCode {
     "eqir", "eqri", "eqrr"
   )
 
-  def execute(opcode: String, params: Vector[Int], reg: Vector[Int]): Vector[Int] = {
+  def getInstruction(opcode: String, params: Vector[Int]): Vector[Int] => Vector[Int] = {
+    val instruction = parseInstriction(opcode)
+    val Seq(a, b, c) = params
+    reg => reg.updated(c, instruction(a, b, reg))
+  }
+
+  private def parseInstriction(opcode: String): (Int, Int, Vector[Int]) => Int = {
     implicit def bool2int(bool: Boolean): Int = if (bool) 1 else 0
 
-    val Seq(a, b, c) = params
-    val result: Int = opcode match {
-      case "addr" => reg(a) + reg(b)
-      case "addi" => reg(a) + b
-      case "mulr" => reg(a) * reg(b)
-      case "muli" => reg(a) * b
-      case "banr" => reg(a) & reg(b)
-      case "bani" => reg(a) & b
-      case "borr" => reg(a) | reg(b)
-      case "bori" => reg(a) | b
-      case "setr" => reg(a)
-      case "seti" => a
-      case "gtir" => a > reg(b)
-      case "gtri" => reg(a) > b
-      case "gtrr" => reg(a) > reg(b)
-      case "eqir" => a == reg(b)
-      case "eqri" => reg(a) == b
-      case "eqrr" => reg(a) == reg(b)
+    opcode match {
+      case "addr" => (a, b, reg) => reg(a) + reg(b)
+      case "addi" => (a, b, reg) => reg(a) + b
+      case "mulr" => (a, b, reg) => reg(a) * reg(b)
+      case "muli" => (a, b, reg) => reg(a) * b
+      case "banr" => (a, b, reg) => reg(a) & reg(b)
+      case "bani" => (a, b, reg) => reg(a) & b
+      case "borr" => (a, b, reg) => reg(a) | reg(b)
+      case "bori" => (a, b, reg) => reg(a) | b
+      case "setr" => (a, _, reg) => reg(a)
+      case "seti" => (a, _, _)   => a
+      case "gtir" => (a, b, reg) => a > reg(b)
+      case "gtri" => (a, b, reg) => reg(a) > b
+      case "gtrr" => (a, b, reg) => reg(a) > reg(b)
+      case "eqir" => (a, b, reg) => a == reg(b)
+      case "eqri" => (a, b, reg) => reg(a) == b
+      case "eqrr" => (a, b, reg) => reg(a) == reg(b)
     }
-    reg.updated(c, result)
   }
 }

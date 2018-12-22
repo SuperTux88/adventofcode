@@ -17,7 +17,7 @@ object Day16 extends Year2018 {
       val (regBefore, regAfter) = (parseRegister(before), parseRegister(after))
       val Array(opcode, a, b, c) = instruction.split(" ").map(_.toInt)
       (opcode, ElfCode.opcodes.filter { possibleOpcode =>
-        ElfCode.execute(possibleOpcode, Vector(a, b, c), regBefore) == regAfter
+        ElfCode.getInstruction(possibleOpcode, Vector(a, b, c))(regBefore) == regAfter
       })
   }
 
@@ -37,7 +37,7 @@ object Day16 extends Year2018 {
 
   val registers = program.trim.split("\n").foldLeft(Vector.fill(4)(0)) {
     case (state, InstructionRE(instruction, a, b, c)) =>
-      ElfCode.execute(opcodeMapping(instruction.toInt), Vector(a.toInt, b.toInt, c.toInt), state)
+      ElfCode.getInstruction(opcodeMapping(instruction.toInt), Vector(a.toInt, b.toInt, c.toInt))(state)
   }
 
   printDayPart(2, registers.head)
