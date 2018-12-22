@@ -7,14 +7,15 @@ object Day19 extends Year2018 {
 
   val elfCode = new ElfCode(input.getLines)
 
-  val registerWithNumberToFactor = 1 // TODO get this from the input
+  val instructionWhereFactorizationStarts = 1
+  val registerWithNumberToFactor = elfCode.program(elfCode.size - 3)._2(2)
 
   printDayPart(1, elfCode.runProgram().head)
   printDayPart(2, factors(findNumberToFactor(Vector(1, 0, 0, 0, 0, 0))).sum)
 
   @tailrec
   final def findNumberToFactor(registers: Vector[Int]): Int = {
-    if (registers(elfCode.ip) != 1)
+    if (registers(elfCode.ip) != instructionWhereFactorizationStarts)
       findNumberToFactor(elfCode.runInstruction(registers))
     else
       registers(registerWithNumberToFactor)
@@ -23,7 +24,7 @@ object Day19 extends Year2018 {
   def factors(num: Int) = {
     (1 to num).filter { divisor =>
       num % divisor == 0
-    }
+    }.flatMap(f => Set(f, num / f)).toSet
   }
 }
 

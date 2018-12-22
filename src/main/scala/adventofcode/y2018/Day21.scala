@@ -5,8 +5,8 @@ object Day21 extends Year2018 {
 
   val elfCode = new ElfCode(input.getLines)
 
-  val registerWithNumberForExit = 4 // TODO get this from the input
-  val instructionWithHaltCheck = 28 // I think this is the same for all inputs?
+  val instructionWithHaltCheck = elfCode.size - 3
+  val registerWithNumberForExit = elfCode.program(instructionWithHaltCheck)._2.take(2).max
 
   var registers = Vector.fill(6)(0)
   var seen = Set[Int]()
