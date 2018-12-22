@@ -1,7 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
-import adventofcode.common.{Dijkstra, Pos}
+import adventofcode.common.{AStar, Pos}
 
 import scala.collection.mutable
 
@@ -21,7 +21,7 @@ object Day22 extends Year2018 {
 
   printDayPart(1, map.map(_._2.riskLevel).sum)
 
-  private val duration = Dijkstra(
+  private val duration = AStar(
     State(Pos(0, 0), Torch),
     State(target, Torch),
     {state: State => state.neighbors()}
@@ -55,14 +55,14 @@ object Day22 extends Year2018 {
   }
 
   private case class State(pos: Pos, tool: Tool) {
-    def neighbors(): List[(Int, State)] = {
+    def neighbors(): List[(Int, Int, State)] = {
       val newTool = Seq(Torch, ClimbingGear, Neither).find {
         t => t != tool && getRegion(pos).regionType.valid(t)
       }.get
 
-      (7, State(pos, newTool)) :: Pos.directions.map(pos + _).filter { newPos =>
+      (7, pos.distance(target), State(pos, newTool)) :: Pos.directions.map(pos + _).filter { newPos =>
         newPos.positive && getRegion(newPos).regionType.valid(tool)
-      }.map(newPos => (1, State(newPos, tool)))
+      }.map(newPos => (1, newPos.distance(target), State(newPos, tool)))
     }
   }
 

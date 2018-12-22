@@ -2,25 +2,26 @@ package adventofcode.common
 
 import scala.collection.mutable
 
-object Dijkstra {
+object AStar {
   /**
     * @param start     start point
     * @param target    target point
-    * @param neighbors get new neighbors: (step-cost, neighbor)
+    * @param neighbors get new neighbors: (step-cost, heuristic, neighbor)
     * @tparam T        point type
     * @return          (total cost, path)
     */
-  def apply[T](start: T, target: T, neighbors: T => List[(Int, T)]): (Int, List[T]) = {
-    val Q = mutable.PriorityQueue((0, List(start)))(Ordering.by(-_._1)) // order by cost
+  def apply[T](start: T, target: T, neighbors: T => List[(Int, Int, T)]): (Int, List[T]) = {
+    val Q = mutable.PriorityQueue((0, 0, List(start)))(Ordering.by(-_._2)) // order by heuristic
     val seen = mutable.Set[T]()
 
     while(Q.nonEmpty) {
-      val (cost, current) = Q.dequeue()
+      val (cost, _, current) = Q.dequeue()
       if (current.head == target) {
         return (cost, current)
       } else if (seen.add(current.head)) {
         neighbors(current.head).foreach { n =>
-          Q.enqueue((cost + n._1, n._2 :: current))
+          val nCost = cost + n._1
+          Q.enqueue((nCost, nCost + n._2, n._3 :: current))
         }
       }
     }
