@@ -18,7 +18,7 @@ object Day4 extends Year2015 {
   printDayPart(2, calculateParallel(6))
 
   private def calculate(numberOfZeroes: Int): Int = {
-    implicit val expectedResult = ExpectedResult(numberOfZeroes)
+    implicit val expectedResult: ExpectedResult = ExpectedResult(numberOfZeroes)
 
     var counter = 0
     def nextCounter = { counter += 1; counter }
@@ -32,7 +32,7 @@ object Day4 extends Year2015 {
   }
 
   private def calculateParallel(numberOfZeroes: Int): Int = {
-    implicit val expectedResult = ExpectedResult(numberOfZeroes)
+    implicit val expectedResult: ExpectedResult = ExpectedResult(numberOfZeroes)
     val batchSize = 5000
 
     var counter = 0
@@ -62,7 +62,7 @@ object Day4 extends Year2015 {
     while(!queue.isEmpty) { Await.result(queue.poll, 2 seconds) }
 
     printDebug(s"with $numberOfZeroes zeros | first result after in ${first - start}ms | finished after ${currentTime - start}ms")
-    result.sorted.head
+    result.min
   }
 
   private def calculateFirstInBatch(batch: Range, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
