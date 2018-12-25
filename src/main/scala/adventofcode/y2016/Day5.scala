@@ -21,7 +21,7 @@ object Day5 extends Year2016 {
     char
   }.tail
 
-  print("\r")
+  if (Logging.results) print("\r")
   printDayPart(1, first8Chars.map(_._1.toHexString).mkString, "password: %s")
 
   first8Chars.foreach { char =>
@@ -33,7 +33,7 @@ object Day5 extends Year2016 {
   }
 
   val password2 = findSecondPassword(passwordArray2, doorId, first8Chars.last._3)
-  print("\r")
+  if (Logging.results) print("\r")
   printDayPart(2, password2, "password for second door: %s")
 
   @tailrec
