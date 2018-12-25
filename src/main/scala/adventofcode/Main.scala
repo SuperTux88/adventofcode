@@ -77,27 +77,35 @@ object Main extends App {
   }
 
   private object BenchmarkMode extends DaySelectorRunnable {
+    private val benchmarkRunsForDays = Map[DayApp, Int](
+      y2015.Day1 -> 1000, y2015.Day2 -> 1000, y2015.Day3 -> 1000, y2015.Day4 -> 50, y2015.Day7 -> 1000, y2015.Day8 -> 1000, y2015.Day10 -> 25, y2015.Day11 -> 10, y2015.Day13 -> 10, y2015.Day15 -> 10, y2015.Day16 -> 1000, y2015.Day18 -> 5, y2015.Day20 -> 5, y2015.Day21 -> 1000, y2015.Day22 -> 10, y2015.Day23 -> 1000, y2015.Day25 -> 1000,
+      y2016.Day1 -> 1000, y2016.Day2 -> 1000, y2016.Day3 -> 1000, y2016.Day5 -> 5, y2016.Day6 -> 1000, y2016.Day8 -> 1000, y2016.Day9 -> 1000, y2016.Day10 -> 1000, y2016.Day11 -> 3, y2016.Day12 -> 10, y2016.Day13 -> 1000, y2016.Day14 -> 2, y2016.Day15 -> 1000, y2016.Day16 -> 5, y2016.Day18 -> 5, y2016.Day19 -> 1000, y2016.Day20 -> 1000, y2016.Day21 -> 1000, y2016.Day23 -> 1, y2016.Day25 -> 50,
+      y2018.Day4 -> 1000, y2018.Day7 -> 1000, y2018.Day8 -> 1000, y2018.Day9 -> 25, y2018.Day10 -> 1000, y2018.Day11 -> 25, y2018.Day14 -> 5, y2018.Day15 -> 10, y2018.Day18 -> 10, y2018.Day19 -> 25, y2018.Day21 -> 1, y2018.Day22 -> 50, y2018.Day24 -> 25,
+    ).withDefaultValue(100)
+
     def runDays(days: List[DayApp]) {
       Logging.results = false
 
-      print("Number of runs (default: 100): ")
+      print("Number of runs (default: optimal for each day): ")
 
-      val runs = readInput {
+      val selectedRuns = readInput {
         case Int(number) if number > 0 => Some(number)
-        case "" => Some(100)
+        case "" => Some(-1)
         case _ => None
       }
 
       days.foreach { day =>
         print(s"${day.getClass.getSimpleName.dropRight(1)}: ")
 
+        val runs = if (selectedRuns > 0) selectedRuns else benchmarkRunsForDays(day)
+        print(s"runs: $runs")
         val times = (1 to runs).map { pass =>
           val start = System.nanoTime
           day.main(args)
           (System.nanoTime - start).toFloat / 1000 / 1000
         }
 
-        println(f"min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms")
+        println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms")
         if (util.Properties.propIsSet("benchmark.times"))
           println(times.map(time => f"$time%.3f").mkString(", "))
       }
