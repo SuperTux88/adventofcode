@@ -12,8 +12,8 @@ object Day24 extends Year2018 {
   private val groups = input.mkString.split("\n\n").map(_.split("\n").toIterator)
 
   private val unitGroups = groups.flatMap { group =>
-    val groupType = if (group.take(1).mkString == "Immune System:") ImmuneSystem else Infection
-    group.drop(1).map {
+    val groupType = if (group.next == "Immune System:") ImmuneSystem else Infection
+    group.map {
       case UnitGroupRE(count, hp, weaknessesAndImmunities, attackPower, attackType, initiative) =>
         val (weaknesses, immunities) = parseWeaknessesAndImmunities(weaknessesAndImmunities)
         UnitGroup(groupType, count.toInt, hp.toInt, immunities, weaknesses, attackPower.toInt, attackType, initiative.toInt)
