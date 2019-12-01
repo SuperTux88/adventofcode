@@ -33,11 +33,11 @@ object Day10 extends Year2016 {
 
   printDayPart(2, outputs(0) * outputs(1) * outputs(2))
 
-  private def addChipToBot(id: Int, chip: Int) {
+  private def addChipToBot(id: Int, chip: Int) = {
     bots = bots + (id -> (chip :: bots.getOrElse(id, List.empty[Int])).sorted)
   }
 
-  private def addChipToTarget(targetType: String, id: Int, value: Int) {
+  private def addChipToTarget(targetType: String, id: Int, value: Int) = {
     targetType match {
       case "bot" => addChipToBot(id, value)
       case "output" => outputs = outputs + (id -> value)

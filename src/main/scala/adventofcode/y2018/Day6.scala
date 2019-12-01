@@ -36,6 +36,6 @@ object Day6 extends Year2018 {
   private val border = (map.map(_(min.y)) ++ map.map(_(max.y)) ++ map(min.x) ++ map(max.x)).toSet
   private val fieldsByNearestCoordinate = map.flatMap(_.toList).groupBy(identity)
 
-  printDayPart(1, fieldsByNearestCoordinate.filterKeys(!border.contains(_)).values.map(_.length).max)
+  printDayPart(1, fieldsByNearestCoordinate.view.filterKeys(!border.contains(_)).values.map(_.length).max)
   printDayPart(2, regionSize)
 }

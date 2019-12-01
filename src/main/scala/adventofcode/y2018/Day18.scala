@@ -51,7 +51,7 @@ object Day18 extends Year2018 {
         case Some(line) => line.lift(x + xOffset)
         case None => None
       }
-    }.groupBy(identity).mapValues(_.size).withDefaultValue(0)
+    }.groupBy(identity).view.mapValues(_.size).toMap.withDefaultValue(0)
 
   private def count(map: Acres, char: Char) = map.flatten.count(_ == char)
 }

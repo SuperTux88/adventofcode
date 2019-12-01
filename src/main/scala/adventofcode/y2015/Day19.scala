@@ -30,7 +30,7 @@ object Day19 extends Year2015 {
   printDayPart(2, counter)
 
   private def transition(from: String, to: String, molecule: String) =
-    molecule.sliding(from.length).zipWithIndex.collect {
+    molecule.toSeq.sliding(from.length).map(_.unwrap).zipWithIndex.collect {
       case (`from`, x) => molecule.take(x) + to + molecule.drop(x + from.length)
     }
 }

@@ -24,7 +24,7 @@ object Day14 extends Year2015 {
     var flying = true
     private var nextStateChangeIn = flySeconds
 
-    def tick() {
+    def tick() = {
       if (flying) distance += flySpeed
       nextStateChangeIn -= 1
       if (nextStateChangeIn == 0) {
@@ -33,6 +33,6 @@ object Day14 extends Year2015 {
       }
     }
 
-    def addPoint() { points += 1 }
+    def addPoint() = { points += 1 }
   }
 }

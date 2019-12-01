@@ -11,14 +11,14 @@ trait DayApp extends App {
 
   def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
-  def printDayPart(part: Int, solution: String, formatString: String) {
+  def printDayPart(part: Int, solution: String, formatString: String) = {
     if (Logging.results) {
       println(s"Day $day - Part $part: ${String.format(formatString, solution)}")
       Solutions.check(day, year, part, solution)
     }
   }
 
-  def printDebug(text: String) {
+  def printDebug(text: String) = {
     if (Logging.debug) println(s"DEBUG: $text")
   }
 }
@@ -27,7 +27,7 @@ object Logging {
   var results = true
 }
 object Solutions {
-  def check(day: Int, year: Int, part: Int, solution: String) {
+  def check(day: Int, year: Int, part: Int, solution: String) = {
     val correctSolution = solutions(year)((day-1)*2 + part-1)
     if (solution != correctSolution)
       println(s"$solution is wrong, the expected solution is: $correctSolution")

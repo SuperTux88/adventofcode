@@ -8,7 +8,7 @@ object Day20 extends Year2016 {
     range(0).toLong to range(1).toLong
   }.toList.sortBy(_.start)
 
-  val (allowedIps, _) = blacklist.foldLeft(List.empty[Long], 0l) { (state, range) =>
+  val (allowedIps, _) = blacklist.foldLeft(List.empty[Long], 0L) { (state, range) =>
     val (allowedIps, lastBlocked) = state
     val nextFree = lastBlocked + 1
     val nextLastBlocked = Math.max(lastBlocked, range.end)

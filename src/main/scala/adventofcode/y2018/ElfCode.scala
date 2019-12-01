@@ -49,6 +49,7 @@ object ElfCode {
   }
 
   private def parseInstriction(opcode: String): (Int, Int, Vector[Int]) => Int = {
+    import scala.language.implicitConversions
     implicit def bool2int(bool: Boolean): Int = if (bool) 1 else 0
 
     opcode match {

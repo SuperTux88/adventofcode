@@ -14,7 +14,7 @@ object Day4 extends Year2016 {
 
   private case class Room(name: String, sectorId: Int, checksum: String) {
     def isReal: Boolean = {
-      val calculatedChecksum = name.filter(_ != '-').groupBy(identity).toSeq
+      val calculatedChecksum = name.filter(_ != '-').toSeq.groupBy(identity).toSeq
         .sortBy(_._1).sortBy(-_._2.length).take(5).map(_._1).mkString
       calculatedChecksum == checksum
     }

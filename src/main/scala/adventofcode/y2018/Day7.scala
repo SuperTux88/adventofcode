@@ -11,7 +11,7 @@ object Day7 extends Year2018 {
     .foldLeft(Set[Char](), Map[Char, Set[Char]]().withDefaultValue(Set())) { (state, instruction) =>
       instruction match {
         case InstructionRE(before, after) => (
-          state._1 + (before.charAt(0), after.charAt(0)),
+          state._1 ++ Set(before.charAt(0), after.charAt(0)),
           state._2 + (after.charAt(0) -> (state._2(after.charAt(0)) + before.charAt(0)))
         )
       }
@@ -19,7 +19,7 @@ object Day7 extends Year2018 {
 
   val order = allSteps.foldLeft(List[Char](), allInstructions) { (state, _) =>
     val next = allSteps.filterNot(s => state._2.contains(s) || state._1.contains(s)).min
-    (next :: state._1, state._2.mapValues(_ - next).filter(_._2.nonEmpty))
+    (next :: state._1, state._2.view.mapValues(_ - next).filter(_._2.nonEmpty).toMap)
   }._1.reverse
 
   printDayPart(1, order.mkString, "order: %s")
@@ -34,7 +34,7 @@ object Day7 extends Year2018 {
     } else {
       val newTime = workers.minBy(_._2)._2
       val doneTasks = workers.filter(_._2 == newTime).keys
-      val newInstructions = instructions.mapValues(_ -- doneTasks).filter(_._2.nonEmpty)
+      val newInstructions = instructions.view.mapValues(_ -- doneTasks).filter(_._2.nonEmpty).toMap
       workParallel(stepsTodo, newInstructions, workers -- doneTasks, newTime)
     }
   }

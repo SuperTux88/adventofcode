@@ -38,7 +38,7 @@ object Day17 extends Year2018 {
         if (free(left.down) || free(right.down)) {
           flow(left, flow(right, water ++ line)) // overflow
         } else {
-          water ++ line.mapValues(_ => true) // fill line
+          water ++ line.view.mapValues(_ => true) // fill line
         }
       } else if (!water.contains(pos)) { // flow downward
         val flowDown = flow(pos.down, water + (pos -> false))

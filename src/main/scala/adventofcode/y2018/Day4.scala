@@ -25,10 +25,10 @@ object Day4 extends Year2018 {
   }._1
 
   val guardMostAsleep = guardSleepMinutes.toSeq.maxBy(_._2.length)
-  val minuteMostAsleep = guardMostAsleep._2.groupBy(identity).mapValues(_.size).maxBy(_._2)._1
+  val minuteMostAsleep = guardMostAsleep._2.groupBy(identity).view.mapValues(_.size).maxBy(_._2)._1
   printDayPart(1, guardMostAsleep._1 * minuteMostAsleep)
 
-  val guardsMinuteMostAsleep = guardSleepMinutes.mapValues(_.groupBy(identity).mapValues(_.size).maxBy(_._2)._1)
+  val guardsMinuteMostAsleep = guardSleepMinutes.view.mapValues(_.groupBy(identity).view.mapValues(_.size).maxBy(_._2)._1)
   val guardMostAsleepSameMinute = guardsMinuteMostAsleep.toSeq.maxBy(_._2)
   printDayPart(2, guardMostAsleepSameMinute._1 * guardMostAsleepSameMinute._2)
 }

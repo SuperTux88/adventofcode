@@ -9,7 +9,7 @@ object Day24 extends Year2018 {
   private val ImmunitiesRE = """immune to ([\w, ]+)""".r
   private val WeaknessesRE = """weak to ([\w, ]+)""".r
 
-  private val groups = input.mkString.split("\n\n").map(_.split("\n").toIterator)
+  private val groups = input.mkString.split("\n\n").map(_.split("\n").iterator)
 
   private val unitGroups = groups.flatMap { group =>
     val groupType = if (group.next == "Immune System:") ImmuneSystem else Infection

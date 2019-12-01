@@ -3,7 +3,6 @@ package adventofcode.y2015
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
 
-import scala.compat.Platform._
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
@@ -79,4 +78,6 @@ object Day4 extends Year2015 {
   private implicit object ExpectedResult {
     def apply(numberOfZeroes: Int): ExpectedResult = ExpectedResult(numberOfZeroes, numberOfZeroes/2)
   }
+
+  private def currentTime: Long = System.currentTimeMillis
 }

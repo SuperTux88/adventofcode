@@ -1,5 +1,7 @@
 package adventofcode.y2016
 
+import scala.collection.immutable.ArraySeq
+
 object Day7 extends Year2016 {
   override val day: Int = 7
 
@@ -12,7 +14,7 @@ object Day7 extends Year2016 {
   printDayPart(2, ips.count(_.supportsSSL))
 
   private def parseIP(ip: String) = {
-    IP(HypernetRE.split(ip).zipWithIndex.map(s => NetSequence(s._1, s._2 % 2 != 0)))
+    IP(ArraySeq.unsafeWrapArray(HypernetRE.split(ip)).zipWithIndex.map(s => NetSequence(s._1, s._2 % 2 != 0)))
   }
 
   private case class IP(sequences: Seq[NetSequence]) {
@@ -26,6 +28,6 @@ object Day7 extends Year2016 {
 
   private case class NetSequence(sequence: String, isHypernet: Boolean) {
     def hasABBA: Boolean = AbbaRE.unapplySeq(sequence).isDefined
-    def getABAs: Iterator[String] = sequence.sliding(3).filter(s => s(0) == s(2) && s(0) != s(1))
+    def getABAs: Iterator[String] = sequence.toSeq.sliding(3).map(_.unwrap).filter(s => s(0) == s(2) && s(0) != s(1))
   }
 }

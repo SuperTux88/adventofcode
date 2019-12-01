@@ -9,7 +9,7 @@ object Day2 extends Year2018 {
   var threeTimes = 0
 
   boxIds.foreach { id =>
-    val count = id.groupBy(identity).values.map(_.length).toList
+    val count = id.toSeq.groupBy(identity).values.map(_.length).toList
     if (count.contains(2)) twoTimes += 1
     if (count.contains(3)) threeTimes += 1
   }

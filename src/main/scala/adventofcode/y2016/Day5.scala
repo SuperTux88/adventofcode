@@ -56,14 +56,14 @@ object Day5 extends Year2016 {
     else password.flatten.mkString
   }
 
-  private def addCharToPassword(password: Array[Option[Char]], position: Int, char: Int) {
+  private def addCharToPassword(password: Array[Option[Char]], position: Int, char: Int) = {
     if (position < password.length && password(position).isEmpty) {
       password(position) = Some(char.toHexString.last)
       printPassword(password)
     }
   }
 
-  private def printPassword(password: Array[Option[Char]]) {
+  private def printPassword(password: Array[Option[Char]]) = {
     if (Logging.results) {
       val string = password.map {
         case None => Random.nextInt(15).toHexString

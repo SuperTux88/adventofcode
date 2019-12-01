@@ -14,10 +14,10 @@ object Day23 extends Year2015 {
   }.toList
 
   printDayPart(1, runCommands(Map())('b').toInt)
-  printDayPart(2, runCommands(Map('a' -> 1l))('b').toInt)
+  printDayPart(2, runCommands(Map('a' -> 1L))('b').toInt)
 
   private def runCommands(initialRegisters: Map[Char, Long]) = {
-    var registers = initialRegisters.withDefaultValue(0l)
+    var registers = initialRegisters.withDefaultValue(0L)
     var currentCommand = 0
 
     while(currentCommand >= 0 && currentCommand < commands.size) {

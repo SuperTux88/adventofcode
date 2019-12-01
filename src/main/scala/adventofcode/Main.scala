@@ -53,7 +53,7 @@ object Main extends App {
   }
 
   private trait DaySelectorRunnable extends Runnable {
-    def run() {
+    def run() = {
       print("Select day number or \"all\" (default: all): ")
 
       val daysToRun = readInput {
@@ -65,11 +65,11 @@ object Main extends App {
       runDays(daysToRun)
     }
 
-    def runDays(days: List[DayApp])
+    def runDays(days: List[DayApp]): Unit
   }
 
   private object ResultMode extends DaySelectorRunnable {
-    def runDays(days: List[DayApp]) {
+    def runDays(days: List[DayApp]) = {
       days.foreach { day =>
         day.main(args)
       }
@@ -83,7 +83,7 @@ object Main extends App {
       y2018.Day4 -> 1000, y2018.Day7 -> 1000, y2018.Day8 -> 1000, y2018.Day9 -> 25, y2018.Day10 -> 1000, y2018.Day11 -> 25, y2018.Day14 -> 5, y2018.Day15 -> 10, y2018.Day18 -> 10, y2018.Day19 -> 25, y2018.Day21 -> 1, y2018.Day22 -> 50, y2018.Day24 -> 25,
     ).withDefaultValue(100)
 
-    def runDays(days: List[DayApp]) {
+    def runDays(days: List[DayApp]) = {
       Logging.results = false
 
       print("Number of runs (default: optimal for each day): ")
@@ -105,6 +105,7 @@ object Main extends App {
           (System.nanoTime - start).toFloat / 1000 / 1000
         }
 
+        import scala.math.Ordering.Float.TotalOrdering
         println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms")
         if (util.Properties.propIsSet("benchmark.times"))
           println(times.map(time => f"$time%.3f").mkString(", "))

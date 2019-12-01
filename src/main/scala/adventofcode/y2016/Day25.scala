@@ -19,7 +19,7 @@ object Day25 extends Year2016 {
 
       computer.run("a" -> initValue, checkOutput)
 
-      def checkOutput(output: Int) {
+      def checkOutput(output: Int) = {
         if (lastOutput == output) {
           break
         } else {

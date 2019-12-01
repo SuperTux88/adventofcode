@@ -32,7 +32,7 @@ object Day16 extends Year2018 {
   val opcodeMapping = ElfCode.opcodes.foldLeft(Map[Int, String](), possibleOpcodeMappings) { (mappings, _) =>
     val (finalMapping, possibleMappings) = mappings
     val (opcode, mapped) = possibleMappings.find(_._2.size == 1).get
-    (finalMapping + (opcode -> mapped.head), possibleMappings.mapValues(v => v - mapped.head))
+    (finalMapping + (opcode -> mapped.head), possibleMappings.view.mapValues(v => v - mapped.head).toMap)
   }._1
 
   val registers = program.trim.split("\n").foldLeft(Vector.fill(4)(0)) {
