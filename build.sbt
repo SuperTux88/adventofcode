@@ -1,6 +1,6 @@
 name := "adventofcode"
 
-version := "3.0"
+version := "4.0"
 
 scalaVersion := "2.13.1"
 
