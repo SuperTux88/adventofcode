@@ -15,14 +15,14 @@ object Day22 extends Year2018 {
 
   private val map = mutable.Map.empty[Pos, Region]
 
-  Seq(Pos(0, 0), target, target.left, target.up).foreach(getRegion)
+  Seq(Pos.zero, target, target.left, target.up).foreach(getRegion)
 
   printMap()
 
   printDayPart(1, map.map(_._2.riskLevel).sum)
 
   private val duration = AStar(
-    State(Pos(0, 0), Torch),
+    State(Pos.zero, Torch),
     State(target, Torch),
     {state: State => state.neighbors()}
   )._1
@@ -33,7 +33,7 @@ object Day22 extends Year2018 {
 
   private def calculateRegion(x: Int, y: Int): Region = {
     val geologicIndex = Pos(x, y) match {
-      case Pos(0, 0) => 0
+      case Pos.zero => 0
       case pos if pos == target => 0
       case Pos(_, 0) => x * 16807
       case Pos(0, _) => y * 48271

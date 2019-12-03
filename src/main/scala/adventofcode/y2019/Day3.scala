@@ -9,7 +9,7 @@ object Day3 extends Year2019 {
   val List(wireA, wireB) = wires.map(generatePath(_))
   val crossings = wireA intersect wireB
 
-  printDayPart(1, crossings.map(_.distance(Pos(0, 0))).min)
+  printDayPart(1, crossings.map(_.distance(Pos.zero)).min)
 
   printDayPart(2, crossings.map(crossing => wireA.indexOf(crossing) + wireB.indexOf(crossing) + 2).min)
 
@@ -22,7 +22,7 @@ object Day3 extends Year2019 {
     wire.iterator.flatMap {
       case (direction, distance) =>
         Iterator.fill(distance)(direction)
-    }.scanLeft(Pos(0, 0)) {
+    }.scanLeft(Pos.zero) {
       (pos, direction) => pos.move(direction)
     }.toList.tail
 }

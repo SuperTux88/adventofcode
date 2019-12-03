@@ -34,4 +34,6 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
 object Pos {
   // up, right, down, left
   val directions = List((0, -1), (1, 0), (0, 1), (-1, 0))
+
+  val zero: Pos = Pos(0, 0)
 }

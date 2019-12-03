@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 object Day1 extends Year2016 {
   override val day: Int = 1
 
-  val (startPos, startDirection) = Pos(0, 0) -> 2 // 0, 0 -> moving down
+  val (startPos, startDirection) = Pos.zero -> 2 // 0, 0 -> moving down
 
   private val (positions, _) = input.mkString.split(", ").map(_.splitAt(1))
     .foldLeft(Seq(startPos), startDirection)(move)

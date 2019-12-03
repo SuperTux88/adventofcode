@@ -20,9 +20,9 @@ object Day20 extends Year2018 {
   @tailrec
   private def process(
                        regex: Iterator[Char],
-                       map: Map[Pos, Char] = Map(Pos(0, 0) -> 'X'),
-                       positions: Set[Pos] = Set(Pos(0, 0)),
-                       branches: List[Set[Pos]] = List(Set(Pos(0, 0))),
+                       map: Map[Pos, Char] = Map(Pos.zero -> 'X'),
+                       positions: Set[Pos] = Set(Pos.zero),
+                       branches: List[Set[Pos]] = List(Set(Pos.zero)),
                        branchPositions: List[Set[Pos]] = List.empty
                      ): Map[Pos, Char] = {
     regex.next match {
@@ -72,7 +72,7 @@ object Day20 extends Year2018 {
         step(nextToVisit, nextSteps, steps + 1, nextRoomSteps)
     }
 
-    step(rooms, Set(Pos(0, 0)))
+    step(rooms, Set(Pos.zero))
   }
 
   private def printMap(map: Map[Pos, Char]): Unit = if (Logging.debug) {
