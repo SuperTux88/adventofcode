@@ -6,7 +6,7 @@ object Main extends App {
   val allDays2015 = List(y2015.Day1, y2015.Day2, y2015.Day3, y2015.Day4, y2015.Day5, y2015.Day6, y2015.Day7, y2015.Day8, y2015.Day9, y2015.Day10, y2015.Day11, y2015.Day12, y2015.Day13, y2015.Day14, y2015.Day15, y2015.Day16, y2015.Day17, y2015.Day18, y2015.Day19, y2015.Day20, y2015.Day21, y2015.Day22, y2015.Day23, y2015.Day24, y2015.Day25)
   val allDays2016 = List(y2016.Day1, y2016.Day2, y2016.Day3, y2016.Day4, y2016.Day5, y2016.Day6, y2016.Day7, y2016.Day8, y2016.Day9, y2016.Day10, y2016.Day11, y2016.Day12, y2016.Day13, y2016.Day14, y2016.Day15, y2016.Day16, y2016.Day17, y2016.Day18, y2016.Day19, y2016.Day20, y2016.Day21, y2016.Day22, y2016.Day23, y2016.Day24, y2016.Day25)
   val allDays2018 = List(y2018.Day1, y2018.Day2, y2018.Day3, y2018.Day4, y2018.Day5, y2018.Day6, y2018.Day7, y2018.Day8, y2018.Day9, y2018.Day10, y2018.Day11, y2018.Day12, y2018.Day13, y2018.Day14, y2018.Day15, y2018.Day16, y2018.Day17, y2018.Day18, y2018.Day19, y2018.Day20, y2018.Day21, y2018.Day22, y2018.Day23, y2018.Day24, y2018.Day25)
-  val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4)
+  val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4, y2019.Day5)
 
   Logging.debug = false
 
@@ -84,7 +84,7 @@ object Main extends App {
       y2015.Day1 -> 1000, y2015.Day2 -> 1000, y2015.Day3 -> 1000, y2015.Day4 -> 50, y2015.Day7 -> 1000, y2015.Day8 -> 1000, y2015.Day10 -> 25, y2015.Day11 -> 10, y2015.Day13 -> 10, y2015.Day15 -> 10, y2015.Day16 -> 1000, y2015.Day18 -> 5, y2015.Day20 -> 5, y2015.Day21 -> 1000, y2015.Day22 -> 10, y2015.Day23 -> 1000, y2015.Day25 -> 1000,
       y2016.Day1 -> 1000, y2016.Day2 -> 1000, y2016.Day3 -> 1000, y2016.Day5 -> 5, y2016.Day6 -> 1000, y2016.Day8 -> 1000, y2016.Day9 -> 1000, y2016.Day10 -> 1000, y2016.Day11 -> 3, y2016.Day12 -> 10, y2016.Day13 -> 1000, y2016.Day14 -> 2, y2016.Day15 -> 1000, y2016.Day16 -> 5, y2016.Day18 -> 5, y2016.Day19 -> 1000, y2016.Day20 -> 1000, y2016.Day21 -> 1000, y2016.Day23 -> 1, y2016.Day25 -> 50,
       y2018.Day4 -> 1000, y2018.Day7 -> 1000, y2018.Day8 -> 1000, y2018.Day9 -> 25, y2018.Day10 -> 1000, y2018.Day11 -> 25, y2018.Day14 -> 5, y2018.Day15 -> 10, y2018.Day18 -> 10, y2018.Day19 -> 25, y2018.Day21 -> 1, y2018.Day22 -> 50, y2018.Day24 -> 25,
-      y2019.Day1 -> 1000
+      y2019.Day1 -> 1000, y2019.Day5 -> 1000
     ).withDefaultValue(100)
 
     def runDays(days: List[DayApp]) = {
