@@ -7,6 +7,7 @@ class IntCode(private val instructions: String) {
 
   private val program = instructions.split(",").map(_.toInt).toVector
 
+  def start(noun: Int, verb: Int): Result = run(program.updated(1, noun).updated(2, verb), 0, Vector.empty)
   def start(input: Vector[Int]): Result = run(program, 0, input)
 
   @tailrec
