@@ -20,5 +20,5 @@ object Day2 extends Year2019 {
   printDayPart(2, 100 * noun + verb)
 
   private def runProgram(noun: Int, verb: Int) =
-    new IntCode(intcodeProgram.updated(1, noun).updated(2, verb)).start()
+    new IntCode(intcodeProgram.updated(1, noun).updated(2, verb)).run()
 }
