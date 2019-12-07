@@ -3,15 +3,14 @@ package adventofcode.y2019
 import scala.annotation.tailrec
 import scala.math.pow
 
-class IntCode(private val instructions: String) {
+class IntCode(val program: Vector[Int]) {
 
-  private val program = instructions.split(",").map(_.toInt).toVector
+  def this(instructions: String) = this(instructions.split(",").map(_.toInt).toVector)
 
-  def start(noun: Int, verb: Int): Result = run(program.updated(1, noun).updated(2, verb))
-  def start(input: Vector[Int]): Result = run(program, 0, input)
+  def start(input: Vector[Int] = Vector.empty): Result = run(program, 0, input)
 
   @tailrec
-  private def run(memory: Vector[Int], ip: Int = 0, inputs: Vector[Int] = Vector.empty, outputs: Vector[Int] = Vector.empty): Result = {
+  private def run(memory: Vector[Int], ip: Int, inputs: Vector[Int], outputs: Vector[Int] = Vector.empty): Result = {
     def param(parameter: Int) = memory(ip + parameter)
     def value(parameter: Int) =
       (memory(ip) / pow(10, parameter + 1) % 10).toInt match {
