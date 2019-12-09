@@ -20,7 +20,7 @@ object Day7 extends Year2019 {
     }.max
 
   @tailrec
-  private def getAmplifierOutput(amplifiers: Seq[IntCode], nextInput: Int = 0): Int = {
+  private def getAmplifierOutput(amplifiers: Seq[IntCode], nextInput: Long = 0L): Long = {
     val amplifierResults = amplifiers.foldLeft((nextInput, Vector.empty[IntCode])) { (state, amplifier) =>
       val (input, results) = state
       val amplifierResult = amplifier.run(input)
