@@ -32,23 +32,30 @@ class IntCode private(val program: Vector[Long], private val state: State) {
     def value(parameter: Int) =
       (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
         case 0|2 => // position mode and relative mode
-          memory(param(parameter).toInt)
+          memory.lift(param(parameter).toInt).getOrElse(0L)
         case 1 => // immediate mode
           param(parameter)
       }
 
+    def updateMemory(position: Int, value: Long) =
+      if (position < memory.length) {
+        memory.updated(position, value)
+      } else {
+        memory ++ Vector.fill(position - memory.length)(0L) :+ value
+      }
+
     memory(ip) % 100 match {
       case 1 => // add
-        val newMemory = memory.updated(param(3).toInt, value(1) + value(2))
+        val newMemory = updateMemory(param(3).toInt, value(1) + value(2))
         run(newMemory, ip + 4, inputs, outputs, relativeBase)
       case 2 => // multiply
-        val newMemory = memory.updated(param(3).toInt, value(1) * value(2))
+        val newMemory = updateMemory(param(3).toInt, value(1) * value(2))
         run(newMemory, ip + 4, inputs, outputs, relativeBase)
       case 3 => // input
         if (inputs.isEmpty) {
           State(memory, ip, outputs, relativeBase)
         } else {
-          run(memory.updated(param(1).toInt, inputs.head), ip + 2, inputs.tail, outputs, relativeBase)
+          run(updateMemory(param(1).toInt, inputs.head), ip + 2, inputs.tail, outputs, relativeBase)
         }
       case 4 => // output
         val output = value(1)
@@ -61,10 +68,10 @@ class IntCode private(val program: Vector[Long], private val state: State) {
         val newIp = if (value(1) == 0) value(2).toInt else ip + 3
         run(memory, newIp, inputs, outputs, relativeBase)
       case 7 => // less than
-        val newMemory = memory.updated(param(3).toInt, if (value(1) < value(2)) 1L else 0L)
+        val newMemory = updateMemory(param(3).toInt, if (value(1) < value(2)) 1L else 0L)
         run(newMemory, ip + 4, inputs, outputs, relativeBase)
       case 8 => // equals
-        val newMemory = memory.updated(param(3).toInt, if (value(1) == value(2)) 1L else 0L)
+        val newMemory = updateMemory(param(3).toInt, if (value(1) == value(2)) 1L else 0L)
         run(newMemory, ip + 4, inputs, outputs, relativeBase)
       case 9 => // adjusts relative base
         run(memory, ip + 2, inputs, outputs, relativeBase + value(1))
