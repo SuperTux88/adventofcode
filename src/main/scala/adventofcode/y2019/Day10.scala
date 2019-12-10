@@ -15,9 +15,6 @@ object Day10 extends Year2019 {
       }
   }.toSet
 
-  private val width = asteroids.maxBy(_.x).x
-  private val height = asteroids.maxBy(_.y).y
-
   private val (stationPos, visibleAsteroids) = asteroids.par.map { asteroid =>
     asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)
   }.maxBy(_._2.size)
@@ -30,18 +27,17 @@ object Day10 extends Year2019 {
   printDayPart(2, twohundredthAsteroid.x * 100 + twohundredthAsteroid.y)
 
   private def getVisibleAsteroids(asteroid: Pos, otherAsteroids: Set[Pos]) =
-    otherAsteroids.foldLeft(otherAsteroids) { (stillVisible, otherAsteroid) =>
+    otherAsteroids.filterNot { otherAsteroid =>
       val direction = otherAsteroid - asteroid
       val greatestCommonDivisor = BigInt(direction.x).gcd(BigInt(direction.y)).toInt
-      val blocked = Iterator.iterate(asteroid)(_ + (direction.x / greatestCommonDivisor, direction.y / greatestCommonDivisor))
-        .takeWhile(pos => pos.x >= 0 && pos.x <= width && pos.y >= 0 && pos.y <= height)
-        .filter(_.distance(asteroid) > otherAsteroid.distance(asteroid))
-      stillVisible -- blocked
+      val minDirection = direction / greatestCommonDivisor
+
+      (1 until greatestCommonDivisor).exists(mul => otherAsteroids.contains(asteroid + minDirection * mul))
     }
 
   import scala.math.Ordering.Double.TotalOrdering
 
-  private def getVaporizeOrder(station: Pos, remaining: Set[Pos]): Seq[Pos] = {
+  private def getVaporizeOrder(station: Pos, remaining: Set[Pos]): Seq[Pos] =
     if (remaining.nonEmpty) {
       val visible = getVisibleAsteroids(station, remaining)
       val orderedAsteroids = visible.toVector.sortBy(asteroid => {
@@ -52,5 +48,4 @@ object Day10 extends Year2019 {
     } else {
       Nil
     }
-  }
 }
