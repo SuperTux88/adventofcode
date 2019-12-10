@@ -19,8 +19,7 @@ object Day10 extends Year2019 {
   private val height = asteroids.maxBy(_.y).y
 
   private val (stationPos, visibleAsteroids) = asteroids.par.map { asteroid =>
-    val otherAsteroids = asteroids.filterNot(_ == asteroid)
-    asteroid -> getVisibleAsteroids(asteroid, otherAsteroids)
+    asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)
   }.maxBy(_._2.size)
 
   printDayPart(1, visibleAsteroids.size)
@@ -33,11 +32,10 @@ object Day10 extends Year2019 {
   private def getVisibleAsteroids(asteroid: Pos, otherAsteroids: Set[Pos]) =
     otherAsteroids.foldLeft(otherAsteroids) { (stillVisible, otherAsteroid) =>
       val direction = otherAsteroid - asteroid
-      val distance = otherAsteroid.distance(asteroid)
       val greatestCommonDivisor = BigInt(direction.x).gcd(BigInt(direction.y)).toInt
       val blocked = Iterator.iterate(asteroid)(_ + (direction.x / greatestCommonDivisor, direction.y / greatestCommonDivisor))
         .takeWhile(pos => pos.x >= 0 && pos.x <= width && pos.y >= 0 && pos.y <= height)
-        .filter(_.distance(asteroid) > distance)
+        .filter(_.distance(asteroid) > otherAsteroid.distance(asteroid))
       stillVisible -- blocked
     }
 
