@@ -4,6 +4,8 @@ package adventofcode.common
 case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
 
+  def -(other: Pos): Pos = Pos(x - other.x, y - other.y)
+
   // Manhattan distance
   def distance(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
 
