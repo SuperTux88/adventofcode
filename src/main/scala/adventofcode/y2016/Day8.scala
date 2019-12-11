@@ -1,6 +1,7 @@
 package adventofcode.y2016
 
 import adventofcode.Logging
+import adventofcode.common.OCR
 
 object Day8 extends Year2016 {
   override val day: Int = 8
@@ -33,23 +34,6 @@ object Day8 extends Year2016 {
 
   private def getCharAt(screen: Array[Array[Boolean]], position: Int) = {
     val start = position * 5
-    screen.map(line => line.slice(start, start + 5).toList).toList
-  }
-
-  private object OCR {
-    def readChar(char: List[List[Boolean]]): Char = chars.getOrElse(char, '_')
-
-    // hardcoded chars for my solution
-    private val chars = Map(
-      'C' -> List(List(false, true, true, false, false), List(true, false, false, true, false), List(true, false, false, false, false), List(true, false, false, false, false), List(true, false, false, true, false), List(false, true, true, false, false)),
-      'H' -> List(List(true, false, false, true, false), List(true, false, false, true, false), List(true, true, true, true, false), List(true, false, false, true, false), List(true, false, false, true, false), List(true, false, false, true, false)),
-      'J' -> List(List(false, false, true, true, false), List(false, false, false, true, false), List(false, false, false, true, false), List(false, false, false, true, false), List(true, false, false, true, false), List(false, true, true, false, false)),
-      'K' -> List(List(true, false, false, true, false), List(true, false, true, false, false), List(true, true, false, false, false), List(true, false, true, false, false), List(true, false, true, false, false), List(true, false, false, true, false)),
-      'L' -> List(List(true, false, false, false, false), List(true, false, false, false, false), List(true, false, false, false, false), List(true, false, false, false, false), List(true, false, false, false, false), List(true, true, true, true, false)),
-      'P' -> List(List(true, true, true, false, false), List(true, false, false, true, false), List(true, false, false, true, false), List(true, true, true, false, false), List(true, false, false, false, false), List(true, false, false, false, false)),
-      'R' -> List(List(true, true, true, false, false), List(true, false, false, true, false), List(true, false, false, true, false), List(true, true, true, false, false), List(true, false, true, false, false), List(true, false, false, true, false)),
-      'Y' -> List(List(true, false, false, false, true), List(true, false, false, false, true), List(false, true, false, true, false), List(false, false, true, false, false), List(false, false, true, false, false), List(false, false, true, false, false)),
-      'Z' -> List(List(true, true, true, true, false), List(false, false, false, true, false), List(false, false, true, false, false), List(false, true, false, false, false), List(true, false, false, false, false), List(true, true, true, true, false))
-    ).map(_.swap)
+    screen.map(line => line.slice(start, start + 5).map(if (_) 1 else 0).toSeq).toSeq
   }
 }

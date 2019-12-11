@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.Logging
-import adventofcode.common.Pos
+import adventofcode.common.{OCR, Pos}
 
 import scala.annotation.tailrec
 
@@ -20,7 +20,7 @@ object Day11 extends Year2019 {
   if (debug) printMap(message)
 
   private val chars = (0 until 8).map(pos => getCharAt(message, pos))
-  //printDayPart(2, chars.map(OCR.readChar).mkString, "registration identifier: %s")
+  printDayPart(2, chars.map(OCR.readChar).mkString, "registration identifier: %s")
 
   @tailrec
   private def move(robot: IntCode, map: Map[Pos, Int] = Map.empty.withDefaultValue(0), pos: Pos = Pos.zero, direction: Int = 0): Map[Pos, Int] = {

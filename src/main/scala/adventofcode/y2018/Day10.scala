@@ -1,6 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
+import adventofcode.common.OCR
 
 object Day10 extends Year2018 {
   override val day = 10
@@ -30,33 +31,10 @@ object Day10 extends Year2018 {
 
   private def getCharAt(message: Seq[Seq[Boolean]], position: Int) = {
     val start = position * 8
-    message.map(line => line.slice(start, start + 6).toList).toList
+    message.map(line => line.slice(start, start + 6).map(if (_) 1 else 0))
   }
 
   private case class Point(x: Int, y: Int, xVelocity: Int, yVelocity: Int) {
     def move(times: Int = 1) = Point(x + xVelocity * times, y + yVelocity * times, xVelocity, yVelocity)
-  }
-
-  private object OCR {
-    def readChar(char: List[List[Boolean]]): Char = chars.getOrElse(char, '_')
-
-    // hardcoded chars for as many solutions I could find :)
-    private val chars = Map(
-      'A' -> List(List(false, false, true, true, false, false), List(false, true, false, false, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true)),
-      'B' -> List(List(true, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, false)),
-      'C' -> List(List(false, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, true), List(false, true, true, true, true, false)),
-      'E' -> List(List(true, true, true, true, true, true), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, true, true, true, true, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, true, true, true, true, true)),
-      'F' -> List(List(true, true, true, true, true, true), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, true, true, true, true, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false)),
-      'G' -> List(List(false, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, true, true, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, true, true), List(false, true, true, true, false, true)),
-      'H' -> List(List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true)),
-      'J' -> List(List(false, false, false, true, true, true), List(false, false, false, false, true, false), List(false, false, false, false, true, false), List(false, false, false, false, true, false), List(false, false, false, false, true, false), List(false, false, false, false, true, false), List(false, false, false, false, true, false), List(true, false, false, false, true, false), List(true, false, false, false, true, false), List(false, true, true, true, false, false)),
-      'K' -> List(List(true, false, false, false, false, true), List(true, false, false, false, true, false), List(true, false, false, true, false, false), List(true, false, true, false, false, false), List(true, true, false, false, false, false), List(true, true, false, false, false, false), List(true, false, true, false, false, false), List(true, false, false, true, false, false), List(true, false, false, false, true, false), List(true, false, false, false, false, true)),
-      'L' -> List(List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, true, true, true, true, true)),
-      'N' -> List(List(true, false, false, false, false, true), List(true, true, false, false, false, true), List(true, true, false, false, false, true), List(true, false, true, false, false, true), List(true, false, true, false, false, true), List(true, false, false, true, false, true), List(true, false, false, true, false, true), List(true, false, false, false, true, true), List(true, false, false, false, true, true), List(true, false, false, false, false, true)),
-      'P' -> List(List(true, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false)),
-      'R' -> List(List(true, true, true, true, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(true, true, true, true, true, false), List(true, false, false, true, false, false), List(true, false, false, false, true, false), List(true, false, false, false, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true)),
-      'X' -> List(List(true, false, false, false, false, true), List(true, false, false, false, false, true), List(false, true, false, false, true, false), List(false, true, false, false, true, false), List(false, false, true, true, false, false), List(false, false, true, true, false, false), List(false, true, false, false, true, false), List(false, true, false, false, true, false), List(true, false, false, false, false, true), List(true, false, false, false, false, true)),
-      'Z' -> List(List(true, true, true, true, true, true), List(false, false, false, false, false, true), List(false, false, false, false, false, true), List(false, false, false, false, true, false), List(false, false, false, true, false, false), List(false, false, true, false, false, false), List(false, true, false, false, false, false), List(true, false, false, false, false, false), List(true, false, false, false, false, false), List(true, true, true, true, true, true)),
-    ).map(_.swap)
   }
 }
