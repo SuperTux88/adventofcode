@@ -60,7 +60,7 @@ object Main extends App {
       print("Select day number or \"all\" (default: all): ")
 
       val daysToRun = readInput {
-        case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber -1)))
+        case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber - 1)))
         case "all"|"" => Some(allDays)
         case _ => None
       }
@@ -101,6 +101,12 @@ object Main extends App {
       days.foreach { day =>
         print(s"${day.getClass.getSimpleName.dropRight(1)}: ")
 
+        import java.lang.management.ManagementFactory
+        import com.sun.management.OperatingSystemMXBean
+
+        val osMBean = ManagementFactory.newPlatformMXBeanProxy(ManagementFactory.getPlatformMBeanServer, ManagementFactory.OPERATING_SYSTEM_MXBEAN_NAME, classOf[OperatingSystemMXBean])
+        val (nanoBefore, cpuBefore) = (System.nanoTime, osMBean.getProcessCpuTime)
+
         val runs = if (selectedRuns > 0) selectedRuns else benchmarkRunsForDays(day)
         print(s"runs: $runs")
         val times = (1 to runs).map { pass =>
@@ -109,8 +115,11 @@ object Main extends App {
           (System.nanoTime - start).toFloat / 1000 / 1000
         }
 
+        val cpuTime = osMBean.getProcessCpuTime - cpuBefore
+        val percent = cpuTime * 100 / (System.nanoTime - nanoBefore)
+
         import scala.math.Ordering.Float.TotalOrdering
-        println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms")
+        println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms | cpu-time: ${cpuTime/1000/1000}%dms | cpu-usage: ${percent}%d%%")
         if (util.Properties.propIsSet("benchmark.times"))
           println(times.map(time => f"$time%.3f").mkString(", "))
       }
