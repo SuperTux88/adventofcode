@@ -3,7 +3,7 @@ package adventofcode.y2019
 object Day1 extends Year2019 {
   override val day = 1
 
-  val masses = input.getLines().map(_.toInt).toList
+  private val masses = input.getLines().map(_.toInt).toList
 
   printDayPart(1, masses.map(fuelNeeded).sum)
 

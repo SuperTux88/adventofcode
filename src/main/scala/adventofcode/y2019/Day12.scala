@@ -15,14 +15,14 @@ object Day12 extends Year2019 {
     case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
   }.toVector
 
-  val energy = Iterator.iterate(moons)(step).drop(1000).next.map {
+  private val energy = Iterator.iterate(moons)(step).drop(1000).next.map {
     case (pos, vel) =>
       (math.abs(pos.x) + math.abs(pos.y) + math.abs(pos.z)) *
         (math.abs(vel._1) + math.abs(vel._2) + math.abs(vel._3))
   }.sum
   printDayPart(1, energy)
 
-  val loops = axisFunctions.par.map(f => findLoopInAxis(step(moons), f, moons.map(moon => f(moon._1))))
+  private val loops = axisFunctions.par.map(f => findLoopInAxis(step(moons), f, moons.map(moon => f(moon._1))))
   printDayPart(2, lcm(loops.seq.map(BigInt(_))).toLong)
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
@@ -51,5 +51,5 @@ object Day12 extends Year2019 {
     }
   }
 
-  def lcm(numbers: Seq[BigInt]) = numbers.reduce((x: BigInt, y: BigInt) => x * (y / x.gcd(y)))
+  private def lcm(numbers: Seq[BigInt]) = numbers.reduce((x: BigInt, y: BigInt) => x * (y / x.gcd(y)))
 }

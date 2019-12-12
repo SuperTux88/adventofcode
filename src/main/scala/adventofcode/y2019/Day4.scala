@@ -5,9 +5,9 @@ import scala.collection.parallel.CollectionConverters._
 object Day4 extends Year2019 {
   override val day = 4
 
-  val Seq(min, max) = input.mkString.split("-").map(_.toInt).toSeq
+  private val Seq(min, max) = input.mkString.split("-").map(_.toInt).toSeq
 
-  val validPart1 = (min to max).par.map(_.toString.map(_.asDigit))
+  private val validPart1 = (min to max).par.map(_.toString.map(_.asDigit))
     .filter(pass => isIncreasing(pass) && hasGroup(pass))
 
   printDayPart(1, validPart1.size)

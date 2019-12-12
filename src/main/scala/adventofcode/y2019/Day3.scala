@@ -5,9 +5,9 @@ import adventofcode.common.Pos
 object Day3 extends Year2019 {
   override val day = 3
 
-  val wires = input.getLines().take(2).map(_.split(",").map(parseInstruction).toList).toList
-  val List(wireA, wireB) = wires.map(generatePath(_))
-  val crossings = wireA intersect wireB
+  private val wires = input.getLines().take(2).map(_.split(",").map(parseInstruction).toList).toList
+  private val List(wireA, wireB) = wires.map(generatePath(_))
+  private val crossings = wireA intersect wireB
 
   printDayPart(1, crossings.map(_.distance(Pos.zero)).min)
 
