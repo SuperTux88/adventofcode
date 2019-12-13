@@ -15,6 +15,8 @@ class IntCode private(val program: Vector[Long], private val state: State) {
   def output: Vector[Long] = state.output
   def isRunning: Boolean = state.ip >= 0
 
+  def setMemory(index: Int, value: Long): IntCode = new IntCode(program, state.copy(memory = memory.updated(index, value)))
+
   def run(): IntCode = run(Vector.empty)
   def run(input: Int): IntCode = run(Vector(input.toLong))
   def run(input: Long): IntCode = run(Vector(input))

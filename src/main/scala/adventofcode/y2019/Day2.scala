@@ -5,7 +5,7 @@ import scala.collection.parallel.CollectionConverters._
 object Day2 extends Year2019 {
   override val day = 2
 
-  private val intcodeProgram = new IntCode(input.mkString).program
+  private val intcode = new IntCode(input.mkString)
 
   printDayPart(1, runProgram(12, 2).memory(0))
 
@@ -20,5 +20,5 @@ object Day2 extends Year2019 {
   printDayPart(2, 100 * noun + verb)
 
   private def runProgram(noun: Int, verb: Int) =
-    new IntCode(intcodeProgram.updated(1, noun.toLong).updated(2, verb.toLong)).run()
+    intcode.setMemory(1, noun).setMemory(2, verb).run()
 }

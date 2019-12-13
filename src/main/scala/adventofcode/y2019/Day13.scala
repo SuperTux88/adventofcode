@@ -13,7 +13,7 @@ object Day13 extends Year2019 {
 
   private val SCORE_POS = Pos(-1, 0)
 
-  private val intcode = new IntCode(new IntCode(input.mkString).program.updated(0, 2L))
+  private val intcode = new IntCode(input.mkString).setMemory(0, 2)
 
   private val initGame = intcode.run()
 
