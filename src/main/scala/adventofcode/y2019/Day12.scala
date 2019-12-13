@@ -4,7 +4,6 @@ import adventofcode.common.NumberHelper.lcm
 import adventofcode.common.Pos3D
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters._
 
 object Day12 extends Year2019 {
   override val day = 12
@@ -22,8 +21,8 @@ object Day12 extends Year2019 {
   }.sum
   printDayPart(1, energy)
 
-  private val loops = axisFunctions.par.map(f => findLoopInAxis(step(moons), f, moons.map(moon => f(moon._1))))
-  printDayPart(2, lcm(loops.seq.map(_.toLong)))
+  private val axis = axisFunctions.map(f => moons.map(moon => f(moon._1))).lazyZip(axisFunctions)
+  printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)))
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
     def compare(a: Pos3D, b: Pos3D, f: Pos3D => Int) = f(a).compareTo(f(b))
@@ -42,12 +41,15 @@ object Day12 extends Year2019 {
   }
 
   @tailrec
-  private def findLoopInAxis(moons: Vector[(Pos3D, (Int, Int, Int))], getAxis: Pos3D => Int, start: Vector[Int], count: Int = 1): Int = {
-    val axis = moons.map(moon => getAxis(moon._1))
-    if (start == axis) {
-      count + 1
+  private def findLoop(moons: Vector[(Pos3D, (Int, Int, Int))], loops: Seq[Int] = Seq(0, 0, 0), count: Int = 1): Seq[Int] = {
+    if (!loops.contains(0)) {
+      loops
     } else {
-      findLoopInAxis(step(moons), getAxis, start, count + 1)
+      val newLoops = axis.lazyZip(loops).map {
+        case (positions, getAxis, loop) =>
+          if (positions == moons.map(moon => getAxis(moon._1)) && loop == 0) count + 1 else loop
+      }
+      findLoop(step(moons), newLoops, count + 1)
     }
   }
 }
