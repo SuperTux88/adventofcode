@@ -10,6 +10,7 @@ object Day12 extends Year2019 {
 
   private val MoonRE = """<x=(-?\d+), y=(-?\d+), z=(-?\d+)>""".r
   private val axisFunctions = Seq[Pos3D => Int](_.x, _.y, _.z)
+  private val velocityFunctions = Seq[((Int, Int, Int)) => Int](_._1, _._2, _._3)
 
   private val moons = input.getLines().map {
     case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
@@ -21,7 +22,6 @@ object Day12 extends Year2019 {
   }.sum
   printDayPart(1, energy)
 
-  private val axis = axisFunctions.map(f => moons.map(moon => f(moon._1))).lazyZip(axisFunctions)
   printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)))
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
@@ -45,9 +45,9 @@ object Day12 extends Year2019 {
     if (!loops.contains(0)) {
       loops
     } else {
-      val newLoops = axis.lazyZip(loops).map {
-        case (positions, getAxis, loop) =>
-          if (positions == moons.map(moon => getAxis(moon._1)) && loop == 0) count + 1 else loop
+      val newLoops = velocityFunctions.lazyZip(loops).map {
+        case (getVelocity, loop) =>
+          if (Seq(0, 0, 0, 0) == moons.map(moon => getVelocity(moon._2)) && loop == 0) count * 2 else loop
       }
       findLoop(step(moons), newLoops, count + 1)
     }
