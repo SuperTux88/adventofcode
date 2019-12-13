@@ -1,5 +1,6 @@
 package adventofcode.y2019
 
+import adventofcode.common.NumberHelper.lcm
 import adventofcode.common.Pos3D
 
 import scala.annotation.tailrec
@@ -17,13 +18,12 @@ object Day12 extends Year2019 {
 
   private val energy = Iterator.iterate(moons)(step).drop(1000).next.map {
     case (pos, vel) =>
-      (math.abs(pos.x) + math.abs(pos.y) + math.abs(pos.z)) *
-        (math.abs(vel._1) + math.abs(vel._2) + math.abs(vel._3))
+      (pos.x.abs + pos.y.abs + pos.z.abs) * (vel._1.abs + vel._2.abs + vel._3.abs)
   }.sum
   printDayPart(1, energy)
 
   private val loops = axisFunctions.par.map(f => findLoopInAxis(step(moons), f, moons.map(moon => f(moon._1))))
-  printDayPart(2, lcm(loops.seq.map(BigInt(_))).toLong)
+  printDayPart(2, lcm(loops.seq.map(_.toLong)))
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
     def compare(a: Pos3D, b: Pos3D, f: Pos3D => Int) = f(a).compareTo(f(b))
@@ -50,6 +50,4 @@ object Day12 extends Year2019 {
       findLoopInAxis(step(moons), getAxis, start, count + 1)
     }
   }
-
-  private def lcm(numbers: Seq[BigInt]) = numbers.reduce((x: BigInt, y: BigInt) => x * (y / x.gcd(y)))
 }

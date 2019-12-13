@@ -1,6 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.common.Pos
+import adventofcode.common.NumberHelper.gcd
 
 import scala.collection.parallel.CollectionConverters._
 
@@ -29,7 +30,7 @@ object Day10 extends Year2019 {
   private def getVisibleAsteroids(asteroid: Pos, otherAsteroids: Set[Pos]) =
     otherAsteroids.filterNot { otherAsteroid =>
       val direction = otherAsteroid - asteroid
-      val greatestCommonDivisor = BigInt(direction.x).gcd(BigInt(direction.y)).toInt
+      val greatestCommonDivisor = gcd(direction.x, direction.y).toInt
       val minDirection = direction / greatestCommonDivisor
 
       (1 until greatestCommonDivisor).exists(mul => otherAsteroids.contains(asteroid + minDirection * mul))
