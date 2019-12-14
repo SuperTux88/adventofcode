@@ -1,29 +1,23 @@
 package adventofcode.y2019
 
-import adventofcode.Logging
-import adventofcode.y2019.IntCode.State
-
 import scala.annotation.tailrec
 import scala.math.pow
 
-class IntCode private(val program: Vector[Long], private val state: State) {
+class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0) {
 
-  def this(program: Vector[Long]) = this(program, State(program))
-  def this(instructions: String) = this(instructions.split(",").map(_.toLong).toVector)
+  def this(program: String) = this(program.split(",").map(_.toLong).toVector)
 
-  def memory: Vector[Long] = state.memory
-  def output: Iterator[Long] = state.output
-  def isRunning: Boolean = state.ip >= 0
+  def isRunning: Boolean = ip >= 0
 
-  def setMemory(index: Int, value: Long): IntCode = new IntCode(program, state.copy(memory = memory.updated(index, value)))
+  def setMemory(index: Int, value: Long): IntCode = new IntCode(memory.updated(index, value), ip, output, relativeBase)
 
   def run(): IntCode = run(Vector.empty)
   def run(input: Int): IntCode = run(Vector(input.toLong))
   def run(input: Long): IntCode = run(Vector(input))
-  def run(input: Vector[Long]): IntCode = new IntCode(program, run(memory, state.ip, input, output, state.relativeBase))
+  def run(input: Vector[Long]): IntCode = run(memory, ip, input, output, relativeBase)
 
   @tailrec
-  private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Iterator[Long], relativeBase: Long): State = {
+  private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Iterator[Long], relativeBase: Long): IntCode = {
     def param(parameter: Int) = // TODO refactor parameter modes to remove duplicate check?
       (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
         case 0|1 => // position mode and immediate mode
@@ -55,7 +49,7 @@ class IntCode private(val program: Vector[Long], private val state: State) {
         run(newMemory, ip + 4, inputs, outputs, relativeBase)
       case 3 => // input
         if (inputs.isEmpty) {
-          State(memory, ip, outputs, relativeBase)
+          new IntCode(memory, ip, outputs, relativeBase)
         } else {
           run(updateMemory(param(1).toInt, inputs.head), ip + 2, inputs.tail, outputs, relativeBase)
         }
@@ -78,12 +72,11 @@ class IntCode private(val program: Vector[Long], private val state: State) {
       case 9 => // adjusts relative base
         run(memory, ip + 2, inputs, outputs, relativeBase + value(1))
       case 99 => // exit
-        State(memory, -1, outputs, relativeBase)
+        new IntCode(memory, -1, outputs, relativeBase)
     }
   }
 }
-object IntCode {
-  private case class State(memory: Vector[Long], ip: Int = 0, output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0)
 
+object IntCode {
   var debug: Boolean = false
 }
