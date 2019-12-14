@@ -8,9 +8,6 @@ import scala.annotation.tailrec
 object Day13 extends Year2019 {
   override val day = 13
 
-  private val debug = Logging.debug
-  Logging.debug = false
-
   private val SCORE_POS = Pos(-1, 0)
 
   private val intcode = new IntCode(input.mkString).setMemory(0, 2)
@@ -18,7 +15,7 @@ object Day13 extends Year2019 {
   private val initGame = intcode.run()
   private val initMap = parseOutput(initGame.output)
 
-  if (debug) printMap(initMap)
+  if (Logging.debug) printMap(initMap)
 
   printDayPart(1, countBlocks(initMap))
   printDayPart(2, play(initGame, initMap))
@@ -29,7 +26,7 @@ object Day13 extends Year2019 {
     if (game.isRunning) {
       play(game.run(getHorizontalPos(state, 4).compareTo(getHorizontalPos(state, 3))), state)
     } else {
-      if (debug) printMap(state)
+      if (Logging.debug) printMap(state)
       state(SCORE_POS)
     }
   }

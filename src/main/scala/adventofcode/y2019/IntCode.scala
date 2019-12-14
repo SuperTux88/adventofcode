@@ -61,7 +61,7 @@ class IntCode private(val program: Vector[Long], private val state: State) {
         }
       case 4 => // output
         val output = value(1)
-        if (Logging.debug) println(s"Output: $output")
+        if (IntCode.debug) println(s"Output: $output")
         run(memory, ip + 2, inputs, outputs ++ Iterator(output), relativeBase)
       case 5 => // jump-if-true
         val newIp = if (value(1) != 0) value(2).toInt else ip + 3
@@ -84,4 +84,6 @@ class IntCode private(val program: Vector[Long], private val state: State) {
 }
 object IntCode {
   private case class State(memory: Vector[Long], ip: Int = 0, output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0)
+
+  var debug: Boolean = false
 }

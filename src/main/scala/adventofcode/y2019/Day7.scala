@@ -1,13 +1,9 @@
 package adventofcode.y2019
 
-import adventofcode.Logging
-
 import scala.annotation.tailrec
 
 object Day7 extends Year2019 {
   override val day = 7
-
-  Logging.debug = false
 
   private val intcode = new IntCode(input.mkString)
 
