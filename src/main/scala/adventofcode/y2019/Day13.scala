@@ -16,27 +16,28 @@ object Day13 extends Year2019 {
   private val intcode = new IntCode(input.mkString).setMemory(0, 2)
 
   private val initGame = intcode.run()
+  private val initMap = parseOutput(initGame.output)
 
-  if (debug) printMap(parseOutput(initGame.output))
+  if (debug) printMap(initMap)
 
-  printDayPart(1, countBlocks(parseOutput(initGame.output)))
-  printDayPart(2, play(initGame))
+  printDayPart(1, countBlocks(initMap))
+  printDayPart(2, play(initGame, initMap))
 
   @tailrec
-  private def play(game: IntCode): Int = {
-    val state = parseOutput(game.output)
+  private def play(game: IntCode, map: Map[Pos, Int]): Int = {
+    val state = parseOutput(game.output, map)
     if (game.isRunning) {
-      play(game.run(getHorizontalPos(state, 4).compareTo(getHorizontalPos(state, 3))))
+      play(game.run(getHorizontalPos(state, 4).compareTo(getHorizontalPos(state, 3))), state)
     } else {
       if (debug) printMap(state)
       state(SCORE_POS)
     }
   }
 
-  private def parseOutput(output: Vector[Long]) =
-    output.grouped(3).map {
-      case Vector(x, y, id) => Pos(x.toInt, y.toInt) -> id.toInt
-    }.toMap
+  private def parseOutput(output: Iterator[Long], map: Map[Pos, Int] = Map.empty) =
+    map ++ output.grouped(3).map {
+      case Seq(x, y, id) => Pos(x.toInt, y.toInt) -> id.toInt
+    }
 
   private def countBlocks(map: Map[Pos, Int]) = map.count(_._2 == 2)
   private def getHorizontalPos(map: Map[Pos, Int], id: Int) = map.find(_._2 == id).get._1.x

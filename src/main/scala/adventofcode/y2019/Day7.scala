@@ -21,16 +21,16 @@ object Day7 extends Year2019 {
 
   @tailrec
   private def getAmplifierOutput(amplifiers: Seq[IntCode], nextInput: Long = 0L): Long = {
-    val amplifierResults = amplifiers.foldLeft((nextInput, Vector.empty[IntCode])) { (state, amplifier) =>
+    val (lastOutput, amplifierResults) = amplifiers.foldLeft((nextInput, Vector.empty[IntCode])) { (state, amplifier) =>
       val (input, results) = state
       val amplifierResult = amplifier.run(input)
-      (amplifierResult.output.last, results :+ amplifierResult)
-    }._2
+      (amplifierResult.output.next, results :+ amplifierResult)
+    }
 
     if (amplifierResults.last.isRunning) {
-      getAmplifierOutput(amplifierResults, amplifierResults.last.output.last)
+      getAmplifierOutput(amplifierResults, lastOutput)
     } else {
-      amplifierResults.last.output.last
+      lastOutput
     }
   }
 }

@@ -12,7 +12,7 @@ class IntCode private(val program: Vector[Long], private val state: State) {
   def this(instructions: String) = this(instructions.split(",").map(_.toLong).toVector)
 
   def memory: Vector[Long] = state.memory
-  def output: Vector[Long] = state.output
+  def output: Iterator[Long] = state.output
   def isRunning: Boolean = state.ip >= 0
 
   def setMemory(index: Int, value: Long): IntCode = new IntCode(program, state.copy(memory = memory.updated(index, value)))
@@ -23,7 +23,7 @@ class IntCode private(val program: Vector[Long], private val state: State) {
   def run(input: Vector[Long]): IntCode = new IntCode(program, run(memory, state.ip, input, output, state.relativeBase))
 
   @tailrec
-  private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Vector[Long], relativeBase: Long): State = {
+  private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Iterator[Long], relativeBase: Long): State = {
     def param(parameter: Int) = // TODO refactor parameter modes to remove duplicate check?
       (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
         case 0|1 => // position mode and immediate mode
@@ -62,7 +62,7 @@ class IntCode private(val program: Vector[Long], private val state: State) {
       case 4 => // output
         val output = value(1)
         if (Logging.debug) println(s"Output: $output")
-        run(memory, ip + 2, inputs, outputs :+ output, relativeBase)
+        run(memory, ip + 2, inputs, outputs ++ Iterator(output), relativeBase)
       case 5 => // jump-if-true
         val newIp = if (value(1) != 0) value(2).toInt else ip + 3
         run(memory, newIp, inputs, outputs, relativeBase)
@@ -83,5 +83,5 @@ class IntCode private(val program: Vector[Long], private val state: State) {
   }
 }
 object IntCode {
-  private case class State(memory: Vector[Long], ip: Int = 0, output: Vector[Long] = Vector.empty[Long], relativeBase: Long = 0)
+  private case class State(memory: Vector[Long], ip: Int = 0, output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0)
 }
