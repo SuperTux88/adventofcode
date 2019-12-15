@@ -9,8 +9,8 @@ import scala.collection.MapView
 object Day15 extends Year2019 {
   override val day = 15
 
-  // special order: up, down, left, right ... zipped with droid inputs
-  private val directions = List((0, -1), (0, 1), (-1, 0), (1, 0)).lazyZip(List(1, 2, 3, 4))
+  // special order: north (1), south (2), west (3), and east (4)
+  private val directions = List((1, (0, -1)), (2, (0, 1)), (3, (-1, 0)), (4, (1, 0)))
 
   private val intCode = new IntCode(input.mkString)
 
@@ -31,9 +31,9 @@ object Day15 extends Year2019 {
     } else {
       val nextSteps = current.flatMap {
         case (pos, droid) =>
-          directions.filterNot(dir => visited.contains(pos + dir._1)).map { dir =>
-            val res = droid.run(dir._2)
-            DroidState(res, pos + dir._1, res.output.next.toInt)
+          directions.filterNot(dir => visited.contains(pos + dir._2)).map { dir =>
+            val res = droid.run(dir._1)
+            DroidState(res, pos + dir._2, res.output.next.toInt)
           }
       }
 
