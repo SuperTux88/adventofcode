@@ -8,12 +8,12 @@ import scala.annotation.tailrec
 object Day11 extends Year2019 {
   override val day = 11
 
-  private val intcode = new IntCode(input.mkString)
+  private val intCode = new IntCode(input.mkString)
 
-  private val painted = move(intcode)
+  private val painted = move(intCode)
   printDayPart(1, painted.size)
 
-  private val message = move(intcode, Map(Pos.zero -> 1).withDefaultValue(0))
+  private val message = move(intCode, Map(Pos.zero -> 1).withDefaultValue(0))
   if (Logging.debug) printMap(message)
 
   private val chars = (0 until 8).map(pos => getCharAt(message, pos))

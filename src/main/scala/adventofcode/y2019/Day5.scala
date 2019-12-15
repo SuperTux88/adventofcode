@@ -7,8 +7,8 @@ object Day5 extends Year2019 {
 
   IntCode.debug = Logging.debug
 
-  private val intcode = new IntCode(input.mkString)
+  private val intCode = new IntCode(input.mkString)
 
-  printDayPart(1, intcode.run(1).output.dropWhile(_ == 0).next)
-  printDayPart(2, intcode.run(5).output.next)
+  printDayPart(1, intCode.run(1).output.dropWhile(_ == 0).next)
+  printDayPart(2, intCode.run(5).output.next)
 }

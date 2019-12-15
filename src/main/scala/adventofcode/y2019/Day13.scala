@@ -10,9 +10,9 @@ object Day13 extends Year2019 {
 
   private val SCORE_POS = Pos(-1, 0)
 
-  private val intcode = new IntCode(input.mkString).setMemory(0, 2)
+  private val intCode = new IntCode(input.mkString).setMemory(0, 2)
 
-  private val initGame = intcode.run()
+  private val initGame = intCode.run()
   private val initMap = parseOutput(initGame.output)
 
   if (Logging.debug) printMap(initMap)
