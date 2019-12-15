@@ -1,0 +1,64 @@
+package adventofcode.y2019
+
+import adventofcode.Logging
+import adventofcode.common.Pos
+
+import scala.annotation.tailrec
+import scala.collection.MapView
+
+object Day15 extends Year2019 {
+  override val day = 15
+
+  // special order: up, down, left, right ... zipped with droid inputs
+  private val directions = List((0, -1), (0, 1), (-1, 0), (1, 0)).lazyZip(List(1, 2, 3, 4))
+
+  private val intCode = new IntCode(input.mkString)
+
+  private val exploreResult = exploreMap(List((Pos.zero, intCode)))
+  private val (oxygenSystem, (_, steps)) = exploreResult.find(_._2._1 == 2).get
+
+  if (Logging.debug) printMap(exploreResult.view.mapValues(_._1))
+
+  printDayPart(1, steps)
+
+  private val freeSpace = exploreResult.filter(_._2._1 == 1).keys.toList
+  printDayPart(2, fillWithOxygen(List(oxygenSystem), freeSpace))
+
+  @tailrec
+  private def exploreMap(current: List[(Pos, IntCode)], visited: Map[Pos, (Int, Int)] = Map(Pos.zero -> (1, 0)), steps: Int = 1): Map[Pos, (Int, Int)] =
+    if (current.isEmpty) {
+      visited
+    } else {
+      val nextSteps = current.flatMap {
+        case (pos, droid) =>
+          directions.filterNot(dir => visited.contains(pos + dir._1)).map { dir =>
+            val res = droid.run(dir._2)
+            DroidState(res, pos + dir._1, res.output.next.toInt)
+          }
+      }
+
+      val newPositions = nextSteps.filterNot(_.output == 0).map(step => (step.pos, step.intCode))
+      val newVisited = nextSteps.map(step => step.pos -> (step.output, steps))
+      exploreMap(newPositions, visited ++ newVisited, steps + 1)
+    }
+
+  @tailrec
+  private def fillWithOxygen(current: List[Pos], todo: List[Pos], minutes: Int = 0): Int =
+    if (todo.isEmpty) {
+      minutes
+    } else {
+      val nextSteps = current.flatMap { pos => Pos.directions.map(pos + _).filter(todo.contains) }
+      fillWithOxygen(nextSteps, todo.filterNot(nextSteps.contains), minutes + 1)
+    }
+
+  private def printMap(map: MapView[Pos, Int]): Unit =
+    (map.keys.map(_.y).min to map.keys.map(_.y).max).foreach(y =>
+      println((map.keys.map(_.x).min to map.keys.map(_.x).max).map(x => map.getOrElse(Pos(x, y), 0) match {
+        case 0 => "█"
+        case 1 => " "
+        case 2 => "O"
+      }).mkString)
+    )
+
+  private case class DroidState(intCode: IntCode, pos: Pos, output: Int)
+}
