@@ -26,10 +26,10 @@ object Day17 extends Year2019 {
   private val intersections = scaffolds.filter(scaffold => Pos.directions.forall(dir => scaffolds.contains(scaffold + dir)))
 
   private val path = getPath(robotStartPos, directions.indexOf(directionChar))
-  if (Logging.debug) println(s"Path: ${path.mkString(",")}")
 
-  // inputs solved by hand ... TODO: generate this from the path to work for other inputs
-  private val inputs = List("A,B,A,C,A,A,C,B,C,B", "L,12,L,8,R,12", "L,10,L,8,L,12,R,12", "R,12,L,8,L,10", "n")
+  private val functions = getSubPathFunctions(List(path)).head.toMap
+  private val mainRoutine = getMainRoutine(path, functions.map(f => f._2.toVector -> f._1))
+  private val inputs = mainRoutine.mkString(",") +: functions.map(_._2.mkString(",")).toVector :+ "n"
 
   private val output = inputs.foldLeft((initRobot, List.empty[Long])) {
     case ((robot, _), nextInput) => sendInput(robot, nextInput)
@@ -50,6 +50,42 @@ object Day17 extends Year2019 {
       Nil
     }
   }
+
+  private def getSubPathFunctions(pathParts: Seq[List[String]], functions: Seq[String] = Seq("A", "B", "C")): Seq[List[(String, List[String])]] = {
+    def splitListAtSlice(seq: List[String], separator: List[String]): List[List[String]] = {
+      val index = seq.indexOfSlice(separator)
+      if (index < 0)
+        List(seq)
+      else
+        seq.take(index) :: splitListAtSlice(seq.drop(index + separator.length), separator)
+    }
+
+    if (pathParts.isEmpty) {
+      Seq(Nil) // all parts were splitted into functions, return a non-empty list with Nil to end the functions-map
+    } else if (functions.isEmpty) {
+      Seq.empty // still parts leftover but no functions available anymore, return empty list to break the loop
+    } else {
+      for {
+        elements <- 1 to 10 // with commas there are at most 10 elements in a sub-path
+        subPath = pathParts.head.take(elements)
+        if subPath.mkString(",").length < 20 // check if length isn't more than 20 bytes
+        otherParts = pathParts.flatMap(splitListAtSlice(_, subPath).filterNot(_.isEmpty))
+
+        // only loop over possibilities where the remaining parts can still split into the remaining functions
+        otherSubParts <- getSubPathFunctions(otherParts, functions.tail)
+      } yield (functions.head -> subPath) :: otherSubParts
+    }
+  }
+
+  private def getMainRoutine(path: List[String], functions: Map[Vector[String], String]) =
+    path.foldLeft(List.empty[String], Vector.empty[String]) {
+      case ((mainRoutine, currentSubPath), element) =>
+        val newSubPath = currentSubPath :+ element
+        if (functions.contains(newSubPath))
+          (functions(newSubPath) :: mainRoutine, Vector.empty)
+        else
+          (mainRoutine, newSubPath)
+    }._1.reverse
 
   private def sendInput(robot: IntCode, input: String): (IntCode, List[Long]) = {
     val newRobot = robot.run(input.map(_.toLong).toVector :+ '\n'.toLong)
