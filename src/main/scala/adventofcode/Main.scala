@@ -8,8 +8,6 @@ object Main extends App {
   val allDays2018 = List(y2018.Day1, y2018.Day2, y2018.Day3, y2018.Day4, y2018.Day5, y2018.Day6, y2018.Day7, y2018.Day8, y2018.Day9, y2018.Day10, y2018.Day11, y2018.Day12, y2018.Day13, y2018.Day14, y2018.Day15, y2018.Day16, y2018.Day17, y2018.Day18, y2018.Day19, y2018.Day20, y2018.Day21, y2018.Day22, y2018.Day23, y2018.Day24, y2018.Day25)
   val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4, y2019.Day5, y2019.Day6, y2019.Day7, y2019.Day8, y2019.Day9, y2019.Day10, y2019.Day11, y2019.Day12, y2019.Day13, y2019.Day14, y2019.Day15, y2019.Day16, y2019.Day17)
 
-  Logging.debug = false
-
   print(
     """Advent of Code
       |==============
@@ -56,12 +54,14 @@ object Main extends App {
   }
 
   private trait DaySelectorRunnable extends Runnable {
-    def run() = {
+    def run(): Unit = {
       print("Select day number or \"all\" (default: all): ")
 
       val daysToRun = readInput {
         case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber - 1)))
-        case "all"|"" => Some(allDays)
+        case "all"|"" =>
+          Logging.debug = false
+          Some(allDays)
         case _ => None
       }
 
@@ -72,7 +72,7 @@ object Main extends App {
   }
 
   private object ResultMode extends DaySelectorRunnable {
-    def runDays(days: List[DayApp]) = {
+    def runDays(days: List[DayApp]): Unit = {
       days.foreach { day =>
         day.main(args)
       }
@@ -87,7 +87,8 @@ object Main extends App {
       y2019.Day1 -> 1000, y2019.Day5 -> 1000, y2019.Day12 -> 25, y2019.Day16 -> 10
     ).withDefaultValue(100)
 
-    def runDays(days: List[DayApp]) = {
+    def runDays(days: List[DayApp]): Unit = {
+      Logging.debug = false
       Logging.results = false
 
       print("Number of runs (default: optimal for each day): ")
