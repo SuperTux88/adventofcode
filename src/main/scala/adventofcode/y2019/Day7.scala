@@ -7,8 +7,8 @@ object Day7 extends Year2019 {
 
   private val intCode = new IntCode(input.mkString)
 
-  printDayPart(1, getBestAmplifierOutput(0 to 4))
-  printDayPart(2, getBestAmplifierOutput(5 to 9))
+  printDayPart(1, getBestAmplifierOutput(0 to 4), "highest possible signal: %s")
+  printDayPart(2, getBestAmplifierOutput(5 to 9), "highest possible signal: %s")
 
   private def getBestAmplifierOutput(phaseSettings: Seq[Int]) =
     phaseSettings.permutations.map { phaseOrder =>

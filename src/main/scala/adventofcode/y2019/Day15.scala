@@ -19,10 +19,10 @@ object Day15 extends Year2019 {
 
   if (Logging.debug) printMap(exploreResult.view.mapValues(_._1))
 
-  printDayPart(1, steps)
+  printDayPart(1, steps, "fewest steps to oxygent system: %s")
 
   private val freeSpace = exploreResult.filter(_._2._1 == 1).keys.toList
-  printDayPart(2, fillWithOxygen(List(oxygenSystem), freeSpace))
+  printDayPart(2, fillWithOxygen(List(oxygenSystem), freeSpace), "minutes to fill area: %s")
 
   @tailrec
   private def exploreMap(current: List[(Pos, IntCode)], visited: Map[Pos, (Int, Int)] = Map(Pos.zero -> (1, 0)), steps: Int = 1): Map[Pos, (Int, Int)] =

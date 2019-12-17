@@ -16,10 +16,10 @@ object Day14 extends Year2019 {
   }.toMap
 
   private val neededForOneFuel = oreForFuel(1)
-  printDayPart(1, neededForOneFuel)
+  printDayPart(1, neededForOneFuel, "required ore for one FUEL: %s")
 
   private val worstCaseResult = 1000000000000L / neededForOneFuel
-  printDayPart(2, findMaximumFuel(worstCaseResult, worstCaseResult * 2))
+  printDayPart(2, findMaximumFuel(worstCaseResult, worstCaseResult * 2), "maximum FUEL produced: %s")
 
   private def oreForFuel(fuel: Long) = react(Map("FUEL" -> fuel))
 

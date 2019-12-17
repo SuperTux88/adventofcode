@@ -17,8 +17,8 @@ object Day13 extends Year2019 {
 
   if (Logging.debug) printMap(initMap)
 
-  printDayPart(1, countBlocks(initMap))
-  printDayPart(2, play(initGame, initMap))
+  printDayPart(1, countBlocks(initMap), "blocks in game: %s")
+  printDayPart(2, play(initGame, initMap), "end score: %s")
 
   @tailrec
   private def play(game: IntCode, map: Map[Pos, Int]): Int = {

@@ -20,7 +20,7 @@ object Day10 extends Year2019 {
     asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)
   }.maxBy(_._2.size)
 
-  printDayPart(1, visibleAsteroids.size)
+  printDayPart(1, visibleAsteroids.size, "visible asteroids: %s")
 
   private val vaporizeOrder = getVaporizeOrder(stationPos, asteroids - stationPos)
 

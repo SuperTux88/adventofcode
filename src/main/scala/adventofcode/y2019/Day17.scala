@@ -36,7 +36,7 @@ object Day17 extends Year2019 {
   }._2
 
   printDayPart(1, intersections.map(pos => pos.x * pos.y).sum)
-  printDayPart(2, output.last)
+  printDayPart(2, output.last, "collected dust: %s")
 
   private def getPath(pos: Pos, dir: Int): List[String] = {
     if (scaffolds.contains(pos.moveDirectionIndex(dir))) {

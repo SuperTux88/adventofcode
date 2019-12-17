@@ -9,6 +9,6 @@ object Day5 extends Year2019 {
 
   private val intCode = new IntCode(input.mkString)
 
-  printDayPart(1, intCode.run(1).output.dropWhile(_ == 0).next)
-  printDayPart(2, intCode.run(5).output.next)
+  printDayPart(1, intCode.run(1).output.dropWhile(_ == 0).next, "diagnostic code: %s")
+  printDayPart(2, intCode.run(5).output.next, "diagnostic code: %s")
 }

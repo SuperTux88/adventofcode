@@ -15,10 +15,10 @@ object Day6 extends Year2019 {
     case (orbit, center) => orbit -> Iterator.iterate(center)(planets).takeWhile(_ != "COM").toVector
   }
 
-  printDayPart(1, planetOrbits.map(_._2.length + 1).sum)
+  printDayPart(1, planetOrbits.map(_._2.length + 1).sum, "number of direct and indirect orbits: %s")
 
   private val youDist = planetOrbits("YOU").reverse.dropWhile(planetOrbits("SAN").contains(_)).length
   private val santaDist = planetOrbits("SAN").length - (planetOrbits("YOU").length - youDist)
 
-  printDayPart(2, youDist + santaDist)
+  printDayPart(2, youDist + santaDist, "distance to santa: %s")
 }

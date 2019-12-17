@@ -20,9 +20,9 @@ object Day12 extends Year2019 {
     case (pos, vel) =>
       (pos.x.abs + pos.y.abs + pos.z.abs) * (vel._1.abs + vel._2.abs + vel._3.abs)
   }.sum
-  printDayPart(1, energy)
+  printDayPart(1, energy, "total energy after 1000 steps: %s")
 
-  printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)))
+  printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)), "loop after %s steps")
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
     def compare(a: Pos3D, b: Pos3D, f: Pos3D => Int) = f(a).compareTo(f(b))

@@ -9,9 +9,10 @@ object Day3 extends Year2019 {
   private val List(wireA, wireB) = wires.map(generatePath(_))
   private val crossings = wireA intersect wireB
 
-  printDayPart(1, crossings.map(_.distance(Pos.zero)).min)
+  printDayPart(1, crossings.map(_.distance(Pos.zero)).min, "manhatten distance to closest intersection: %s")
 
-  printDayPart(2, crossings.map(crossing => wireA.indexOf(crossing) + wireB.indexOf(crossing) + 2).min)
+  private val wireDistance = crossings.map(crossing => wireA.indexOf(crossing) + wireB.indexOf(crossing) + 2).min
+  printDayPart(2, wireDistance, "wire distance to closest intersection: %s")
 
   private def parseInstruction(instruction: String) =
     instruction.splitAt(1) match {

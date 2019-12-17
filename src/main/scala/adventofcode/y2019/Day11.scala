@@ -11,7 +11,7 @@ object Day11 extends Year2019 {
   private val intCode = new IntCode(input.mkString)
 
   private val painted = move(intCode)
-  printDayPart(1, painted.size)
+  printDayPart(1, painted.size, "painted panels: %s")
 
   private val message = move(intCode, Map(Pos.zero -> 1).withDefaultValue(0))
   if (Logging.debug) printMap(message)
