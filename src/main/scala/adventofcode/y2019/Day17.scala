@@ -3,8 +3,6 @@ package adventofcode.y2019
 import adventofcode.Logging
 import adventofcode.common.Pos
 
-import scala.annotation.tailrec
-
 object Day17 extends Year2019 {
   override val day = 17
 
@@ -25,8 +23,8 @@ object Day17 extends Year2019 {
   private val scaffolds = map.filter(_._2 == '#').keys.toSet
   private val intersections = scaffolds.filter(scaffold => Pos.directions.forall(dir => scaffolds.contains(scaffold + dir)))
 
-  private val path = getPath(robotStartPos, directions.indexOf(directionChar), scaffolds)
-  if (Logging.debug) println(s"Path: $path")
+  private val path = getPath(robotStartPos, directions.indexOf(directionChar))
+  if (Logging.debug) println(s"Path: ${path.mkString(",")}")
 
   // inputs solved by hand ... TODO: generate this from the path to work for other inputs
   private val inputs = List("A,B,A,C,A,A,C,B,C,B", "L,12,L,8,R,12", "L,10,L,8,L,12,R,12", "R,12,L,8,L,10", "n")
@@ -39,31 +37,18 @@ object Day17 extends Year2019 {
   printDayPart(1, intersections.map(pos => pos.x * pos.y).sum)
   printDayPart(2, output.last)
 
-  @tailrec
-  private def getPath(currentPos: Pos, currentDir: Int, todo: Set[Pos], commands: String = ""): String = {
-    val (turnCommand, newDir) = turn(currentPos, currentDir)
-    val walkedPath = moveForward(currentPos, newDir)
-    val newCommands = commands + turnCommand + walkedPath.length
-    val newTodo = todo -- walkedPath
-
-    if (newTodo.isEmpty)
-      newCommands
-    else
-      getPath(walkedPath.last, newDir, newTodo, newCommands + ",")
-  }
-
-  private def turn(pos: Pos, dir: Int): (String, Int) = {
-    if (scaffolds.contains(pos.moveDirectionIndex((dir + 1) % 4))) {
-      ("R,", (dir + 1) % 4)
+  private def getPath(pos: Pos, dir: Int): List[String] = {
+    if (scaffolds.contains(pos.moveDirectionIndex(dir))) {
+      val walkedPath = Iterator.iterate(pos)(_.moveDirectionIndex(dir)).drop(1).takeWhile(scaffolds.contains).toList
+      walkedPath.length.toString :: getPath(walkedPath.last, dir)
+    } else if (scaffolds.contains(pos.moveDirectionIndex((dir + 1) % 4))) {
+      "R" :: getPath(pos, (dir + 1) % 4)
     } else if (scaffolds.contains(pos.moveDirectionIndex((dir + 3) % 4))) {
-      ("L,", (dir + 3) % 4)
+      "L" :: getPath(pos, (dir + 3) % 4)
     } else {
-      ("", dir)
+      Nil
     }
   }
-
-  private def moveForward(pos: Pos, dir: Int): List[Pos] =
-    Iterator.iterate(pos)(_.moveDirectionIndex(dir)).drop(1).takeWhile(scaffolds.contains).toList
 
   private def sendInput(robot: IntCode, input: String): (IntCode, List[Long]) = {
     val newRobot = robot.run(input.map(_.toLong).toVector :+ '\n'.toLong)
