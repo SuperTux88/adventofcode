@@ -3,6 +3,8 @@ package adventofcode.y2019
 import adventofcode.Logging
 import adventofcode.common.Pos
 
+import scala.io.AnsiColor.{CYAN, RESET}
+
 object Day17 extends Year2019 {
   override val day = 17
 
@@ -32,7 +34,6 @@ object Day17 extends Year2019 {
   private val output = inputs.foldLeft((initRobot, List.empty[Long])) {
     case ((robot, _), nextInput) => sendInput(robot, nextInput)
   }._2
-  if (Logging.debug) println()
 
   printDayPart(1, intersections.map(pos => pos.x * pos.y).sum)
   printDayPart(2, output.last)
@@ -55,8 +56,8 @@ object Day17 extends Year2019 {
     val output = newRobot.output.toList
 
     if (Logging.debug) {
-      println(input)
-      print(output.map(_.toChar).mkString)
+      println(s"$CYAN$input$RESET")
+      print(output.filter(_ < 255).map(_.toChar).mkString)
     }
 
     (newRobot, output)
