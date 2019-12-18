@@ -3,6 +3,9 @@ package adventofcode.y2019
 import adventofcode.common.{Dijkstra, Pos}
 
 import scala.annotation.tailrec
+import scala.concurrent.{Await, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 object Day18 extends Year2019 {
   override val day = 18
@@ -16,12 +19,15 @@ object Day18 extends Year2019 {
   private val allKeys = map.values.filter(key => key >= 'a' && key <= 'z').toSet
   private val startPos = map.find(_._2 == '@').get._1
 
-  printDayPart(1, getShortestPath(Seq(startPos), map), "shortest path to all keys: %s")
+  private val futurePart1 = Future { getShortestPath(Seq(startPos), map) }
 
   private val map2 = map + (startPos -> '#') ++ Pos.directions.map(startPos + _).map(_ -> '#')
   private val startPositionsRobots = List((-1, -1), (-1, 1), (1, 1), (1, -1)).map(startPos + _)
 
-  printDayPart(2, getShortestPath(startPositionsRobots, map2), "shortest path with robots: %s")
+  private val futurePart2 = Future { getShortestPath(startPositionsRobots, map2) }
+
+  printDayPart(1, Await.result(futurePart1, Duration.Inf), "shortest path to all keys: %s")
+  printDayPart(2, Await.result(futurePart2, Duration.Inf), "shortest path with robots: %s")
 
   private def getShortestPath(startPositions: Seq[Pos], map: Map[Pos, Char]): Int = {
     Dijkstra(
