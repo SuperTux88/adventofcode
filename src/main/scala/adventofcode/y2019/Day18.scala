@@ -12,25 +12,34 @@ object Day18 extends Year2019 {
       case (char, x) => Pos(x, y) -> char
     }
   }.toMap
-  printMap(map)
 
   private val allKeys = map.values.filter(key => key >= 'a' && key <= 'z').toSet
   private val startPos = map.find(_._2 == '@').get._1
 
-  private val shortestPath = Dijkstra(
-    State(startPos, allKeys, Set.empty),
-    { state: State => state.remainingKeys.isEmpty },
-    { state: State =>
-      val reachableKeys = findNextKeys(List(state.pos), map, state.openDoors)
-      reachableKeys.map {
-        case (dist, pos) =>
-          val key = map(pos)
-          (dist, State(pos, state.remainingKeys - key, state.openDoors + key.toUpper))
-      }
-    }
-  )._1
+  printDayPart(1, getShortestPath(Seq(startPos), map), "shortest path to all keys: %s")
 
-  printDayPart(1, shortestPath, "shortest path to all keys: %s")
+  private val map2 = map + (startPos -> '#') ++ Pos.directions.map(startPos + _).map(_ -> '#')
+  private val startPositionsRobots = List((-1, -1), (-1, 1), (1, 1), (1, -1)).map(startPos + _)
+
+  printDayPart(2, getShortestPath(startPositionsRobots, map2), "shortest path with robots: %s")
+
+  private def getShortestPath(startPositions: Seq[Pos], map: Map[Pos, Char]): Int = {
+    Dijkstra(
+      State(startPositions, allKeys, Set.empty),
+      { state: State => state.remainingKeys.isEmpty },
+      { state: State =>
+        state.positions.zipWithIndex.flatMap {
+          case (pos, i) =>
+            val reachableKeys = findNextKeys(List(pos), map, state.openDoors)
+            reachableKeys.map {
+              case (dist, pos) =>
+                val key = map(pos)
+                (dist, State(state.positions.updated(i, pos), state.remainingKeys - key, state.openDoors + key.toUpper))
+            }
+        }.toList
+      }
+    )._1
+  }
 
   @tailrec
   private def findNextKeys(positions: List[Pos], map: Map[Pos, Char], openDoors: Set[Char], visited: Set[Pos] = Set.empty, foundKeys: List[(Int, Pos)] = List.empty, steps: Int = 1): List[(Int, Pos)] = {
@@ -58,10 +67,5 @@ object Day18 extends Year2019 {
     }
   }
 
-  private def printMap(map: Map[Pos, Char]): Unit =
-    (0 to map.keys.map(_.y).max).foreach(y =>
-      println((0 to map.keys.map(_.x).max).map(x => map(Pos(x, y))).mkString)
-    )
-
-  case class State(pos: Pos, remainingKeys: Set[Char], openDoors: Set[Char])
+  case class State(positions: Seq[Pos], remainingKeys: Set[Char], openDoors: Set[Char])
 }
