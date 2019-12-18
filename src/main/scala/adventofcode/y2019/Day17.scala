@@ -68,7 +68,7 @@ object Day17 extends Year2019 {
       for {
         elements <- 1 to 10 // with commas there are at most 10 elements in a sub-path
         subPath = pathParts.head.take(elements)
-        if subPath.mkString(",").length < 20 // check if length isn't more than 20 bytes
+        if subPath.mkString(",").length <= 20 // check if length isn't more than 20 bytes
         otherParts = pathParts.flatMap(splitListAtSlice(_, subPath).filterNot(_.isEmpty))
 
         // only loop over possibilities where the remaining parts can still split into the remaining functions
