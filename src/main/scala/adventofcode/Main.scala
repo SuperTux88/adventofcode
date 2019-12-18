@@ -8,40 +8,54 @@ object Main extends App {
   val allDays2018 = List(y2018.Day1, y2018.Day2, y2018.Day3, y2018.Day4, y2018.Day5, y2018.Day6, y2018.Day7, y2018.Day8, y2018.Day9, y2018.Day10, y2018.Day11, y2018.Day12, y2018.Day13, y2018.Day14, y2018.Day15, y2018.Day16, y2018.Day17, y2018.Day18, y2018.Day19, y2018.Day20, y2018.Day21, y2018.Day22, y2018.Day23, y2018.Day24, y2018.Day25)
   val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4, y2019.Day5, y2019.Day6, y2019.Day7, y2019.Day8, y2019.Day9, y2019.Day10, y2019.Day11, y2019.Day12, y2019.Day13, y2019.Day14, y2019.Day15, y2019.Day16, y2019.Day17)
 
-  print(
+  val years = Map("2015" -> allDays2015, "2016" -> allDays2016, "2018" -> allDays2018, "2019" -> allDays2019)
+
+  private val options = new Options(args.toList)
+
+  println(
     """Advent of Code
       |==============
-      |
-      |Select year:
-      |
-      |  - 2015
-      |  - 2016
-      |  - 2018
-      |  - 2019 (default)
-      |
-      |Year: """.stripMargin)
+      |""".stripMargin)
 
-  val allDays = readInput {
-    case "2015" => Some(allDays2015)
-    case "2016" => Some(allDays2016)
-    case "2019" => Some(allDays2018)
-    case "2018"|"" => Some(allDays2019)
-    case _ => None
+  val allDays = if (options.year.isDefined) {
+    years(options.year.get)
+  } else {
+    print(
+      """Select year:
+        |
+        |  - 2015
+        |  - 2016
+        |  - 2018
+        |  - 2019 (default)
+        |
+        |Year: """.stripMargin)
+
+    readInput {
+      case "2015" => Some(allDays2015)
+      case "2016" => Some(allDays2016)
+      case "2019" => Some(allDays2018)
+      case "2018"|"" => Some(allDays2019)
+      case _ => None
+    }
   }
 
-  print(
-    """Select mode:
-      |
-      |  1) run and print result (default)
-      |  2) run benchmarks
-      |
-      |Mode: """.stripMargin)
+  if (options.hasOptions) {
+    if (options.benchmark) BenchmarkMode.run() else ResultMode.run()
+  } else {
+    print(
+      """Select mode:
+        |
+        |  1) run and print result (default)
+        |  2) run benchmarks
+        |
+        |Mode: """.stripMargin)
 
-  readInput {
-    case "1"|"" => Some(ResultMode)
-    case "2" => Some(BenchmarkMode)
-    case _ => None
-  }.run()
+    readInput {
+      case "1" | "" => Some(ResultMode)
+      case "2" => Some(BenchmarkMode)
+      case _ => None
+    }.run()
+  }
 
   private def readInput[T](matchInput: String => Option[T]) = {
     var result: Option[T] = None
@@ -55,14 +69,18 @@ object Main extends App {
 
   private trait DaySelectorRunnable extends Runnable {
     def run(): Unit = {
-      print("Select day number or \"all\" (default: all): ")
+      val daysToRun = if (options.day.isDefined) {
+        List(allDays(options.day.get - 1))
+      } else {
+        print("Select day number or \"all\" (default: all): ")
 
-      val daysToRun = readInput {
-        case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber - 1)))
-        case "all"|"" =>
-          Logging.debug = false
-          Some(allDays)
-        case _ => None
+        readInput {
+          case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber - 1)))
+          case "all"|"" =>
+            Logging.debug = false
+            Some(allDays)
+          case _ => None
+        }
       }
 
       runDays(daysToRun)

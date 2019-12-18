@@ -8,14 +8,20 @@ trait DayApp extends App {
   val day: Int
   val year: Int
 
-  def input: BufferedSource = Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/day$day.txt"))
+  private lazy val options = new Options(args.toList)
+
+  def input: BufferedSource = if (options.input.isDefined) {
+    Source.fromFile(options.input.get)
+  } else {
+    Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/day$day.txt"))
+  }
 
   def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
   def printDayPart(part: Int, solution: String, formatString: String): Unit = {
     if (Logging.results) {
       println(s"Day $day - Part $part: ${String.format(formatString, s"$GREEN$solution$RESET")}")
-      Solutions.check(day, year, part, solution)
+      if (options.input.isEmpty) Solutions.check(day, year, part, solution)
     }
   }
 
