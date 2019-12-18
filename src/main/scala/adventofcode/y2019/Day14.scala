@@ -8,7 +8,7 @@ object Day14 extends Year2019 {
   private val ChemicalRE = """(\d+) (\w+)""".r
   private val ReactionRE = """(.+) => (\d+) (\w+)""".r
 
-  private val chemicals = input.getLines().map {
+  private val chemicals = input.getLines().takeWhile(_.nonEmpty).map {
     case ReactionRE(input, quantity, output) =>
       output -> Chemical(output, quantity.toInt, input.split(", ").map {
         case ChemicalRE(quantity, name) => name -> quantity.toInt

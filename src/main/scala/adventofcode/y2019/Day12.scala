@@ -12,7 +12,7 @@ object Day12 extends Year2019 {
   private val axisFunctions = Seq[Pos3D => Int](_.x, _.y, _.z)
   private val velocityFunctions = Seq[((Int, Int, Int)) => Int](_._1, _._2, _._3)
 
-  private val moons = input.getLines().map {
+  private val moons = input.getLines().takeWhile(_.nonEmpty).map {
     case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
   }.toVector
 

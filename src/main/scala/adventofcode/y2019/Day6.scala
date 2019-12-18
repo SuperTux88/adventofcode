@@ -7,7 +7,7 @@ object Day6 extends Year2019 {
 
   private val OrbitRE = """(\w+)\)(\w+)""".r
 
-  private val planets = input.getLines().map {
+  private val planets = input.getLines().takeWhile(_.nonEmpty).map {
     case OrbitRE(center, orbit) => orbit -> center
   }.toMap
 

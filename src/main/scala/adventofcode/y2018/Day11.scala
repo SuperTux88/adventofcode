@@ -5,7 +5,7 @@ import scala.collection.parallel.CollectionConverters._
 object Day11 extends Year2018 {
   override val day = 11
 
-  val serialNumber = input.mkString.toInt
+  val serialNumber = inputString.toInt
   val grid = (11 to 310).map(rackID => (1 to 300).map(y => ((rackID * y + serialNumber) * rackID /100) % 10 - 5))
 
   val partialSums = (for (x <- 1 to 300; y <- 1 to 300) yield (x,y))

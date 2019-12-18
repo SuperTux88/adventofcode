@@ -36,8 +36,7 @@ object Day18 extends Year2019 {
       { state: State =>
         state.positions.zipWithIndex.flatMap {
           case (pos, i) =>
-            val reachableKeys = findNextKeys(List(pos), map, state.openDoors)
-            reachableKeys.map {
+            findNextKeys(List(pos), map, state.openDoors).map {
               case (dist, pos) =>
                 val key = map(pos)
                 (dist, State(state.positions.updated(i, pos), state.remainingKeys - key, state.openDoors + key.toUpper))

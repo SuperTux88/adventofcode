@@ -10,7 +10,7 @@ object Day5 extends Year2018 {
     }).reverse.mkString
   }
 
-  val polymerAfterPart1 = react(input.mkString)
+  val polymerAfterPart1 = react(inputString)
   printDayPart(1, polymerAfterPart1.length)
 
   val shortest = ('a' to 'z').map { c => react(polymerAfterPart1.filterNot(_.toLower == c)).length }.min

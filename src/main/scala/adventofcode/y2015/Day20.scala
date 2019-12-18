@@ -3,7 +3,7 @@ package adventofcode.y2015
 object Day20 extends Year2015 {
   override val day: Int = 20
 
-  val targetNumberOfPresents = input.mkString.toInt
+  val targetNumberOfPresents = inputString.toInt
   val targetPart1 = targetNumberOfPresents / 10
   val targetPart2 = targetNumberOfPresents / 11
   val max = targetNumberOfPresents / 40 // maybe bigger max value?

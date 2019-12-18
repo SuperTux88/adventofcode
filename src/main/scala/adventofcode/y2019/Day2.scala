@@ -5,7 +5,7 @@ import scala.collection.parallel.CollectionConverters._
 object Day2 extends Year2019 {
   override val day = 2
 
-  private val intCode = new IntCode(input.mkString)
+  private val intCode = new IntCode(inputString)
 
   printDayPart(1, runProgram(12, 2).memory(0))
 

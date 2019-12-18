@@ -5,7 +5,7 @@ import adventofcode.common.Pos
 object Day13 extends Year2016 {
   override val day: Int = 13
 
-  private val favoriteNumber = input.mkString.toInt
+  private val favoriteNumber = inputString.toInt
   private val start = Pos(1,1)
   private val target = Pos(31,39)
 

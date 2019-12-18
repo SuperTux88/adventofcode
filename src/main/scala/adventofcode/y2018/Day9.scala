@@ -7,7 +7,7 @@ object Day9 extends Year2018 {
 
   val InputRE = """(\d+) players; last marble is worth (\d+) points""".r
 
-  val (players, lastMarble) = input.mkString match {
+  val (players, lastMarble) = inputString match {
     case InputRE(playersStr, lastMarbleStr) => (playersStr.toInt, lastMarbleStr.toInt)
   }
 

@@ -13,7 +13,7 @@ object Day14 extends Year2016 {
   val ThreeCharsRE = """(\w)\1{2}""".r
   val hexChars = "0123456789abcdef".getBytes
 
-  val salt = input.mkString
+  val salt = inputString
 
   val md5Cache = mutable.Map.empty[Int, String]
 

@@ -3,7 +3,7 @@ package adventofcode.y2019
 object Day16 extends Year2019 {
   override val day = 16
 
-  private val inputSignal = input.mkString.map(_.asDigit).toList
+  private val inputSignal = inputString.map(_.asDigit).toList
 
   private val message100 = (1 to 100).foldLeft(inputSignal) { (state, _) =>
     val stateOffset = 0 :: state

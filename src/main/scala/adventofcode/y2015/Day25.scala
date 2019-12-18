@@ -5,7 +5,7 @@ object Day25 extends Year2015 {
 
   val InputRE = """Enter the code at row (\d+), column (\d+).""".r.unanchored
 
-  val (row, col) = input.mkString match {
+  val (row, col) = inputString match {
     case InputRE(rowStr, colStr) => (rowStr.toInt, colStr.toInt)
   }
 

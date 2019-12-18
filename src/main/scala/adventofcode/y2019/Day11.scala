@@ -8,7 +8,7 @@ import scala.annotation.tailrec
 object Day11 extends Year2019 {
   override val day = 11
 
-  private val intCode = new IntCode(input.mkString)
+  private val intCode = new IntCode(inputString)
 
   private val painted = move(intCode)
   printDayPart(1, painted.size, "painted panels: %s")

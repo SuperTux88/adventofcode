@@ -3,7 +3,7 @@ package adventofcode.y2018
 object Day8 extends Year2018 {
   override val day = 8
 
-  val (metadataSum, totalValue, _) = calculateNode(input.mkString.split(" ").map(_.toInt).toList)
+  val (metadataSum, totalValue, _) = calculateNode(inputString.split(" ").map(_.toInt).toList)
 
   printDayPart(1, metadataSum)
   printDayPart(2, totalValue)

@@ -9,7 +9,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 object Day4 extends Year2015 {
   override val day: Int = 4
 
-  val inputStr = input.mkString
+  val inputStr = inputString
 
   //calculate(5)
   //calculate(6)

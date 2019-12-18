@@ -7,7 +7,7 @@ object Day5 extends Year2019 {
 
   IntCode.debug = Logging.debug
 
-  private val intCode = new IntCode(input.mkString)
+  private val intCode = new IntCode(inputString)
 
   printDayPart(1, intCode.run(1).output.dropWhile(_ == 0).next, "diagnostic code: %s")
   printDayPart(2, intCode.run(5).output.next, "diagnostic code: %s")

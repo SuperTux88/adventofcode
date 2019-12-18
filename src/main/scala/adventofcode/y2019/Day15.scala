@@ -12,7 +12,7 @@ object Day15 extends Year2019 {
   // special order: north (1), south (2), west (3), and east (4)
   private val directions = List((1, (0, -1)), (2, (0, 1)), (3, (-1, 0)), (4, (1, 0)))
 
-  private val intCode = new IntCode(input.mkString)
+  private val intCode = new IntCode(inputString)
 
   private val exploreResult = exploreMap(List((Pos.zero, intCode)))
   private val (oxygenSystem, (_, steps)) = exploreResult.find(_._2._1 == 2).get

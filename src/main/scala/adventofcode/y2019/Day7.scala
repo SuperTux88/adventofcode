@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day7 extends Year2019 {
   override val day = 7
 
-  private val intCode = new IntCode(input.mkString)
+  private val intCode = new IntCode(inputString)
 
   printDayPart(1, getBestAmplifierOutput(0 to 4), "highest possible signal: %s")
   printDayPart(2, getBestAmplifierOutput(5 to 9), "highest possible signal: %s")

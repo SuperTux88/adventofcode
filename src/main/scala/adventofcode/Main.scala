@@ -33,8 +33,8 @@ object Main extends App {
     readInput {
       case "2015" => Some(allDays2015)
       case "2016" => Some(allDays2016)
-      case "2019" => Some(allDays2018)
-      case "2018"|"" => Some(allDays2019)
+      case "2018" => Some(allDays2018)
+      case "2019"|"" => Some(allDays2019)
       case _ => None
     }
   }

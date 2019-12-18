@@ -5,7 +5,7 @@ object Day10 extends Year2015 {
 
   val sameDigitsRE = """(\w)\1*""".r
 
-  val part1 = transform(input.mkString, 40)
+  val part1 = transform(inputString, 40)
   printDayPart(1, part1.length)
   printDayPart(2, transform(part1, 10).length)
 

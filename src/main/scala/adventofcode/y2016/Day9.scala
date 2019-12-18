@@ -5,7 +5,7 @@ object Day9 extends Year2016 {
 
   val MarkerRE = """([^(]*)\((\d+)x(\d+)\)(.*)""".r
 
-  val compressed = input.mkString
+  val compressed = inputString
 
   printDayPart(1, decompressedLength(compressed), "length after simple decompress: %s")
   printDayPart(2, decompressedLength(compressed, recursive = true), "length after recursive decompress: %s")

@@ -9,7 +9,7 @@ object Day12 extends Year2015 {
   val InnerObjectRE = """\{[^{}]+\}""".r
   val RedValueRE = """:"red"""".r.unanchored
 
-  val jsonString = input.mkString
+  val jsonString = inputString
 
   printDayPart(1, sum(jsonString), "sum of all numbers: %s")
   printDayPart(2, part2, "sum of all numbers: %s")

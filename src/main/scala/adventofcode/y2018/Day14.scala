@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day14 extends Year2018 {
   override val day = 14
 
-  val totalRecipes = input.mkString.toInt
+  val totalRecipes = inputString.toInt
   val searchedScore = input.map(_.asDigit).toSeq
 
   val (recipeScores, offset) = calculate(Vector(3,7), 0, 1, Vector.fill(searchedScore.length + 1)(0))

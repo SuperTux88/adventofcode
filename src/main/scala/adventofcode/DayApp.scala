@@ -16,6 +16,8 @@ trait DayApp extends App {
     Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/day$day.txt"))
   }
 
+  def inputString: String = input.mkString.trim
+
   def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
   def printDayPart(part: Int, solution: String, formatString: String): Unit = {

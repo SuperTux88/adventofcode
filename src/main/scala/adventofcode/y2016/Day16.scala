@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day16 extends Year2016 {
   override val day = 16
 
-  val seed = input.mkString
+  val seed = inputString
 
   printDayPart(1, calcChecksum(random(seed, 272)), "checksum for data: %s")
   printDayPart(2, calcChecksum(random(seed, 35651584)), "checksum for data: %s")

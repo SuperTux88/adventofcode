@@ -5,9 +5,7 @@ import java.security.MessageDigest
 object Day17 extends Year2016 {
   override val day = 17
 
-  val passcode = input.mkString
-
-  val paths = getPaths(State(0, 0, ""), passcode)
+  val paths = getPaths(State(0, 0, ""), inputString)
   printDayPart(1, paths._1, "shortest path: %s")
   printDayPart(2, paths._2.length, "longest path length: %s")
 

@@ -10,7 +10,7 @@ import scala.util.Random
 object Day5 extends Year2016 {
   override val day: Int = 5
 
-  val doorId = input.mkString
+  val doorId = inputString
 
   val passwordArray = Array.fill[Option[Char]](8)(None)
   val passwordArray2 = Array.fill[Option[Char]](8)(None)

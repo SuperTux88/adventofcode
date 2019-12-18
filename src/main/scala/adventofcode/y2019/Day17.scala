@@ -10,7 +10,7 @@ object Day17 extends Year2019 {
 
   private val directions = List('^', '>', 'v', '<')
 
-  private val intCode = new IntCode(input.mkString).setMemory(0, 2)
+  private val intCode = new IntCode(inputString).setMemory(0, 2)
   private val initRobot = intCode.run()
   private val initOutput = initRobot.output.map(_.toChar).mkString
   if (Logging.debug) print(initOutput)

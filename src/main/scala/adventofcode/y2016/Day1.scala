@@ -9,7 +9,7 @@ object Day1 extends Year2016 {
 
   val (startPos, startDirection) = Pos.zero -> 2 // 0, 0 -> moving down
 
-  private val (positions, _) = input.mkString.split(", ").map(_.splitAt(1))
+  private val (positions, _) = inputString.split(", ").map(_.splitAt(1))
     .foldLeft(Seq(startPos), startDirection)(move)
 
   printDayPart(1, positions.last.distance(startPos))

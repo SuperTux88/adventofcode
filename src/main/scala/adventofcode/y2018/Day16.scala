@@ -9,7 +9,7 @@ object Day16 extends Year2018 {
 
   val InstructionRE = """(\d+) (\d) (\d) (\d)""".r
 
-  val inputStr = input.mkString
+  val inputStr = inputString
   val (samples, program) = inputStr.splitAt(inputStr.indexOf("\n\n\n\n"))
 
   val possibleOpcodes = samples.split("\n\n").map {

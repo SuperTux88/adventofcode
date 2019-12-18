@@ -10,7 +10,7 @@ object Day8 extends Year2019 {
   private val height = 6
   private val layerSize = width * height
 
-  private val encodedImage = input.map(_.asDigit).grouped(layerSize).toSeq
+  private val encodedImage = input.map(_.asDigit).takeWhile(_ >= 0).grouped(layerSize).toSeq
 
   private val fewestZeros = encodedImage.minBy(_.count(_ == 0))
   printDayPart(1, fewestZeros.count(_ == 1) * fewestZeros.count(_ == 2))

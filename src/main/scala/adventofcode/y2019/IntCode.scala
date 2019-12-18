@@ -5,7 +5,7 @@ import scala.math.pow
 
 class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0) {
 
-  def this(program: String) = this(program.strip.split(",").map(_.toLong).toVector)
+  def this(program: String) = this(program.split(",").map(_.toLong).toVector)
 
   def isRunning: Boolean = ip >= 0
 
