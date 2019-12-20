@@ -16,7 +16,7 @@ object Day18 extends Year2019 {
     }
   }.toMap
 
-  private val allKeys = map.values.filter(key => key >= 'a' && key <= 'z').toSet
+  private val allKeys = map.values.filter(_.isLower).toSet
   private val startPos = map.find(_._2 == '@').get._1
 
   private val futurePart1 = Future { getShortestPath(Seq(startPos), map) }
@@ -55,7 +55,7 @@ object Day18 extends Year2019 {
         Pos.directions.map(pos + _).filterNot(visited.contains).filter { pos =>
           map(pos) match {
             case '#' => false
-            case door if door >= 'A' && door <= 'Z' => openDoors.contains(door)
+            case door if door.isUpper => openDoors.contains(door)
             case _ => true
           }
         }
@@ -63,7 +63,7 @@ object Day18 extends Year2019 {
 
       val (newPositions, foundKeyPos) = nextSteps.partition { pos =>
         map(pos) match {
-          case key if key >= 'a' && key <= 'z' => openDoors.contains(key.toLower)
+          case key if key.isLower => openDoors.contains(key.toUpper)
           case _ => true
         }
       }
