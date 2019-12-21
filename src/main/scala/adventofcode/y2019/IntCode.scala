@@ -1,6 +1,9 @@
 package adventofcode.y2019
 
+import adventofcode.Logging
+
 import scala.annotation.tailrec
+import scala.io.AnsiColor.{CYAN, RESET}
 import scala.math.pow
 
 class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterator[Long] = Iterator.empty, relativeBase: Long = 0) {
@@ -10,6 +13,18 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
   def isRunning: Boolean = ip >= 0
 
   def setMemory(index: Int, value: Long): IntCode = new IntCode(memory.updated(index, value), ip, output, relativeBase)
+
+  def sendAsciiInput(input: String): (IntCode, List[Long]) = {
+    val intCode = run(input.map(_.toLong).toVector :+ '\n'.toLong)
+    val output = intCode.output.toList
+
+    if (IntCode.asciiOut) {
+      println(s"$CYAN$input$RESET")
+      print(output.filter(_ < 255).map(_.toChar).mkString)
+    }
+
+    (intCode, output)
+  }
 
   def run(): IntCode = run(Vector.empty)
   def run(input: Int): IntCode = run(Vector(input.toLong))
@@ -79,4 +94,5 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
 
 object IntCode {
   var debug: Boolean = false
+  var asciiOut: Boolean = Logging.debug
 }
