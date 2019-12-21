@@ -14,6 +14,13 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
 
   def setMemory(index: Int, value: Long): IntCode = new IntCode(memory.updated(index, value), ip, output, relativeBase)
 
+  def startAsciiProgram(): (IntCode, String) = {
+    val intCode = run()
+    val output = intCode.output.toList.map(_.toChar).mkString
+    if (IntCode.asciiOut) print(output)
+    (intCode, output)
+  }
+
   def sendAsciiInput(input: String): (IntCode, List[Long]) = {
     val intCode = run(input.map(_.toLong).toVector :+ '\n'.toLong)
     val output = intCode.output.toList

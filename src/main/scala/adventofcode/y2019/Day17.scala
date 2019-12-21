@@ -9,9 +9,7 @@ object Day17 extends Year2019 {
   private val directions = List('^', '>', 'v', '<')
 
   private val intCode = new IntCode(inputString).setMemory(0, 2)
-  private val initRobot = intCode.run()
-  private val initOutput = initRobot.output.map(_.toChar).mkString
-  if (Logging.debug) print(initOutput)
+  private val (initRobot, initOutput) = intCode.startAsciiProgram()
 
   private val map = initOutput.split('\n').takeWhile(_.nonEmpty).zipWithIndex.flatMap {
     case (line, y) => line.zipWithIndex.map {
