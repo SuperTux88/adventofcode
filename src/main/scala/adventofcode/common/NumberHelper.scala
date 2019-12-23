@@ -15,4 +15,19 @@ object NumberHelper {
     */
   def lcm(a: Long, b: Long): Long = a * (b / gcd(a, b))
   def lcm(numbers: Seq[Long]): Long = numbers.reduce(lcm)
+
+  /**
+    * modular inverse
+    */
+  // from https://rosettacode.org/wiki/Modular_inverse#Scala
+  @tailrec
+  def modInv(a: Long, m: Long, x: Long = 1, y: Long = 0): Long =
+    if (m == 0) x else modInv(m, a % m, y, x - y * (a / m))
+
+  implicit class ExtendedLong(val l: Long) {
+    /**
+      * positive modulo
+      */
+    def %+(d: Long): Long = (l + d) % d
+  }
 }
