@@ -16,17 +16,20 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
 
   def startAsciiProgram(): (IntCode, String) = {
     val intCode = run()
-    val output = intCode.output.toList.map(_.toChar).mkString
-    if (IntCode.printAsciiOut) print(output)
-    (intCode, output)
+    val outputChars = intCode.output.toList.map(_.toChar)
+    if (IntCode.printAsciiOut) slowPrint(outputChars)
+    (intCode, outputChars.mkString)
   }
 
   def sendAsciiInput(input: String): (IntCode, List[Long]) = {
     val intCode = run(input.map(_.toLong).toVector :+ '\n'.toLong)
     val output = intCode.output.toList
 
-    if (IntCode.printAsciiIn) println(s"$CYAN$input$RESET")
-    if (IntCode.printAsciiOut) print(output.filter(_ < 255).map(_.toChar).mkString)
+    if (IntCode.printAsciiIn) {
+      Thread.sleep(250)
+      slowPrint(s"$CYAN$input$RESET\n")
+    }
+    if (IntCode.printAsciiOut) slowPrint(output.filter(_ < 255).map(_.toChar))
 
     (intCode, output)
   }
@@ -40,14 +43,15 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
   private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Iterator[Long], relativeBase: Long): IntCode = {
     def param(parameter: Int) = // TODO refactor parameter modes to remove duplicate check?
       (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
-        case 0|1 => // position mode and immediate mode
+        case 0 | 1 => // position mode and immediate mode
           memory(ip + parameter)
         case 2 => // relative mode
           memory(ip + parameter) + relativeBase
       }
+
     def value(parameter: Int) =
       (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
-        case 0|2 => // position mode and relative mode
+        case 0 | 2 => // position mode and relative mode
           memory.lift(param(parameter).toInt).getOrElse(0L)
         case 1 => // immediate mode
           param(parameter)
@@ -95,10 +99,18 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
         new IntCode(memory, -1, outputs, relativeBase)
     }
   }
+
+  private def slowPrint(chars: Seq[Char]): Unit = {
+    chars.foreach { char =>
+      Thread.sleep(IntCode.printDelay)
+      print(char)
+    }
+  }
 }
 
 object IntCode {
   var debug: Boolean = false
+  var printDelay = 5
   var printAsciiOut: Boolean = Logging.debug
   var printAsciiIn: Boolean = Logging.debug
 }

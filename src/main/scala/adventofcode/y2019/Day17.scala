@@ -6,6 +6,8 @@ import adventofcode.common.Pos
 object Day17 extends Year2019 {
   override val day = 17
 
+  IntCode.printDelay = 1
+
   private val directions = List('^', '>', 'v', '<')
 
   private val intCode = new IntCode(inputString).setMemory(0, 2)
