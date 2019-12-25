@@ -17,7 +17,7 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
   def startAsciiProgram(): (IntCode, String) = {
     val intCode = run()
     val output = intCode.output.toList.map(_.toChar).mkString
-    if (IntCode.asciiOut) print(output)
+    if (IntCode.printAsciiOut) print(output)
     (intCode, output)
   }
 
@@ -25,10 +25,8 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
     val intCode = run(input.map(_.toLong).toVector :+ '\n'.toLong)
     val output = intCode.output.toList
 
-    if (IntCode.asciiOut) {
-      println(s"$CYAN$input$RESET")
-      print(output.filter(_ < 255).map(_.toChar).mkString)
-    }
+    if (IntCode.printAsciiIn) println(s"$CYAN$input$RESET")
+    if (IntCode.printAsciiOut) print(output.filter(_ < 255).map(_.toChar).mkString)
 
     (intCode, output)
   }
@@ -101,5 +99,6 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
 
 object IntCode {
   var debug: Boolean = false
-  var asciiOut: Boolean = Logging.debug
+  var printAsciiOut: Boolean = Logging.debug
+  var printAsciiIn: Boolean = Logging.debug
 }
