@@ -13,6 +13,7 @@ class Options(args: List[String]) {
   def benchmark: Option[Int] = options.getOrElse("benchmark", None).asInstanceOf[Option[Int]]
 
   def interactive: Boolean = options.getOrElse("interactive", false).asInstanceOf[Boolean]
+  def quiet: Boolean = options.getOrElse("quiet", false).asInstanceOf[Boolean]
 
   private lazy val options = parseArgs(args)
 
@@ -26,6 +27,7 @@ class Options(args: List[String]) {
       case "--benchmark" :: runs :: tail if runs.forall(_.isDigit) => parseArgs(tail, map + ("benchmark" -> Some(runs.toInt)))
       case "--benchmark" :: tail => parseArgs(tail, map + ("benchmark" -> Some(-1)))
       case "--interactive" :: tail => parseArgs(tail, map + ("interactive" -> true))
+      case "--quiet" :: tail => parseArgs(tail, map + ("quiet" -> true))
       case "--help" :: _ =>
         showHelp
         System.exit(0).asInstanceOf[Map[String, Any]]
@@ -45,6 +47,7 @@ class Options(args: List[String]) {
         |--day <day>           Select day of year to run.
         |--benchmark [<runs>]  Enable benchmark mode. Without value it selects the optimal number of runs for each day automatically.
         |--interactive         Run in interactive mode to solve manually. This is only available for a few days where this makes sense.
+        |--quiet               Print less intcode output. With this some of the intcode days run faster in single-day-mode because of less waiting for output.
         |--help                Shows this help. :)
         |""".stripMargin)
 }

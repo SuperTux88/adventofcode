@@ -18,24 +18,28 @@ object Day13 extends Year2019 {
 
   if (options.interactive) {
     val con = new tools.jline.console.ConsoleReader()
-    println("Use 'a', 's' and 'd' key to move left or stay where you are or move right.")
+    println("\u001b[2J\u001B[25;0HUse 'a', 's' and 'd' key to move left or stay where you are or move right.")
     playInteractive(intCode, initMap, con)
   } else {
-    if (Logging.debug) printMap(initMap)
+    if (Logging.debug) {
+      printMap(initMap)
+      if (!options.quiet) print("\u001b[2J")
+    }
 
+    val endScore = play(initGame, initMap)
     printDayPart(1, countBlocks(initMap), "blocks in game: %s")
-    printDayPart(2, play(initGame, initMap), "end score: %s")
+    printDayPart(2, endScore, "end score: %s")
   }
 
   @tailrec
   private def play(game: IntCode, map: Map[Pos, Int]): Int = {
     val state = parseOutput(game.output, map)
-    if (game.isRunning) {
+    if (Logging.debug && !options.quiet) printState(state)
+
+    if (game.isRunning)
       play(game.run(getHorizontalPos(state, 4).compareTo(getHorizontalPos(state, 3))), state)
-    } else {
-      if (Logging.debug) printMap(state)
+    else
       state(SCORE_POS)
-    }
   }
 
   @tailrec
@@ -43,9 +47,7 @@ object Day13 extends Year2019 {
     val state = parseOutput(game.output, map)
 
     if (game.isRunning) {
-      print("\u001b[2J")
-      printMap(state)
-      println(s"Score: ${state(SCORE_POS)}")
+      printState(state)
 
       val input = con.readCharacter() match {
         case 97 => -1
@@ -60,7 +62,6 @@ object Day13 extends Year2019 {
       System.exit(1).asInstanceOf[Int]
     }
   }
-
   private def parseOutput(output: Iterator[Long], map: Map[Pos, Int] = Map.empty) =
     map ++ output.grouped(3).map {
       case Seq(x, y, id) => Pos(x.toInt, y.toInt) -> id.toInt
@@ -68,6 +69,12 @@ object Day13 extends Year2019 {
 
   private def countBlocks(map: Map[Pos, Int]) = map.count(_._2 == 2)
   private def getHorizontalPos(map: Map[Pos, Int], id: Int) = map.find(_._2 == id).get._1.x
+
+  private def printState(state: Map[Pos, Int]): Unit = {
+    print("\u001B[0;0H")
+    printMap(state)
+    println(s"Score: ${state(SCORE_POS)}")
+  }
 
   private def printMap(map: Map[Pos, Int]): Unit =
     (0 to map.keys.map(_.y).max).foreach(y =>
