@@ -9,6 +9,9 @@ import scala.io.StdIn
 object Day25 extends Year2019 {
   override val day = 25
 
+  IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
+  IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
+
   private val ListRE = """- ([\w ]+)""".r
   private val RoomRE =
     """== ([\w- ]+) ==
@@ -35,7 +38,7 @@ object Day25 extends Year2019 {
   } else {
     IntCode.printAsciiOut = false
     IntCode.printAsciiIn = false
-    if (Logging.debug) print("Finding the shortest route ...")
+    if (Logging.debug && !options.quiet) print("Finding the shortest route ...")
 
     val initialRoom = parseRoom(initOutput).get
     val shortestSolution = Dijkstra(
@@ -44,7 +47,7 @@ object Day25 extends Year2019 {
       getNeighbors
     )
 
-    if (Logging.debug) {
+    if (Logging.debug && !options.quiet) {
       print("\r")
       IntCode.printAsciiOut = true
       IntCode.printAsciiIn = true

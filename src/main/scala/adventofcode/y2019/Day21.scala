@@ -3,6 +3,9 @@ package adventofcode.y2019
 object Day21 extends Year2019 {
   override val day = 21
 
+  IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
+  IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
+
   private val intCode = new IntCode(inputString)
 
   private val program1 =

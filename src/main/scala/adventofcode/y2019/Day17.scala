@@ -1,12 +1,13 @@
 package adventofcode.y2019
 
-import adventofcode.Logging
 import adventofcode.common.Pos
 
 object Day17 extends Year2019 {
   override val day = 17
 
   IntCode.printDelay = 1
+  IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
+  IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
 
   private val directions = List('^', '>', 'v', '<')
 
