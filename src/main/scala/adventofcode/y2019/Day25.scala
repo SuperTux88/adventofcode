@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.Logging
-import adventofcode.common.Dijkstra
+import adventofcode.common.search.Dijkstra
 
 import scala.annotation.tailrec
 import scala.io.StdIn

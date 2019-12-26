@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
-import adventofcode.common.Pos
 import adventofcode.common.NumberHelper.gcd
+import adventofcode.common.pos.Pos
 
 import scala.collection.parallel.CollectionConverters._
 

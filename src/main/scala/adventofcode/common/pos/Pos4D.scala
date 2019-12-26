@@ -1,4 +1,4 @@
-package adventofcode.common
+package adventofcode.common.pos
 
 case class Pos4D(d1: Int, d2: Int, d3: Int, d4: Int) {
   def +(direction: (Int, Int, Int, Int)): Pos4D =

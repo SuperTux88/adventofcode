@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.common.NumberHelper.lcm
-import adventofcode.common.Pos3D
+import adventofcode.common.pos.Pos3D
 
 import scala.annotation.tailrec
 

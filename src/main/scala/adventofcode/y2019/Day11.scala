@@ -1,7 +1,8 @@
 package adventofcode.y2019
 
 import adventofcode.Logging
-import adventofcode.common.{OCR, Pos}
+import adventofcode.common.OCR
+import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
 

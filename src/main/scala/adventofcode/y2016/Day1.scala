@@ -1,6 +1,6 @@
 package adventofcode.y2016
 
-import adventofcode.common.Pos
+import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
 

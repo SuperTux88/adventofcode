@@ -1,6 +1,6 @@
 package adventofcode.y2018
 
-import adventofcode.common.Pos4D
+import adventofcode.common.pos.Pos4D
 
 object Day25 extends Year2018 {
   override val day = 25

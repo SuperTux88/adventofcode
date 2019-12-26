@@ -1,7 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
-import adventofcode.common.Pos
+import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
 

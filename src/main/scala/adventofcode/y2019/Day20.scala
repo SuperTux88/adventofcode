@@ -1,6 +1,7 @@
 package adventofcode.y2019
 
-import adventofcode.common.{Dijkstra, Pos}
+import adventofcode.common.pos.Pos
+import adventofcode.common.search.Dijkstra
 
 import scala.annotation.tailrec
 

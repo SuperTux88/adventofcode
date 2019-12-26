@@ -1,5 +1,4 @@
-package adventofcode.common
-
+package adventofcode.common.pos
 
 case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)

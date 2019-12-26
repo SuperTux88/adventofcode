@@ -1,4 +1,4 @@
-package adventofcode.common
+package adventofcode.common.search
 
 import scala.collection.mutable
 

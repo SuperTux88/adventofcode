@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.Logging
-import adventofcode.common.Pos
+import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
 import scala.tools.jline.console.ConsoleReader

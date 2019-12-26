@@ -1,4 +1,4 @@
-package adventofcode.common
+package adventofcode.common.pos
 
 case class Pos3D(x: Int, y: Int, z: Int) {
   def +(direction: (Int, Int, Int)): Pos3D = Pos3D(x + direction._1, y + direction._2, z + direction._3)

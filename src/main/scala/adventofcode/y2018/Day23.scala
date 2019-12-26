@@ -1,6 +1,6 @@
 package adventofcode.y2018
 
-import adventofcode.common.Pos3D
+import adventofcode.common.pos.Pos3D
 
 import scala.collection.mutable
 

@@ -1,7 +1,8 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
-import adventofcode.common.{AStar, Pos}
+import adventofcode.common.pos.Pos
+import adventofcode.common.search.AStar
 
 import scala.collection.mutable
 
