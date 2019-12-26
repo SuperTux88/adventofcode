@@ -8,7 +8,7 @@ trait DayApp extends App {
   val day: Int
   val year: Int
 
-  private lazy val options = new Options(args.toList)
+  protected lazy val options = new Options(args.toList)
 
   def input: BufferedSource = if (options.input.isDefined) {
     Source.fromFile(options.input.get)

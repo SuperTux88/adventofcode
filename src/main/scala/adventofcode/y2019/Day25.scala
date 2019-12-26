@@ -29,7 +29,7 @@ object Day25 extends Year2019 {
   private val intCode = new IntCode(inputString)
   private val (initDroid, initOutput) = intCode.startAsciiProgram()
 
-  if (util.Properties.propIsSet("interactive")) {
+  if (options.interactive) {
     IntCode.printAsciiIn = false
     runInteractive(initDroid)
   } else {
