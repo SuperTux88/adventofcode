@@ -10,7 +10,7 @@ class Options(args: List[String]) {
   def year: Option[String] = options.get("year").asInstanceOf[Option[String]]
   def day: Option[Int] = options.get("day").asInstanceOf[Option[Int]]
 
-  def benchmark: Boolean = options.getOrElse("benchmark", false).asInstanceOf[Boolean]
+  def benchmark: Option[Int] = options.getOrElse("benchmark", None).asInstanceOf[Option[Int]]
 
   private lazy val options = parseArgs(args)
 
@@ -21,7 +21,8 @@ class Options(args: List[String]) {
       case "--input" :: input :: tail => parseArgs(tail, map + ("input" -> input))
       case "--year" :: year :: tail => parseArgs(tail, map + ("year" -> year))
       case "--day" :: day :: tail => parseArgs(tail, map + ("day" -> day.toInt))
-      case "--benchmark" :: tail => parseArgs(tail, map + ("benchmark" -> true))
+      case "--benchmark" :: runs :: tail if runs.forall(_.isDigit) => parseArgs(tail, map + ("benchmark" -> Some(runs.toInt)))
+      case "--benchmark" :: tail => parseArgs(tail, map + ("benchmark" -> Some(-1)))
       case option :: tail =>
         println(s"Invalid option $option")
         parseArgs(tail, map)

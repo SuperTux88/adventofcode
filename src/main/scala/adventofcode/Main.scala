@@ -40,7 +40,7 @@ object Main extends App {
   }
 
   if (options.hasOptions) {
-    if (options.benchmark) BenchmarkMode.run() else ResultMode.run()
+    if (options.benchmark.isEmpty) ResultMode.run() else BenchmarkMode.run()
   } else {
     print(
       """Select mode:
@@ -109,12 +109,16 @@ object Main extends App {
       Logging.debug = false
       Logging.results = false
 
-      print("Number of runs (default: optimal for each day): ")
+      val selectedRuns = if (options.benchmark.isDefined) {
+        options.benchmark.get
+      } else {
+        print("Number of runs (default: optimal for each day): ")
 
-      val selectedRuns = readInput {
-        case Int(number) if number > 0 => Some(number)
-        case "" => Some(-1)
-        case _ => None
+        readInput {
+          case Int(number) if number > 0 => Some(number)
+          case "" => Some(-1)
+          case _ => None
+        }
       }
 
       days.foreach { day =>
