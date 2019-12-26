@@ -23,9 +23,24 @@ class Options(args: List[String]) {
       case "--day" :: day :: tail => parseArgs(tail, map + ("day" -> day.toInt))
       case "--benchmark" :: runs :: tail if runs.forall(_.isDigit) => parseArgs(tail, map + ("benchmark" -> Some(runs.toInt)))
       case "--benchmark" :: tail => parseArgs(tail, map + ("benchmark" -> Some(-1)))
-      case option :: tail =>
+      case "--help" :: _ =>
+        showHelp
+        System.exit(0).asInstanceOf[Map[String, Any]]
+      case option :: _ =>
         println(s"Invalid option $option")
-        parseArgs(tail, map)
+        println
+        showHelp
+        System.exit(1).asInstanceOf[Map[String, Any]]
     }
   }
+
+  private def showHelp(): Unit =
+    println(
+      """Available options:
+        |--input <file>        Use different input file to run. This only works when selecting a single day.
+        |--year <year>         Select year to run.
+        |--day <day>           Select day of year to run.
+        |--benchmark [<runs>]  Enable benchmark mode. Without value it selects the optimal number of runs for each day automatically.
+        |--help                Shows this help. :)
+        |""".stripMargin)
 }
