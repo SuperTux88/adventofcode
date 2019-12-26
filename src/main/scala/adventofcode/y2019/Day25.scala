@@ -107,7 +107,7 @@ object Day25 extends Year2019 {
   private def runInteractive(droid: IntCode, commands: List[String] = List.empty): Unit =
     if (droid.isRunning) {
       val command = StdIn.readLine()
-      if (command != "quit" || command != null)
+      if (command != "quit" && command != null)
         runInteractive(droid.sendAsciiInput(command)._1, command :: commands)
     }
 
