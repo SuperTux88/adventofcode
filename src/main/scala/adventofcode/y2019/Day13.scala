@@ -4,6 +4,7 @@ import adventofcode.Logging
 import adventofcode.common.Pos
 
 import scala.annotation.tailrec
+import scala.tools.jline.console.ConsoleReader
 
 object Day13 extends Year2019 {
   override val day = 13
@@ -15,10 +16,16 @@ object Day13 extends Year2019 {
   private val initGame = intCode.run()
   private val initMap = parseOutput(initGame.output)
 
-  if (Logging.debug) printMap(initMap)
+  if (options.interactive) {
+    val con = new tools.jline.console.ConsoleReader()
+    println("Use 'a', 's' and 'd' key to move left or stay where you are or move right.")
+    playInteractive(intCode, initMap, con)
+  } else {
+    if (Logging.debug) printMap(initMap)
 
-  printDayPart(1, countBlocks(initMap), "blocks in game: %s")
-  printDayPart(2, play(initGame, initMap), "end score: %s")
+    printDayPart(1, countBlocks(initMap), "blocks in game: %s")
+    printDayPart(2, play(initGame, initMap), "end score: %s")
+  }
 
   @tailrec
   private def play(game: IntCode, map: Map[Pos, Int]): Int = {
@@ -28,6 +35,29 @@ object Day13 extends Year2019 {
     } else {
       if (Logging.debug) printMap(state)
       state(SCORE_POS)
+    }
+  }
+
+  @tailrec
+  private def playInteractive(game: IntCode, map: Map[Pos, Int], con: ConsoleReader): Int = {
+    val state = parseOutput(game.output, map)
+
+    if (game.isRunning) {
+      print("\u001b[2J")
+      printMap(state)
+      println(s"Score: ${state(SCORE_POS)}")
+
+      val input = con.readCharacter() match {
+        case 97 => -1
+        case 115 => 0
+        case 100 => 1
+        case _ => 0
+      }
+
+      playInteractive(game.run(input), state, con)
+    } else {
+      println("GAME OVER!!!")
+      System.exit(1).asInstanceOf[Int]
     }
   }
 
