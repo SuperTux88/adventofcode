@@ -1,5 +1,7 @@
 *.iml
 .idea
 .attach_pid*
-target
 
+# sbt
+.bsp/sbt.json
+target
