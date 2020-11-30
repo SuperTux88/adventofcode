@@ -7,7 +7,7 @@ object Day12 extends Year2018 {
 
   val ReplacementRE = """([.#]{5}) => ([.#])""".r
 
-  val lines = input.getLines
+  val lines = input.getLines()
   var initialState = lines.next().split(" ")(2).map(_ == '#').toList
 
   val transformations = lines.drop(1).map {

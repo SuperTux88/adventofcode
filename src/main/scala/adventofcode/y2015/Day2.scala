@@ -6,7 +6,7 @@ object Day2 extends Year2015 {
   var totalPaper = 0
   var totalRibbon = 0
 
-  input.getLines.foreach { present =>
+  input.getLines().foreach { present =>
     val Array(l, w, h) = present.split("x").map(_.toInt).sorted
 
     totalPaper += (2*l*w + 2*w*h + 2*h*l) + l*w

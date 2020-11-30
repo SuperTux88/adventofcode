@@ -5,7 +5,7 @@ object Day19 extends Year2015 {
 
   val ReplacementRE = """(\w+) => (\w+)""".r
 
-  val lines = input.getLines
+  val lines = input.getLines()
   val replacements = lines.takeWhile(_.nonEmpty).map {
     case ReplacementRE(from, to) => from -> to
   }.toList

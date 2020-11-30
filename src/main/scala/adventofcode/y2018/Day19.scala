@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object Day19 extends Year2018 {
   override val day = 19
 
-  val elfCode = new ElfCode(input.getLines)
+  val elfCode = new ElfCode(input.getLines())
 
   val instructionWhereFactorizationStarts = 1
   val registerWithNumberToFactor = elfCode.program(elfCode.size - 3)._2(2)

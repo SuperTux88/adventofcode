@@ -20,7 +20,7 @@ object Day7 extends Year2019 {
     val (lastOutput, amplifierResults) = amplifiers.foldLeft((nextInput, Vector.empty[IntCode])) { (state, amplifier) =>
       val (input, results) = state
       val amplifierResult = amplifier.run(input)
-      (amplifierResult.output.next, results :+ amplifierResult)
+      (amplifierResult.output.next(), results :+ amplifierResult)
     }
 
     if (amplifierResults.last.isRunning) {

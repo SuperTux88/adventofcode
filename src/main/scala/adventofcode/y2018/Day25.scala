@@ -7,7 +7,7 @@ object Day25 extends Year2018 {
 
   private val PointRE = """ *(-?\d+), *(-?\d+), *(-?\d+), *(-?\d+)""".r
 
-  private val constellations = input.getLines.foldLeft(List[List[Pos4D]]()) {
+  private val constellations = input.getLines().foldLeft(List[List[Pos4D]]()) {
     case (const, PointRE(d1, d2, d3, d4)) =>
       val pos = Pos4D(d1.toInt, d2.toInt, d3.toInt, d4.toInt)
       val (matching, other) = const.partition(_.exists(_.distance(pos) <= 3))

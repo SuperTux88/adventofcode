@@ -25,7 +25,7 @@ object Day20 extends Year2018 {
                        branches: List[Set[Pos]] = List(Set(Pos.zero)),
                        branchPositions: List[Set[Pos]] = List.empty
                      ): Map[Pos, Char] = {
-    regex.next match {
+    regex.next() match {
       case direction@('N'|'E'|'S'|'W') =>
         val (nextMap, nextPos) = positions.foldLeft(map, Set[Pos]()) { (state, pos) =>
           val dir = Dir.directions(direction)

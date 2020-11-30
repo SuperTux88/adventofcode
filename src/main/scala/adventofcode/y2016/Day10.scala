@@ -9,7 +9,7 @@ object Day10 extends Year2016 {
   var bots = Map.empty[Int, List[Int]]
   var botInstructions = Map.empty[Int, List[Int] => Unit]
 
-  input.getLines.foreach {
+  input.getLines().foreach {
     case ValueRE(value, bot) => addChipToBot(bot.toInt, value.toInt)
     case InstructionRE(bot, lowType, lowId, highType, highId) =>
       botInstructions = botInstructions + (bot.toInt -> { chips =>

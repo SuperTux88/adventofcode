@@ -3,7 +3,7 @@ package adventofcode.y2016
 object Day3 extends Year2016 {
   override val day: Int = 3
 
-  val numbers = input.getLines.map(_.trim.split(" +").map(_.toInt).toList).toList
+  val numbers = input.getLines().map(_.trim.split(" +").map(_.toInt).toList).toList
 
   printDayPart(1, numbers.count(isTriangle))
   printDayPart(2, numbers.grouped(3).flatMap(_.transpose).count(isTriangle))

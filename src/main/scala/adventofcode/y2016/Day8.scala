@@ -11,7 +11,7 @@ object Day8 extends Year2016 {
 
   val screen = Array.fill(6, 50)(false)
 
-  input.getLines.foreach {
+  input.getLines().foreach {
     case RectRE(width, height) =>
       for (x <- 0 until height.toInt; y <- 0 until width.toInt) screen(x)(y) = true
     case RotateRE(direction, index, pixels) => (direction, index.toInt, pixels.toInt) match {

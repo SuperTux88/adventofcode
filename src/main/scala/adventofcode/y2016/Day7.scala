@@ -8,7 +8,7 @@ object Day7 extends Year2016 {
   val AbbaRE = """.*(\w)((?!\1)\w)(\2)\1.*""".r
   val HypernetRE = """\[|\]""".r
 
-  private val ips = input.getLines.map(parseIP).toList
+  private val ips = input.getLines().map(parseIP).toList
 
   printDayPart(1, ips.count(_.supportsTLS))
   printDayPart(2, ips.count(_.supportsSSL))

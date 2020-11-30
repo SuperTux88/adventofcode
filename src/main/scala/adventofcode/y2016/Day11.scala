@@ -11,7 +11,7 @@ object Day11 extends Year2016 {
   val GeneratorRE = """a (\w+) generator""".r
   val MicrochipRE = """a (\w+)-compatible microchip""".r
 
-  private val floors = input.getLines.map {
+  private val floors = input.getLines().map {
     case FloorRE(floor, content) => getFloorNumber(floor) -> (content match {
       case "nothing relevant" => Floor(List.empty)
       case components => Floor(components.split("(,? and|,) ").map {

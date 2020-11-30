@@ -5,7 +5,7 @@ object Day15 extends Year2016 {
 
   val DiscRE = """Disc #(\d) has (\d+) positions; at time=0, it is at position (\d+).""".r
 
-  private val discs = input.getLines.map {
+  private val discs = input.getLines().map {
     case DiscRE(discNo, positions, currentPos) => Disc(discNo.toInt, positions.toInt, currentPos.toInt)
   }.toList
 

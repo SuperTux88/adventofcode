@@ -12,7 +12,7 @@ object Day7 extends Year2015 {
   val RShiftRE = """(\w+) RSHIFT (\d+)""".r
   val NotRE = """NOT (\w+)""".r
 
-  var wires = input.getLines.map {
+  var wires = input.getLines().map {
     case InstructionRE(inputs, output) => output -> inputs
   }.toMap
 

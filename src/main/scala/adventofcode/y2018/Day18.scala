@@ -9,7 +9,7 @@ object Day18 extends Year2018 {
 
   private val acreOffsets = Seq((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
 
-  private val map = input.getLines.map(_.toVector).toVector
+  private val map = input.getLines().map(_.toVector).toVector
 
   private val map10 = (1 to 10).foldLeft(map) { (currentMap, _) => transform(currentMap) }
 

@@ -52,7 +52,7 @@ object Day25 extends Year2019 {
       IntCode.printAsciiOut = true
       IntCode.printAsciiIn = true
       shortestSolution._2.reverse.flatMap(_.command).foldLeft(initDroid)((droid, command) => droid.sendAsciiInput(command)._1)
-      println
+      println()
     }
 
     printDayPart(1, shortestSolution._2.head.room.password.get, "password for the main airlock is: %s")

@@ -5,7 +5,7 @@ object Day4 extends Year2016 {
 
   val RoomRE = """([\w-]+)-(\d+)\[(\w{5})\]""".r
 
-  private val realRooms = input.getLines.map {
+  private val realRooms = input.getLines().map {
     case RoomRE(name, sectorId, checksum) => Room(name, sectorId.toInt, checksum)
   }.filter(_.isReal).toList
 

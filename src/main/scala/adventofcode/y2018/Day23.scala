@@ -9,7 +9,7 @@ object Day23 extends Year2018 {
 
   private val NanoBotRE = """pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)""".r
 
-  private val bots = input.getLines.map {
+  private val bots = input.getLines().map {
     case NanoBotRE(x, y, z, r) => Bot(Pos3D(x.toInt, y.toInt, z.toInt), r.toInt)
   }.toList
 

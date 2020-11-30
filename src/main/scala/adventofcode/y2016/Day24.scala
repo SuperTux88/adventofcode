@@ -7,7 +7,7 @@ object Day24 extends Year2016 {
 
   private val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
 
-  private val maze = input.getLines.zipWithIndex.flatMap { line =>
+  private val maze = input.getLines().zipWithIndex.flatMap { line =>
     line._1.zipWithIndex.map(c => (c._2, line._2) -> c._1)
   }.toMap
 

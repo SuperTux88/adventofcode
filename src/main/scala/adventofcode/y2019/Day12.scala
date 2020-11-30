@@ -16,7 +16,7 @@ object Day12 extends Year2019 {
     case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
   }.toVector
 
-  private val energy = Iterator.iterate(moons)(step).drop(1000).next.map {
+  private val energy = Iterator.iterate(moons)(step).drop(1000).next().map {
     case (pos, vel) =>
       (pos.x.abs + pos.y.abs + pos.z.abs) * (vel._1.abs + vel._2.abs + vel._3.abs)
   }.sum

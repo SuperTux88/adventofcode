@@ -46,5 +46,5 @@ object Solutions {
 
   private val solutionsMap = mutable.Map[Int, List[String]]()
   private def solutions(year: Int) = solutionsMap.getOrElseUpdate(year,
-    Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/solutions.txt")).getLines.toList)
+    Source.fromInputStream(getClass.getResourceAsStream(s"/input/$year/solutions.txt")).getLines().toList)
 }

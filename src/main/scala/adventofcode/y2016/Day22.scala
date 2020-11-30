@@ -7,7 +7,7 @@ object Day22 extends Year2016 {
 
   val NodeRE = """/dev/grid/node-x(\d+)-y(\d+) +(\d+)T +(\d+)T +(\d+)T +(\d+)%""".r
 
-  private val grid = input.getLines.flatMap {
+  private val grid = input.getLines().flatMap {
     case NodeRE(x, y, size, used, avail, use) =>
       Some(Node(x.toInt, y.toInt, size.toInt, used.toInt, avail.toInt, use.toInt))
     case _ => None

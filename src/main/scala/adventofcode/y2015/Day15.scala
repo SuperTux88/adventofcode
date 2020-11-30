@@ -5,7 +5,7 @@ object Day15 extends Year2015 {
 
   val IngredientRE = """([\w]+): capacity ([-\d]+), durability ([-\d]+), flavor ([-\d]+), texture ([-\d]+), calories ([-\d]+)""".r
 
-  private val ingredients = input.getLines.map {
+  private val ingredients = input.getLines().map {
     case IngredientRE(n, capacity, durability, flavor, texture, calories) =>
       Ingredient(n, capacity.toInt, durability.toInt, flavor.toInt, texture.toInt, calories.toInt)
   }.toList

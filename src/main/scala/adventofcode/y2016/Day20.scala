@@ -3,7 +3,7 @@ package adventofcode.y2016
 object Day20 extends Year2016 {
   override val day = 20
 
-  val blacklist = input.getLines.map { line =>
+  val blacklist = input.getLines().map { line =>
     val range = line.split("-")
     range(0).toLong to range(1).toLong
   }.toList.sortBy(_.start)

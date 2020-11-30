@@ -9,7 +9,7 @@ object Day17 extends Year2018 {
   val ClayVerticalRE = """x=(\d+), y=(\d+)\.\.(\d+)""".r
   val ClayHorizontalRE = """y=(\d+), x=(\d+)\.\.(\d+)""".r
 
-  private val clay = input.getLines.flatMap {
+  private val clay = input.getLines().flatMap {
     case ClayVerticalRE(x, yFrom, yTo) => (yFrom.toInt to yTo.toInt).map(Pos(x.toInt, _))
     case ClayHorizontalRE(y, xFrom, xTo) => (xFrom.toInt to xTo.toInt).map(Pos(_, y.toInt))
   }.toSet

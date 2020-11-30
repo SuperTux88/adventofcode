@@ -9,7 +9,7 @@ import scala.collection.mutable
 object Day22 extends Year2018 {
   override val day = 22
 
-  private val lines = input.getLines.toList
+  private val lines = input.getLines().toList
   private val depth = lines.head.split(" ")(1).toInt
   private val Array(targetX, targetY) = lines(1).split(" ")(1).split(",").map(_.toInt)
   private val target = Pos(targetX, targetY)

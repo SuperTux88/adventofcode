@@ -5,7 +5,7 @@ import adventofcode.common.pos.Pos
 object Day2 extends Year2016 {
   override val day: Int = 2
 
-  val instructions = input.getLines.toList
+  val instructions = input.getLines().toList
 
   val keyPad1 = List(List('1','2','3'),
                      List('4','5','6'),

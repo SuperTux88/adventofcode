@@ -5,7 +5,7 @@ import adventofcode.common.pos.Pos
 object Day6 extends Year2018 {
   override val day = 6
 
-  private val coordinates = input.getLines.map { line =>
+  private val coordinates = input.getLines().map { line =>
     val coordinate = line.split(", ").map(_.toInt)
     Pos(coordinate.head, coordinate.last)
   }.toList

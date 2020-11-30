@@ -19,7 +19,7 @@ object Day14 extends Year2016 {
 
   printDayPart(1, getKeyIndex(salt))
 
-  md5Cache.clear
+  md5Cache.clear()
   printDayPart(2, getKeyIndex(salt, stretching = true))
 
   private def getKeyIndex(salt: String, stretching: Boolean = false) =

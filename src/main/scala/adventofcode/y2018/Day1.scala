@@ -19,7 +19,7 @@ object Day1 extends Year2018 {
 
         if (knownFrequencies.contains(frequency)) {
           printDayPart(2, frequency)
-          break
+          break()
         }
 
         knownFrequencies += frequency

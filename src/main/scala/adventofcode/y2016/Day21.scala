@@ -10,7 +10,7 @@ object Day21 extends Year2016 {
   val ReverseRE = """reverse positions (\d) through (\d)""".r
   val MoveRE = """move position (\d) to position (\d)""".r
 
-  val instructions = input.getLines.toList
+  val instructions = input.getLines().toList
 
   printDayPart(1, scramblePassword(instructions, "abcdefgh"), "scrambled password: %s")
   printDayPart(2, scramblePassword(instructions.reverse, "fbgdceah", reverse = true), "un-scrambled password: %s")

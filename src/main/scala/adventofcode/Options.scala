@@ -29,12 +29,12 @@ class Options(args: List[String]) {
       case "--interactive" :: tail => parseArgs(tail, map + ("interactive" -> true))
       case "--quiet" :: tail => parseArgs(tail, map + ("quiet" -> true))
       case "--help" :: _ =>
-        showHelp
+        showHelp()
         System.exit(0).asInstanceOf[Map[String, Any]]
       case option :: _ =>
         println(s"Invalid option $option")
-        println
-        showHelp
+        println()
+        showHelp()
         System.exit(1).asInstanceOf[Map[String, Any]]
     }
   }

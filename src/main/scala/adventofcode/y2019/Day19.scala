@@ -15,7 +15,7 @@ object Day19 extends Year2019 {
   private val topLeft = findSquare(Pos(50, scanned50x50.zipWithIndex.findLast(_._1.last).map(_._2).getOrElse(50)))
   printDayPart(2, topLeft.x * 10000 + topLeft.y)
 
-  private def isInBeam(pos: Pos) = intCode.run(Vector(pos.x.toLong, pos.y.toLong)).output.next == 1
+  private def isInBeam(pos: Pos) = intCode.run(Vector(pos.x.toLong, pos.y.toLong)).output.next() == 1
 
   @tailrec
   private def findSquare(pos: Pos, size: Int = 100): Pos =

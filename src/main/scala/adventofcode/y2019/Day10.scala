@@ -8,7 +8,7 @@ import scala.collection.parallel.CollectionConverters._
 object Day10 extends Year2019 {
   override val day = 10
 
-  private val asteroids = input.getLines.zipWithIndex.flatMap {
+  private val asteroids = input.getLines().zipWithIndex.flatMap {
     case (line, y) =>
       line.zipWithIndex.flatMap {
         case ('#', x) => Some(Pos(x, y))

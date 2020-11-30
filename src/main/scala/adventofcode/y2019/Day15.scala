@@ -33,7 +33,7 @@ object Day15 extends Year2019 {
         case (pos, droid) =>
           directions.filterNot(dir => visited.contains(pos + dir._2)).map { dir =>
             val res = droid.run(dir._1)
-            DroidState(res, pos + dir._2, res.output.next.toInt)
+            DroidState(res, pos + dir._2, res.output.next().toInt)
           }
       }
 

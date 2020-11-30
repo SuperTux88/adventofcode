@@ -7,7 +7,7 @@ object Day23 extends Year2015 {
   val JumpCommandRE = """jmp ([+-]\d+)""".r
   val JumpIfCommandRE = """(ji[oe]) ([ab]), ([+-]\d+)""".r
 
-  private val commands = input.getLines.map {
+  private val commands = input.getLines().map {
     case CommandRE(command, register) => Command(command, Some(register(0)), None)
     case JumpCommandRE(offset) => Command("jmp", None, Some(offset.toInt))
     case JumpIfCommandRE(command, register, offset) => Command(command, Some(register(0)), Some(offset.toInt))

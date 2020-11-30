@@ -5,7 +5,7 @@ import scala.util.control.Breaks._
 object Day25 extends Year2016 {
   override val day = 25
 
-  val computer = new Computer(input.getLines)
+  val computer = new Computer(input.getLines())
 
   var solution: Option[Int] = None
   var initValue = 0
@@ -19,15 +19,15 @@ object Day25 extends Year2016 {
 
       computer.run("a" -> initValue, checkOutput)
 
-      def checkOutput(output: Int) = {
+      def checkOutput(output: Int): Unit = {
         if (lastOutput == output) {
-          break
+          break()
         } else {
           lastOutput = output
           counter += 1
           if (counter > 100) {
             solution = Some(initValue)
-            break
+            break()
           }
         }
       }

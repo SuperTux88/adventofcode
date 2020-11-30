@@ -25,7 +25,7 @@ object Day11 extends Year2019 {
     val result = robot.run(map(pos))
 
     if (result.isRunning) {
-      val (paint, turn) = (result.output.next, result.output.next)
+      val (paint, turn) = (result.output.next(), result.output.next())
 
       val newDirection = turn match {
         case 0 => (direction + 3) % 4

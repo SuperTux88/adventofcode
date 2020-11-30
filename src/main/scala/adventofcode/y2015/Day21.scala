@@ -28,7 +28,7 @@ object Day21 extends Year2015 {
     Item("Defense +2", 40, 0, 2),
     Item("Defense +3", 80, 0, 3))
 
-  private val boss = Player.boss(input.getLines.map(_.split(':')(1).trim.toInt))
+  private val boss = Player.boss(input.getLines().map(_.split(':')(1).trim.toInt))
 
   private val combinations = for {
       weapon <- weapons
