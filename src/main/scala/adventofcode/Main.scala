@@ -7,8 +7,9 @@ object Main extends App {
   val allDays2016 = List(y2016.Day1, y2016.Day2, y2016.Day3, y2016.Day4, y2016.Day5, y2016.Day6, y2016.Day7, y2016.Day8, y2016.Day9, y2016.Day10, y2016.Day11, y2016.Day12, y2016.Day13, y2016.Day14, y2016.Day15, y2016.Day16, y2016.Day17, y2016.Day18, y2016.Day19, y2016.Day20, y2016.Day21, y2016.Day22, y2016.Day23, y2016.Day24, y2016.Day25)
   val allDays2018 = List(y2018.Day1, y2018.Day2, y2018.Day3, y2018.Day4, y2018.Day5, y2018.Day6, y2018.Day7, y2018.Day8, y2018.Day9, y2018.Day10, y2018.Day11, y2018.Day12, y2018.Day13, y2018.Day14, y2018.Day15, y2018.Day16, y2018.Day17, y2018.Day18, y2018.Day19, y2018.Day20, y2018.Day21, y2018.Day22, y2018.Day23, y2018.Day24, y2018.Day25)
   val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4, y2019.Day5, y2019.Day6, y2019.Day7, y2019.Day8, y2019.Day9, y2019.Day10, y2019.Day11, y2019.Day12, y2019.Day13, y2019.Day14, y2019.Day15, y2019.Day16, y2019.Day17, y2019.Day18, y2019.Day19, y2019.Day20, y2019.Day21, y2019.Day22, y2019.Day23, y2019.Day24, y2019.Day25)
+  val allDays2020 = List()
 
-  val years = Map("2015" -> allDays2015, "2016" -> allDays2016, "2018" -> allDays2018, "2019" -> allDays2019)
+  val years = Map("2015" -> allDays2015, "2016" -> allDays2016, "2018" -> allDays2018, "2019" -> allDays2019, "2020" -> allDays2020)
 
   private val options = new Options(args.toList)
 
@@ -26,15 +27,14 @@ object Main extends App {
         |  - 2015
         |  - 2016
         |  - 2018
-        |  - 2019 (default)
+        |  - 2019
+        |  - 2020 (default)
         |
         |Year: """.stripMargin)
 
     readInput {
-      case "2015" => Some(allDays2015)
-      case "2016" => Some(allDays2016)
-      case "2018" => Some(allDays2018)
-      case "2019"|"" => Some(allDays2019)
+      case year if years.contains(year) => Some(years(year))
+      case "" => Some(allDays2020)
       case _ => None
     }
   }
@@ -76,7 +76,7 @@ object Main extends App {
 
         readInput {
           case Int(dayNumber) if dayNumber > 0 && dayNumber <= allDays.size => Some(List(allDays(dayNumber - 1)))
-          case "all"|"" =>
+          case "all" | "" =>
             Logging.debug = false
             Some(allDays)
           case _ => None
