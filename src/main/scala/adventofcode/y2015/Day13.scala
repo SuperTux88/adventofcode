@@ -19,8 +19,10 @@ object Day13 extends Year2015 {
 
   private def calculateBestHappinessChangeForGuests(people: List[String]) =
     people.permutations.map { arrangement =>
-      (arrangement.last :: arrangement).sliding(2).map {
-        case Seq(a, b) => guestsHappiness(a, b) + guestsHappiness(b, a)
+      (arrangement.last :: arrangement).sliding(2).map { x =>
+        (x: @unchecked) match {
+          case Seq(a, b) => guestsHappiness(a, b) + guestsHappiness(b, a)
+        }
       }.sum
     }.toSeq.max
 }

@@ -3,9 +3,9 @@ package adventofcode.y2018
 object Day16 extends Year2018 {
   override val day = 16
 
-  val SampleRE ="""Before: \[(\d, \d, \d, \d)\]
-                  |(\d+ \d \d \d)
-                  |After:  \[(\d, \d, \d, \d)\]""".stripMargin.r
+  val SampleRE = """Before: \[(\d, \d, \d, \d)\]
+                   |(\d+ \d \d \d)
+                   |After:  \[(\d, \d, \d, \d)\]""".stripMargin.r
 
   val InstructionRE = """(\d+) (\d) (\d) (\d)""".r
 
@@ -27,7 +27,7 @@ object Day16 extends Year2018 {
     .foldLeft(Map[Int, Set[String]]().withDefaultValue(ElfCode.opcodes)) { (possibleOpcodeMappings, result) =>
       val (resOpcode, matchingOpcodes) = result
       possibleOpcodeMappings + (resOpcode -> possibleOpcodeMappings(resOpcode).intersect(matchingOpcodes))
-  }
+    }
 
   val opcodeMapping = ElfCode.opcodes.foldLeft(Map[Int, String](), possibleOpcodeMappings) { (mappings, _) =>
     val (finalMapping, possibleMappings) = mappings
@@ -35,9 +35,11 @@ object Day16 extends Year2018 {
     (finalMapping + (opcode -> mapped.head), possibleMappings.view.mapValues(v => v - mapped.head).toMap)
   }._1
 
-  val registers = program.trim.split("\n").foldLeft(Vector.fill(4)(0)) {
-    case (state, InstructionRE(instruction, a, b, c)) =>
-      ElfCode.getInstruction(opcodeMapping(instruction.toInt), Vector(a.toInt, b.toInt, c.toInt))(state)
+  val registers = program.trim.split("\n").foldLeft(Vector.fill(4)(0)) { (x, y) =>
+    ((x, y): @unchecked) match {
+      case (state, InstructionRE(instruction, a, b, c)) =>
+        ElfCode.getInstruction(opcodeMapping(instruction.toInt), Vector(a.toInt, b.toInt, c.toInt))(state)
+    }
   }
 
   printDayPart(2, registers.head)

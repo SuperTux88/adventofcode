@@ -25,15 +25,17 @@ object Day11 extends Year2015 {
   }
 
   private def containsIncreasingStraightOfThreeChars(reversePassword: List[Char]) = {
-    reversePassword.sliding(3).exists { case Seq(a, b, c) =>
-      a == b + 1 && a == c + 2
+    reversePassword.sliding(3).exists { x =>
+      (x: @unchecked) match {
+        case Seq(a, b, c) => a == b + 1 && a == c + 2
+      }
     }
   }
 
   private def containsTwoPairs(reversePassword: List[Char]) = {
     val pairIndexes = reversePassword.sliding(2).zipWithIndex.collect {
-      case (pair, index) if pair.head == pair.last  => index
+      case (pair, index) if pair.head == pair.last => index
     }.toSeq
-    pairIndexes.length >= 2 && pairIndexes.head < pairIndexes.last -1
+    pairIndexes.length >= 2 && pairIndexes.head < pairIndexes.last - 1
   }
 }
