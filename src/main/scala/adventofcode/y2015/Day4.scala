@@ -44,7 +44,7 @@ object Day4 extends Year2015 {
     import ExecutionContext.Implicits.global
     do {
       val future = Future[Int] {
-        calculateFirstInBatch(nextBatch, batchSize)
+        calculateFirstInBatch(nextBatch)
       }
       future.foreach {
         case -1 => queue.remove(future)
@@ -64,7 +64,7 @@ object Day4 extends Year2015 {
     result.min
   }
 
-  private def calculateFirstInBatch(batch: Range, batchSize: Int)(implicit expectedResult: ExpectedResult): Int = {
+  private def calculateFirstInBatch(batch: Range)(implicit expectedResult: ExpectedResult): Int = {
     batch.find( counter => calculateStringAndMatch(inputStr + counter)).getOrElse(-1)
   }
 

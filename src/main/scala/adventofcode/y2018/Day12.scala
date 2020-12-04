@@ -36,7 +36,7 @@ object Day12 extends Year2018 {
     }.sum
 
   @tailrec
-  def findPattern(pots: List[Boolean], steps: Int, pattern: Int = 0): (Int, Int, Int) = {
+  def findPattern(pots: List[Boolean], steps: Int): (Int, Int, Int) = {
     val nextPots = transformPots(pots)
 
     if (trimEmptyPots(nextPots) == trimEmptyPots(pots)) {

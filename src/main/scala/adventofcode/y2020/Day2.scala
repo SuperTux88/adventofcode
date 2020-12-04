@@ -27,4 +27,3 @@ object Day2 extends Year2020 {
       password.length > pos && password.charAt(pos) == char
   }
 }
-

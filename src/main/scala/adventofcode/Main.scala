@@ -133,7 +133,7 @@ object Main extends App {
 
         val runs = if (selectedRuns > 0) selectedRuns else benchmarkRunsForDays(day)
         print(s"runs: $runs")
-        val times = (1 to runs).map { pass =>
+        val times = (1 to runs).map { _ =>
           val start = System.nanoTime
           day.main(args)
           (System.nanoTime - start).toFloat / 1000 / 1000

@@ -26,7 +26,7 @@ object Day14 extends Year2016 {
     (1 to 64).foldLeft(0)((counter, _) => nextKeyIndex(salt, counter + 1, stretching))
 
   @tailrec
-  private def nextKeyIndex(salt: String, counter: Int, stretching: Boolean = false): Int = {
+  private def nextKeyIndex(salt: String, counter: Int, stretching: Boolean): Int = {
     val md5String = cachedMd5(salt, counter, stretching)
     md5Cache.remove(counter)
 
@@ -43,10 +43,10 @@ object Day14 extends Year2016 {
     }
   }
 
-  private def cachedMd5(salt: String, counter: Int, stretching: Boolean = false) =
+  private def cachedMd5(salt: String, counter: Int, stretching: Boolean) =
     md5Cache.getOrElseUpdate(counter, md5((salt + counter).getBytes, stretching))
 
-  private def md5(bytes: Array[Byte], stretching: Boolean = false): String = {
+  private def md5(bytes: Array[Byte], stretching: Boolean): String = {
     val md = MessageDigest.getInstance("MD5")
     var digest = md.digest(bytes)
     if (stretching) (1 to 2016).foreach(_ => digest = md.digest(getHexBytes(digest)))
