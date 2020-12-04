@@ -17,6 +17,11 @@ object NumberHelper {
   def lcm(numbers: Seq[Long]): Long = numbers.reduce(lcm)
 
   /**
+    * number is in range
+    */
+  def isInRange(n: Long, min: Long, max: Long): Boolean = min <= n && n <= max
+
+  /**
     * modular inverse
     */
   // from https://rosettacode.org/wiki/Modular_inverse#Scala

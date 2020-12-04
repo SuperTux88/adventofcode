@@ -1,5 +1,7 @@
 package adventofcode.y2020
 
+import adventofcode.common.NumberHelper.isInRange
+
 object Day4 extends Year2020 {
   override val day = 4
 
@@ -23,16 +25,12 @@ object Day4 extends Year2020 {
       .map(_.split(":")).map { case Array(k, v) => (k, v) }.toMap
 
     private val fieldValidators = Map(
-      "byr" -> ((_: String).toIntOption.exists(yr => 1920 <= yr && yr <= 2002)),
-      "iyr" -> ((_: String).toIntOption.exists(yr => 2010 <= yr && yr <= 2020)),
-      "eyr" -> ((_: String).toIntOption.exists(yr => 2020 <= yr && yr <= 2030)),
+      "byr" -> ((_: String).toIntOption.exists(isInRange(_, 1920, 2002))),
+      "iyr" -> ((_: String).toIntOption.exists(isInRange(_, 2010, 2020))),
+      "eyr" -> ((_: String).toIntOption.exists(isInRange(_, 2020, 2030))),
       "hgt" -> ((_: String) match {
-        case hgtRE(hgtStr, "cm") =>
-          val hgt = hgtStr.toInt
-          150 <= hgt && hgt <= 193
-        case hgtRE(hgtStr, "in") =>
-          val hgt = hgtStr.toInt
-          59 <= hgt && hgt <= 76
+        case hgtRE(hgt, "cm") => isInRange(hgt.toInt, 150, 193)
+        case hgtRE(hgt, "in") => isInRange(hgt.toInt, 59, 76)
         case _ => false
       }),
       "hcl" -> (hclRE.matches(_)),

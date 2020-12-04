@@ -1,5 +1,7 @@
 package adventofcode.y2020
 
+import adventofcode.common.NumberHelper.isInRange
+
 object Day2 extends Year2020 {
   override val day = 2
 
@@ -15,10 +17,8 @@ object Day2 extends Year2020 {
     "valid passwords according to according to the new interpretation of the policies: %s")
 
   private case class Password(a: Int, b: Int, char: Char, password: String) {
-    def isValid: Boolean = {
-      val count = password.count(_ == char)
-      count >= a && count <= b
-    }
+    def isValid: Boolean =
+      isInRange(password.count(_ == char), a, b)
 
     def isValidTobogganCorporatePolicy: Boolean =
       hasCharAtPos(char, a - 1) ^ hasCharAtPos(char, b - 1)
