@@ -23,7 +23,7 @@ trait DayApp extends App {
   def printDayPart(part: Int, solution: String, formatString: String): Unit = {
     if (Logging.results) {
       println(s"Day $day - Part $part: ${String.format(formatString, s"$GREEN$solution$RESET")}")
-      if (options.input.isEmpty) Solutions.check(day, year, part, solution)
+      if (options.input.isEmpty) Solutions.check(year, day, part, solution)
     }
   }
 
@@ -38,11 +38,15 @@ object Logging {
 }
 
 object Solutions {
-  def check(day: Int, year: Int, part: Int, solution: String): Unit = {
-    val correctSolution = solutions(year)((day - 1) * 2 + part - 1)
-    if (solution != correctSolution)
-      println(s"$RED$solution is wrong, the expected solution is: $correctSolution$RESET")
+  def check(year: Int, day: Int, part: Int, solution: String): Unit = {
+    getSolution(year, day, part).foreach { correctSolution =>
+      if (solution != correctSolution)
+        println(s"$RED$solution is wrong, the expected solution is: $correctSolution$RESET")
+    }
   }
+
+  def getSolution(year: Int, day: Int, part: Int): Option[String] =
+    solutions(year).lift((day - 1) * 2 + part - 1)
 
   private val solutionsMap = mutable.Map[Int, List[String]]()
   private def solutions(year: Int) = solutionsMap.getOrElseUpdate(year,
