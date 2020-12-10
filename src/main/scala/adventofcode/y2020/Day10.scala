@@ -11,13 +11,14 @@ object Day10 extends Year2020 {
 
   printDayPart(1, steps(1) * steps(3))
 
-  private val ways = joltages.zipWithIndex.tail.foldLeft(Vector(1L)) { (ways, current) =>
-    val (joltage, index) = current
-    val stepsToHere = (1 to 3).map(index - _)
-      .takeWhile(previous => previous >= 0 && joltage - joltages(previous) <= 3)
-      .foldLeft(0L)((step, previous) => step + ways(previous))
-    ways :+ stepsToHere
-  }
+  private val ways = joltages.zip(1 to joltages.size).reverse.tail
+    .foldLeft(List(1L)) { (ways, current) =>
+      val (joltage, previousIndex) = current
+      val waysFromThisJoltageToDevice = (0 until Math.min(3, joltages.size - previousIndex))
+        .takeWhile(diff => joltages(previousIndex + diff) - joltage <= 3)
+        .map(ways(_)).sum
+      waysFromThisJoltageToDevice :: ways
+    }
 
-  printDayPart(2, ways.last, "number of distinct ways to arrange the adapters: %s")
+  printDayPart(2, ways.head, "number of distinct ways to arrange the adapters: %s")
 }
