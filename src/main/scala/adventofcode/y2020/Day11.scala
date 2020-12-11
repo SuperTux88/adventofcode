@@ -34,8 +34,8 @@ object Day11 extends Year2020 {
     val next = state.map { cur =>
       val (pos, seat) = cur
       val newSeatState = seat match {
-        case false if !neighbors(pos).exists(state.getOrElse(_, false)) => true
-        case true if neighbors(pos).count(state.getOrElse(_, false)) >= fullSeatsRule => false
+        case false if !neighbors(pos).exists(state(_)) => true
+        case true if neighbors(pos).count(state(_)) >= fullSeatsRule => false
         case keep => keep
       }
       pos -> newSeatState
