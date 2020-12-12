@@ -29,6 +29,15 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def moveDirectionIndex(direction: Int): Pos =
     Pos(x + Pos.directions(direction)._1, y + Pos.directions(direction)._2)
 
+  // rotate around 0,0 - only supports 90 degree steps
+  def rotate(stepsClockwise: Int): Pos =
+    stepsClockwise % 4 match {
+      case 0 => this
+      case 1 => Pos(-y, x)
+      case 2 => Pos(-x, -y)
+      case 3 => Pos(y, -x)
+    }
+
   def neighbors: List[Pos] = Pos.directions.map(this + _)
   def neighborsWithDiagonals: List[Pos] = Pos.directionsWithDiagonals.map(this + _)
   def diagonals: List[Pos] = Pos.diagonals.map(this + _)
