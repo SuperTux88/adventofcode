@@ -29,8 +29,9 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def moveDirectionIndex(direction: Int): Pos =
     Pos(x + Pos.directions(direction)._1, y + Pos.directions(direction)._2)
 
-  def neighbors: List[Pos] =
-      Pos.directionsWithDiagonals.map(this + _)
+  def neighbors: List[Pos] = Pos.directions.map(this + _)
+  def neighborsWithDiagonals: List[Pos] = Pos.directionsWithDiagonals.map(this + _)
+  def diagonals: List[Pos] = Pos.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
 
@@ -43,7 +44,9 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
 object Pos {
   // up, right, down, left
   val directions: List[(Int, Int)] = List((0, -1), (1, 0), (0, 1), (-1, 0))
-  val directionsWithDiagonals: List[(Int, Int)] = directions ::: List((-1, -1), (1, -1), (-1, 1), (1, 1))
+  // top-left, top-right, down-right, down-left
+  val diagonals: List[(Int, Int)] = List((-1, -1), (1, -1), (1, 1), (-1, 1))
+  val directionsWithDiagonals: List[(Int, Int)] = directions ::: diagonals
 
   val zero: Pos = Pos(0, 0)
 }

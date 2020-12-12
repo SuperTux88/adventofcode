@@ -19,7 +19,7 @@ object Day11 extends Year2020 {
   private val (width, height) = (seats.maxBy(_.x).x, seats.maxBy(_.y).y)
   private val initialEmptySeats = seats.map(_ -> false).toMap.par
 
-  private val neighborsMap = seats.map(seat => seat -> seat.neighbors.filter(seats.contains)).toMap
+  private val neighborsMap = seats.map(seat => seat -> seat.neighborsWithDiagonals.filter(seats.contains)).toMap
 
   printDayPart(1, move(initialEmptySeats, neighborsMap), "occupied seats: %s")
 

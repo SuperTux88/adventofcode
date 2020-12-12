@@ -61,7 +61,7 @@ object Day22 extends Year2018 {
         t => t != tool && getRegion(pos).regionType.valid(t)
       }.get
 
-      (7, pos.distance(target), State(pos, newTool)) :: Pos.directions.map(pos + _).filter { newPos =>
+      (7, pos.distance(target), State(pos, newTool)) :: pos.neighbors.filter { newPos =>
         newPos.positive && getRegion(newPos).regionType.valid(tool)
       }.map(newPos => (1, newPos.distance(target), State(newPos, tool)))
     }

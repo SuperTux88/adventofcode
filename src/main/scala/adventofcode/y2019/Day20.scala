@@ -73,7 +73,7 @@ object Day20 extends Year2019 {
       labels
     } else {
       val nextSteps = positions.flatMap { pos =>
-        Pos.directions.map(pos + _).filterNot(pos => visited.contains(pos) || map(pos) == '#')
+        pos.neighbors.filterNot(pos => visited.contains(pos) || map(pos) == '#')
       }
 
       val (foundLabels, newPositions) = nextSteps.partition(pos => map(pos).isLetter)

@@ -54,10 +54,10 @@ object Day24 extends Year2019 {
     }
 
   private def countNeighbors(map: Map[Pos, Boolean], pos: Pos) =
-    Pos.directions.map(pos + _).map(map.getOrElse(_, false)).count(identity)
+    pos.neighbors.map(map.getOrElse(_, false)).count(identity)
 
   private def countNeighborsWithLevels(levels: Map[Int, Map[Pos, Boolean]], pos: Pos, level: Int) =
-    Pos.directions.map(pos + _).flatMap(newPos => levels(level).get(newPos) match {
+    pos.neighbors.flatMap(newPos => levels(level).get(newPos) match {
       case Some(bug) => Seq(bug) // on same level
       case None => // not on same level
         if (newPos == Pos(2, 2)) {

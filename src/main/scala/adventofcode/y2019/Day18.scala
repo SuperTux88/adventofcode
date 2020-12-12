@@ -22,10 +22,9 @@ object Day18 extends Year2019 {
 
   private val futurePart1 = Future { getShortestPath(Seq(startPos), map) }
 
-  private val map2 = map + (startPos -> '#') ++ Pos.directions.map(startPos + _).map(_ -> '#')
-  private val startPositionsRobots = List((-1, -1), (-1, 1), (1, 1), (1, -1)).map(startPos + _)
+  private val map2 = map + (startPos -> '#') ++ startPos.neighbors.map(_ -> '#')
 
-  private val futurePart2 = Future { getShortestPath(startPositionsRobots, map2) }
+  private val futurePart2 = Future { getShortestPath(startPos.diagonals, map2) }
 
   printDayPart(1, Await.result(futurePart1, Duration.Inf), "shortest path to all keys: %s")
   printDayPart(2, Await.result(futurePart2, Duration.Inf), "shortest path with robots: %s")
@@ -53,7 +52,7 @@ object Day18 extends Year2019 {
       foundKeys
     } else {
       val nextSteps = positions.flatMap { pos =>
-        Pos.directions.map(pos + _).filterNot(visited.contains).filter { pos =>
+        pos.neighbors.filterNot(visited.contains).filter { pos =>
           map(pos) match {
             case '#' => false
             case door if door.isUpper => openDoors.contains(door)

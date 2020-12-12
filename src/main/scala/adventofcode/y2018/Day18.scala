@@ -1,13 +1,13 @@
 package adventofcode.y2018
 
+import adventofcode.common.pos.Pos
+
 import scala.annotation.tailrec
 
 object Day18 extends Year2018 {
   override val day = 18
 
   type Acres = Vector[Vector[Char]]
-
-  private val acreOffsets = Seq((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
 
   private val map = input.getLines().map(_.toVector).toVector
 
@@ -46,7 +46,7 @@ object Day18 extends Year2018 {
   }
 
   private def getAdjacents(map: Acres, x: Int, y: Int) =
-    acreOffsets.flatMap {
+    Pos.directionsWithDiagonals.flatMap {
       case (xOffset, yOffset) => map.lift(y + yOffset) match {
         case Some(line) => line.lift(x + xOffset)
         case None => None
