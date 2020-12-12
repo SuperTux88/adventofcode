@@ -1,7 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
 
@@ -59,7 +59,7 @@ object Day20 extends Year2018 {
     @tailrec
     def step(toVisit: Set[Pos], current: Set[Pos], steps: Int = 1, roomSteps: Map[Pos, Int] = Map.empty): Map[Pos, Int] = {
       val nextSteps = current.flatMap { pos =>
-        Pos.directions.filter { dir =>
+        Direction.directions.filter { dir =>
           Set('-', '|').contains(map.getOrElse(pos + dir, '#'))
         }.map(dir => pos + dir + dir).filter(toVisit.contains)
       }

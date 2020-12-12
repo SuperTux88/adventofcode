@@ -1,5 +1,6 @@
 package adventofcode.y2020
 
+import adventofcode.common.pos.Direction.DirectionPos
 import adventofcode.common.pos.Pos
 
 object Day12 extends Year2020 {

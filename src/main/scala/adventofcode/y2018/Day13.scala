@@ -1,20 +1,20 @@
 package adventofcode.y2018
 
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.Direction.DirectionPos
+import adventofcode.common.pos.{Direction, Pos}
+
+import scala.annotation.tailrec
 
 object Day13 extends Year2018 {
   override val day = 13
 
-  // down, right, up, left
-  private val directions = List((0, 1), (1, 0), (0, -1), (-1, 0))
-
   private val railsAndCarts = input.getLines().zipWithIndex.map {
     case (line, y) =>
       line.zipWithIndex.map {
-        case ('v', x) => ('|', Some(Cart(Pos(x, y), directions(0))))
-        case ('>', x) => ('-', Some(Cart(Pos(x, y), directions(1))))
-        case ('^', x) => ('|', Some(Cart(Pos(x, y), directions(2))))
-        case ('<', x) => ('-', Some(Cart(Pos(x, y), directions(3))))
+        case ('v', x) => ('|', Some(Cart(Pos(x, y), Direction.down)))
+        case ('>', x) => ('-', Some(Cart(Pos(x, y), Direction.right)))
+        case ('^', x) => ('|', Some(Cart(Pos(x, y), Direction.up)))
+        case ('<', x) => ('-', Some(Cart(Pos(x, y), Direction.left)))
         case (rail, _) => (rail, None)
       }
   }.toList
@@ -25,6 +25,7 @@ object Day13 extends Year2018 {
   printDayPart(1, crashes.head.toString, "first crash at: %s")
   printDayPart(2, lastCart.toString, "last cart at: %s")
 
+  @tailrec
   private def simulate(carts: List[Cart], cartsDone: List[Cart] = Nil, crashes: List[Pos] = Nil): (List[Pos], Pos) = {
     carts match {
       case Nil if cartsDone.size <= 1 => (crashes.reverse, cartsDone.head.pos)
@@ -40,8 +41,8 @@ object Day13 extends Year2018 {
               case  0 => movedCart.copy(nextTurn = 1)
               case  1 => movedCart.turnRight.copy(nextTurn = -1)
             }
-            case ('/', (0, _))|('\\', (_, 0)) => movedCart.turnRight
-            case ('/', (_, 0))|('\\', (0, _)) => movedCart.turnLeft
+            case ('/', Pos(0, _))|('\\', Pos(_, 0)) => movedCart.turnRight
+            case ('/', Pos(_, 0))|('\\', Pos(0, _)) => movedCart.turnLeft
             case _ => movedCart
           }
           simulate(cartsTodo, turnedCart :: cartsDone, crashes)
@@ -51,9 +52,9 @@ object Day13 extends Year2018 {
 
   private def getMapAt(pos: Pos) = map(pos.y)(pos.x)
 
-  private case class Cart(pos: Pos, direction: (Int, Int), nextTurn: Int = -1) {
+  private case class Cart(pos: Pos, direction: Pos, nextTurn: Int = -1) {
     def forward: Cart = copy(pos = pos + direction)
-    def turnLeft: Cart = copy(direction = directions((directions.indexOf(direction) + 1) % 4))
-    def turnRight: Cart = copy(direction = directions((directions.indexOf(direction) + 3) % 4))
+    def turnLeft: Cart = copy(direction = direction.rotateLeft)
+    def turnRight: Cart = copy(direction = direction.rotateRight)
   }
 }

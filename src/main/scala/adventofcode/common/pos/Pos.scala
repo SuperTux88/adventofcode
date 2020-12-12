@@ -27,20 +27,11 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
 
   // 0 -> up, 1 -> right, 2 -> down, 3 -> left
   def moveDirectionIndex(direction: Int, steps: Int = 1): Pos =
-    Pos(x + Pos.directions(direction)._1 * steps, y + Pos.directions(direction)._2 * steps)
+    Pos(x + Direction.directions(direction)._1 * steps, y + Direction.directions(direction)._2 * steps)
 
-  // rotate around 0,0 - only supports 90 degree steps
-  def rotate(stepsClockwise: Int): Pos =
-    stepsClockwise % 4 match {
-      case 0 => this
-      case 1 => Pos(-y, x)
-      case 2 => Pos(-x, -y)
-      case 3 => Pos(y, -x)
-    }
-
-  def neighbors: List[Pos] = Pos.directions.map(this + _)
-  def neighborsWithDiagonals: List[Pos] = Pos.directionsWithDiagonals.map(this + _)
-  def diagonals: List[Pos] = Pos.diagonals.map(this + _)
+  def neighbors: List[Pos] = Direction.directions.map(this + _)
+  def neighborsWithDiagonals: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
+  def diagonals: List[Pos] = Direction.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
 
@@ -51,11 +42,7 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
 }
 
 object Pos {
-  // up, right, down, left
-  val directions: List[(Int, Int)] = List((0, -1), (1, 0), (0, 1), (-1, 0))
-  // top-left, top-right, down-right, down-left
-  val diagonals: List[(Int, Int)] = List((-1, -1), (1, -1), (1, 1), (-1, 1))
-  val directionsWithDiagonals: List[(Int, Int)] = directions ::: diagonals
+  def apply(pos: (Int, Int)): Pos = Pos(pos._1, pos._2)
 
   val zero: Pos = Pos(0, 0)
 }

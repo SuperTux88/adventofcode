@@ -1,6 +1,6 @@
 package adventofcode.y2018
 
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.Direction
 
 import scala.annotation.tailrec
 
@@ -46,7 +46,7 @@ object Day18 extends Year2018 {
   }
 
   private def getAdjacents(map: Acres, x: Int, y: Int) =
-    Pos.directionsWithDiagonals.flatMap {
+    Direction.directionsWithDiagonals.flatMap {
       case (xOffset, yOffset) => map.lift(y + yOffset) match {
         case Some(line) => line.lift(x + xOffset)
         case None => None

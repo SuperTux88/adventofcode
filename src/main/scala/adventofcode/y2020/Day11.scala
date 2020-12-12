@@ -1,6 +1,6 @@
 package adventofcode.y2020
 
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
 import scala.collection.parallel.CollectionConverters._
@@ -24,7 +24,7 @@ object Day11 extends Year2020 {
   printDayPart(1, move(initialEmptySeats, neighborsMap), "occupied seats: %s")
 
   private val visibleMap = seats.map { seat =>
-    seat -> Pos.directionsWithDiagonals.flatMap(findVisibleSeatInDirection(_, seat, seats))
+    seat -> Direction.directionsWithDiagonals.flatMap(findVisibleSeatInDirection(_, seat, seats))
   }.toMap
 
   printDayPart(2, move(initialEmptySeats, visibleMap, 5), "occupied seats with visible rule: %s")
