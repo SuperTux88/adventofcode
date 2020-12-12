@@ -26,8 +26,8 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   }
 
   // 0 -> up, 1 -> right, 2 -> down, 3 -> left
-  def moveDirectionIndex(direction: Int): Pos =
-    Pos(x + Pos.directions(direction)._1, y + Pos.directions(direction)._2)
+  def moveDirectionIndex(direction: Int, steps: Int = 1): Pos =
+    Pos(x + Pos.directions(direction)._1 * steps, y + Pos.directions(direction)._2 * steps)
 
   // rotate around 0,0 - only supports 90 degree steps
   def rotate(stepsClockwise: Int): Pos =

@@ -23,9 +23,9 @@ object Day12 extends Year2020 {
   private val position = instructions.foldLeft(Pos.zero, 1) { (state, instruction) =>
     val (pos, direction) = state
     instruction match {
-      case Forward(steps) => (Pos.zero.moveDirectionIndex(direction) * steps + pos, direction)
+      case Forward(steps) => (pos.moveDirectionIndex(direction, steps), direction)
       case Rotate(stepsClockwise) => (pos, (direction + stepsClockwise) % 4)
-      case Move(dir, steps) => (Pos.zero.moveDirectionIndex(dir) * steps + pos, direction)
+      case Move(dir, steps) => (pos.moveDirectionIndex(dir, steps), direction)
     }
   }
 
@@ -36,7 +36,7 @@ object Day12 extends Year2020 {
     instruction match {
       case Forward(steps) => (pos + waypoint * steps, waypoint)
       case Rotate(stepsClockwise) => (pos, waypoint.rotate(stepsClockwise))
-      case Move(dir, steps) => (pos, Pos.zero.moveDirectionIndex(dir) * steps + waypoint)
+      case Move(dir, steps) => (pos, waypoint.moveDirectionIndex(dir, steps))
     }
   }
 
