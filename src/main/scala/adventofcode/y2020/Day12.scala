@@ -1,7 +1,7 @@
 package adventofcode.y2020
 
 import adventofcode.common.pos.Direction.DirectionPos
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 object Day12 extends Year2020 {
   override val day = 12
@@ -9,15 +9,12 @@ object Day12 extends Year2020 {
   private val InstructionRE = """(\w)(\d+)""".r
 
   private val instructions = input.getLines().map {
-    case InstructionRE(action, number) => (action, number.toInt) match {
-      case ("F", steps) => Forward(steps)
-      case ("R", 90) | ("L", 270) => Rotate(1)
-      case ("R" | "L", 180) => Rotate(2)
-      case ("R", 270) | ("L", 90) => Rotate(3)
-      case ("N", steps) => Move(0, steps)
-      case ("E", steps) => Move(1, steps)
-      case ("S", steps) => Move(2, steps)
-      case ("W", steps) => Move(3, steps)
+    case InstructionRE(action, number) => (action.charAt(0), number.toInt) match {
+      case ('F', steps) => Forward(steps)
+      case ('R', 90) | ('L', 270) => Rotate(1)
+      case ('R' | 'L', 180) => Rotate(2)
+      case ('R', 270) | ('L', 90) => Rotate(3)
+      case (direction@('N'|'E'|'S'|'W'), steps) => Move(Direction.compassDirections.indexOf(direction), steps)
     }
   }.toSeq
 

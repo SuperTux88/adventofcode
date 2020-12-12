@@ -19,10 +19,10 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def left: Pos = copy(x = x - 1)
 
   def move(direction: Char): Pos = direction match {
-    case 'U'|'^' => up
-    case 'R'|'>' => right
-    case 'D'|'v' => down
-    case 'L'|'<' => left
+    case 'N' | 'U' | '^' => up
+    case 'E' | 'R' | '>' => right
+    case 'S' | 'D' | 'v' => down
+    case 'W' | 'L' | '<' => left
   }
 
   // 0 -> up, 1 -> right, 2 -> down, 3 -> left
@@ -38,7 +38,7 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   override def toString = s"$x,$y"
 
   import scala.math.Ordered.orderingToOrdered
-  override def compare(that: Pos): Int = (this.y, this.x) compare (that.y, that.x)
+  override def compare(that: Pos): Int = (this.y, this.x) compare(that.y, that.x)
 }
 
 object Pos {
