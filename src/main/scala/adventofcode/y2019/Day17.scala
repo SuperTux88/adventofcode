@@ -1,6 +1,6 @@
 package adventofcode.y2019
 
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 object Day17 extends Year2019 {
   override val day = 17
@@ -41,10 +41,10 @@ object Day17 extends Year2019 {
     if (scaffolds.contains(pos.moveDirectionIndex(dir))) {
       val walkedPath = Iterator.iterate(pos)(_.moveDirectionIndex(dir)).drop(1).takeWhile(scaffolds.contains).toList
       walkedPath.length.toString :: getPath(walkedPath.last, dir)
-    } else if (scaffolds.contains(pos.moveDirectionIndex((dir + 1) % 4))) {
-      "R" :: getPath(pos, (dir + 1) % 4)
-    } else if (scaffolds.contains(pos.moveDirectionIndex((dir + 3) % 4))) {
-      "L" :: getPath(pos, (dir + 3) % 4)
+    } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateLeft(dir)))) {
+      "R" :: getPath(pos, Direction.rotateLeft(dir))
+    } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateRight(dir)))) {
+      "L" :: getPath(pos, Direction.rotateRight(dir))
     } else {
       Nil
     }

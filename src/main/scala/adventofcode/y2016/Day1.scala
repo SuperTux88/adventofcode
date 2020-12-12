@@ -1,6 +1,6 @@
 package adventofcode.y2016
 
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
 
@@ -20,8 +20,8 @@ object Day1 extends Year2016 {
     val (turn, blocks) = instruction
 
     val newDirection = turn match {
-      case "R" => (direction + 3) % 4
-      case "L" => (direction + 1) % 4
+      case "L" => Direction.rotateLeft(direction)
+      case "R" => Direction.rotateRight(direction)
     }
 
     val newPositions = (1 to blocks.toInt)

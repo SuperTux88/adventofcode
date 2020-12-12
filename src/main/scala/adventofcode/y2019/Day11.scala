@@ -2,7 +2,7 @@ package adventofcode.y2019
 
 import adventofcode.Logging
 import adventofcode.common.OCR
-import adventofcode.common.pos.Pos
+import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
 
@@ -28,8 +28,8 @@ object Day11 extends Year2019 {
       val (paint, turn) = (result.output.next(), result.output.next())
 
       val newDirection = turn match {
-        case 0 => (direction + 3) % 4
-        case 1 => (direction + 1) % 4
+        case 0 => Direction.rotateRight(direction)
+        case 1 => Direction.rotateLeft(direction)
       }
 
       move(result, map.updated(pos, paint.toInt), pos.moveDirectionIndex(newDirection), newDirection)
