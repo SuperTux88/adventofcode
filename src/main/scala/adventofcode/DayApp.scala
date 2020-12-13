@@ -22,7 +22,7 @@ trait DayApp extends App {
     printDayPart(part, solution.toString, formatString)
   def printDayPart(part: Int, solution: String, formatString: String): Unit = {
     if (Logging.results) {
-      println(s"Day $day - Part $part: ${String.format(formatString, s"$GREEN$solution$RESET")}")
+      println(s"$year Day $day - Part $part: ${String.format(formatString, s"$GREEN$solution$RESET")}")
       if (options.input.isEmpty) Solutions.check(year, day, part, solution)
     }
   }

@@ -1,16 +1,10 @@
 package adventofcode
 
+import adventofcode.common.NumberHelper.isInRange
+
 import scala.io.StdIn
 
 object Main extends App {
-  val allDays2015 = List(y2015.Day1, y2015.Day2, y2015.Day3, y2015.Day4, y2015.Day5, y2015.Day6, y2015.Day7, y2015.Day8, y2015.Day9, y2015.Day10, y2015.Day11, y2015.Day12, y2015.Day13, y2015.Day14, y2015.Day15, y2015.Day16, y2015.Day17, y2015.Day18, y2015.Day19, y2015.Day20, y2015.Day21, y2015.Day22, y2015.Day23, y2015.Day24, y2015.Day25)
-  val allDays2016 = List(y2016.Day1, y2016.Day2, y2016.Day3, y2016.Day4, y2016.Day5, y2016.Day6, y2016.Day7, y2016.Day8, y2016.Day9, y2016.Day10, y2016.Day11, y2016.Day12, y2016.Day13, y2016.Day14, y2016.Day15, y2016.Day16, y2016.Day17, y2016.Day18, y2016.Day19, y2016.Day20, y2016.Day21, y2016.Day22, y2016.Day23, y2016.Day24, y2016.Day25)
-  val allDays2018 = List(y2018.Day1, y2018.Day2, y2018.Day3, y2018.Day4, y2018.Day5, y2018.Day6, y2018.Day7, y2018.Day8, y2018.Day9, y2018.Day10, y2018.Day11, y2018.Day12, y2018.Day13, y2018.Day14, y2018.Day15, y2018.Day16, y2018.Day17, y2018.Day18, y2018.Day19, y2018.Day20, y2018.Day21, y2018.Day22, y2018.Day23, y2018.Day24, y2018.Day25)
-  val allDays2019 = List(y2019.Day1, y2019.Day2, y2019.Day3, y2019.Day4, y2019.Day5, y2019.Day6, y2019.Day7, y2019.Day8, y2019.Day9, y2019.Day10, y2019.Day11, y2019.Day12, y2019.Day13, y2019.Day14, y2019.Day15, y2019.Day16, y2019.Day17, y2019.Day18, y2019.Day19, y2019.Day20, y2019.Day21, y2019.Day22, y2019.Day23, y2019.Day24, y2019.Day25)
-  val allDays2020 = List(y2020.Day1, y2020.Day2, y2020.Day3, y2020.Day4, y2020.Day5, y2020.Day6, y2020.Day7, y2020.Day8, y2020.Day9, y2020.Day10, y2020.Day11, y2020.Day12)
-
-  val years = Map("2015" -> allDays2015, "2016" -> allDays2016, "2018" -> allDays2018, "2019" -> allDays2019, "2020" -> allDays2020)
-
   private val options = new Options(args.toList)
 
   println(
@@ -19,7 +13,12 @@ object Main extends App {
       |""".stripMargin)
 
   val allDays = if (options.year.isDefined) {
-    years(options.year.get)
+    if (AllDays.yearExists(options.year.get)) {
+      AllDays.year(options.year.get)
+    } else {
+      println(s"No solutions for year ${options.year.get}!")
+      System.exit(1).asInstanceOf[List[DayApp]]
+    }
   } else {
     print(
       """Select year:
@@ -33,8 +32,8 @@ object Main extends App {
         |Year: """.stripMargin)
 
     readInput {
-      case year if years.contains(year) => Some(years(year))
-      case "" => Some(allDays2020)
+      case Int(year) if AllDays.year(year).nonEmpty => Some(AllDays.year(year))
+      case "" => Some(AllDays.year(2020))
       case _ => None
     }
   }
@@ -70,7 +69,12 @@ object Main extends App {
   private trait DaySelectorRunnable extends Runnable {
     def run(): Unit = {
       val daysToRun = if (options.day.isDefined) {
-        List(allDays(options.day.get - 1))
+        if (isInRange(options.day.get, 1, allDays.size)) {
+          List(allDays(options.day.get - 1))
+        } else {
+          println(s"No solution for day ${options.day.get}!")
+          System.exit(1).asInstanceOf[List[DayApp]]
+        }
       } else {
         print("Select day number or \"all\" (default: all): ")
 
@@ -143,7 +147,7 @@ object Main extends App {
         val percent = cpuTime * 100 / (System.nanoTime - nanoBefore)
 
         import scala.math.Ordering.Float.TotalOrdering
-        println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms | cpu-time: ${cpuTime/1000/1000}%dms | cpu-usage: ${percent}%d%%")
+        println(f" | min: ${times.min}%.3fms | avg: ${times.sum / times.size}%.3fms | max: ${times.max}%.3fms | total: ${times.sum}%.3fms | cpu-time: ${cpuTime / 1000 / 1000}%dms | cpu-usage: ${percent}%d%%")
         if (util.Properties.propIsSet("benchmark.times"))
           println(times.map(time => f"$time%.3f").mkString(", "))
       }
