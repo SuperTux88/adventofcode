@@ -9,6 +9,7 @@ class Options(args: List[String]) {
 
   def year: Option[Int] = options.get("year").asInstanceOf[Option[Int]]
   def day: Option[Int] = options.get("day").asInstanceOf[Option[Int]]
+  def all: Boolean = options.getOrElse("all", false).asInstanceOf[Boolean]
 
   def benchmark: Option[Int] = options.getOrElse("benchmark", None).asInstanceOf[Option[Int]]
 
@@ -30,10 +31,22 @@ class Options(args: List[String]) {
           System.exit(1).asInstanceOf[Map[String, Any]]
         }
       case "--day" :: day :: tail =>
-        if (day.forall(_.isDigit)) {
-          parseArgs(tail, map + ("day" -> day.toInt))
+        if (!map.contains("all")) {
+          if (day.forall(_.isDigit)) {
+            parseArgs(tail, map + ("day" -> day.toInt))
+          } else {
+            println(s"Invalid option: --day $day is not a Number!")
+            System.exit(1).asInstanceOf[Map[String, Any]]
+          }
         } else {
-          println(s"Invalid option: --day $day is not a Number!")
+          println(s"Invalid option: Only one of options --day and --all are allowed!")
+          System.exit(1).asInstanceOf[Map[String, Any]]
+        }
+      case "--all" :: tail =>
+        if (!map.contains("day")) {
+          parseArgs(tail, map + ("all" -> true))
+        } else {
+          println(s"Invalid option: Only one of options --day and --all are allowed!")
           System.exit(1).asInstanceOf[Map[String, Any]]
         }
       case "--benchmark" :: runs :: tail if runs.forall(_.isDigit) => parseArgs(tail, map + ("benchmark" -> Some(runs.toInt)))
@@ -57,6 +70,7 @@ class Options(args: List[String]) {
         |--input <file>        Use different input file to run. This only works when selecting a single day.
         |--year <year>         Select year to run.
         |--day <day>           Select day of a year to run.
+        |--all                 Select all days of a year to run.
         |--benchmark [<runs>]  Enable benchmark mode. Without value it selects the optimal number of runs for each day automatically.
         |--interactive         Run in interactive mode to solve manually. This is only available for a few days where this makes sense.
         |--quiet               Print less intcode output. With this some of the intcode days run faster in single-day-mode because of less waiting for output.

@@ -19,6 +19,8 @@ object Main extends App {
       println(s"No solutions for year ${options.year.get}!")
       System.exit(1).asInstanceOf[List[DayApp]]
     }
+  } else if (options.all) {
+    AllDays.allYears
   } else {
     print(
       """Select year:
@@ -75,6 +77,9 @@ object Main extends App {
           println(s"No solution for day ${options.day.get}!")
           System.exit(1).asInstanceOf[List[DayApp]]
         }
+      } else if (options.all) {
+        Logging.debug = false
+        allDays
       } else {
         print("Select day number or \"all\" (default: all): ")
 
