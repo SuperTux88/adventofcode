@@ -1,6 +1,7 @@
 package adventofcode.common
 
 import scala.annotation.tailrec
+import scala.util.{Success, Try}
 
 object NumberHelper {
 
@@ -28,6 +29,44 @@ object NumberHelper {
   @tailrec
   def modInv(a: Long, m: Long, x: Long = 1, y: Long = 0): Long =
     if (m == 0) x else modInv(m, a % m, y, x - y * (a / m))
+
+  /**
+    * chinese remainder theorem
+    */
+  // from https://rosettacode.org/wiki/Chinese_remainder_theorem#Scala
+  def chineseRemainder(n: List[Long], a: List[Long]): Option[Long] = {
+    require(n.size == a.size)
+    val prod = n.product
+
+    @tailrec
+    def iter(n: List[Long], a: List[Long], sm: Long): Long = {
+      def mulInv(a: Long, b: Long): Long = {
+        @tailrec
+        def loop(a: Long, b: Long, x0: Long, x1: Long): Long = {
+          if (a > 1) loop(b, a % b, x1 - (a / b) * x0, x0) else x1
+        }
+
+        if (b == 1) 1
+        else {
+          val x1 = loop(a, b, 0, 1)
+          if (x1 < 0) x1 + b else x1
+        }
+      }
+
+      if (n.nonEmpty) {
+        val p = prod / n.head
+
+        iter(n.tail, a.tail, sm + a.head * mulInv(p, n.head) * p)
+      } else sm
+    }
+
+    Try {
+      iter(n, a, 0) % prod
+    } match {
+      case Success(v) => Some(v)
+      case _ => None
+    }
+  }
 
   implicit class ExtendedLong(val l: Long) {
     /**
