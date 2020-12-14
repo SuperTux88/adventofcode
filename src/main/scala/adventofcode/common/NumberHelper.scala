@@ -41,14 +41,9 @@ object NumberHelper {
     @tailrec
     def iter(n: List[Long], a: List[Long], sm: Long): Long = {
       def mulInv(a: Long, b: Long): Long = {
-        @tailrec
-        def loop(a: Long, b: Long, x0: Long, x1: Long): Long = {
-          if (a > 1) loop(b, a % b, x1 - (a / b) * x0, x0) else x1
-        }
-
         if (b == 1) 1
         else {
-          val x1 = loop(a, b, 0, 1)
+          val x1 = modInv(a, b)
           if (x1 < 0) x1 + b else x1
         }
       }
