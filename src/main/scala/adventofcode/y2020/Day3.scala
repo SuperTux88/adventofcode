@@ -5,11 +5,7 @@ import adventofcode.common.pos.Pos
 object Day3 extends Year2020 {
   override val day = 3
 
-  private val map = input.getLines().zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.map {
-      case (char, x) => Pos(x, y) -> (char == '#')
-    }
-  }.toMap
+  private val map = Pos.parseMap(input.getLines(), char => char == '#')
 
   private val (width, height) = (map.maxBy(_._1.x)._1.x + 1, map.maxBy(_._1.y)._1.y + 1)
 

@@ -7,12 +7,7 @@ import scala.collection.parallel.CollectionConverters._
 object Day17 extends Year2020 {
   override val day = 17
 
-  private val initialSlice = input.getLines().zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.flatMap {
-      case ('#', x) => Some(Pos(x, y))
-      case ('.', _) => None
-    }
-  }.toSet
+  private val initialSlice = Pos.parseMap(input.getLines(), char => char == '#').filter(_._2).keySet
 
   private val (maxX, maxY) = (initialSlice.maxBy(_.x).x, initialSlice.maxBy(_.y).y)
 

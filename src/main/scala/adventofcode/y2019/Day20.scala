@@ -8,11 +8,7 @@ import scala.annotation.tailrec
 object Day20 extends Year2019 {
   override val day = 20
 
-  private val map = input.getLines().zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.map {
-      case (char, x) => Pos(x, y) -> char
-    }
-  }.toMap.withDefaultValue(' ')
+  private val map = Pos.parseMap(input.getLines(), char => char).withDefaultValue(' ')
 
   private val labels = map.foldLeft(Map.empty[String, List[Label]].withDefaultValue(List.empty)) {
     case (labels, (pos, char)) if char.isLetter =>

@@ -5,13 +5,7 @@ import adventofcode.common.pos.Pos
 object Day18 extends Year2015 {
   override val day: Int = 18
 
-  val initialGrid = input.getLines().zipWithIndex.flatMap {
-    case (line, x) => line.zipWithIndex.map {
-      case ('#', y) => Pos(x, y) -> true
-      case ('.', y) => Pos(x, y) -> false
-      case (c, _) => throw new MatchError(s"Invalid character $c")
-    }
-  }.toMap.withDefaultValue(false)
+  val initialGrid = Pos.parseMap(input.getLines(), char => char == '#').withDefaultValue(false)
 
   val gridAfter100Steps = (1 to 100).foldLeft(initialGrid) {
     (currentGrid, _) => nextGrid(currentGrid)

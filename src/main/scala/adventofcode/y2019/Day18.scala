@@ -11,11 +11,7 @@ import scala.concurrent.duration.Duration
 object Day18 extends Year2019 {
   override val day = 18
 
-  private val map = input.getLines().zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.map {
-      case (char, x) => Pos(x, y) -> char
-    }
-  }.toMap
+  private val map = Pos.parseMap(input.getLines(), char => char)
 
   private val allKeys = map.values.filter(_.isLower).toSet
   private val startPos = map.find(_._2 == '@').get._1

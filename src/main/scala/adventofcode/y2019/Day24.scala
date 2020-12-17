@@ -7,11 +7,7 @@ import scala.annotation.tailrec
 object Day24 extends Year2019 {
   override val day = 24
 
-  private val map = input.getLines().zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.map {
-      case (char, x) => Pos(x, y) -> (char == '#')
-    }
-  }.toMap
+  private val map = Pos.parseMap(input.getLines(), char => char == '#')
 
   private val bugsInFirstRepeatedState = findRepeat(map).groupBy(_._2)(true).keys
   private val biodiversityPoints = bugsInFirstRepeatedState.map { pos => math.pow(2, pos.x + pos.y * 5).toLong }
