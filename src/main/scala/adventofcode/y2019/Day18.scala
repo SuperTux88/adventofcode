@@ -22,7 +22,7 @@ object Day18 extends Year2019 {
 
   private val futurePart1 = Future { getShortestPath(Seq(startPos), map) }
 
-  private val map2 = map + (startPos -> '#') ++ startPos.neighbors.map(_ -> '#')
+  private val map2 = map + (startPos -> '#') ++ startPos.directions.map(_ -> '#')
 
   private val futurePart2 = Future { getShortestPath(startPos.diagonals, map2) }
 
@@ -52,7 +52,7 @@ object Day18 extends Year2019 {
       foundKeys
     } else {
       val nextSteps = positions.flatMap { pos =>
-        pos.neighbors.filterNot(visited.contains).filter { pos =>
+        pos.directions.filterNot(visited.contains).filter { pos =>
           map(pos) match {
             case '#' => false
             case door if door.isUpper => openDoors.contains(door)

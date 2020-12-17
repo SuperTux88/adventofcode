@@ -47,7 +47,7 @@ object Day15 extends Year2019 {
     if (todo.isEmpty) {
       minutes
     } else {
-      val nextSteps = current.flatMap { pos => pos.neighbors.filter(todo.contains) }
+      val nextSteps = current.flatMap { pos => pos.directions.filter(todo.contains) }
       fillWithOxygen(nextSteps, todo.filterNot(nextSteps.contains), minutes + 1)
     }
 

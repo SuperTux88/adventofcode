@@ -43,13 +43,13 @@ object Day15 extends Year2018 {
           if (!freeEnemyPositions.contains(newPos)) {
             val newPositions = findNearestPosition(currentPlayer.pos, freeEnemyPositions)
             if (newPositions.nonEmpty) {
-              val possibleDirections = currentPlayer.pos.neighbors.filter(pos => map.isFree(pos))
+              val possibleDirections = currentPlayer.pos.directions.filter(pos => map.isFree(pos))
               val nearestDirection = findNearestPosition(newPositions.min, possibleDirections)
               if (nearestDirection.nonEmpty) newPos = nearestDirection.min
             }
           }
 
-          val possibleTargets = newPos.neighbors.flatMap { pos =>
+          val possibleTargets = newPos.directions.flatMap { pos =>
             targets.find(_.pos == pos)
           }
 
@@ -100,7 +100,7 @@ object Day15 extends Year2018 {
     @tailrec
     def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
       val nextSteps = current.flatMap { pos =>
-        pos.neighbors.filter(pos => map.isFree(pos) && !visited.contains(pos))
+        pos.directions.filter(pos => map.isFree(pos) && !visited.contains(pos))
       }.distinct
 
       val found = nextSteps.intersect(targets)
@@ -118,7 +118,7 @@ object Day15 extends Year2018 {
       if (hp > attackPower) Some(copy(hp = hp - attackPower)) else None
 
     def freeNeighbors(implicit players: Seq[Enemy]): Seq[Pos] =
-      pos.neighbors.filter(map.isFree(_))
+      pos.directions.filter(map.isFree(_))
 
     def stats: String = s"$symbol($hp)"
   }

@@ -34,7 +34,7 @@ object Day18 extends Year2015 {
       y <- 0 to 99
     } yield {
       val p = Pos(x, y)
-      p -> nextState(currentGrid(p), p.neighborsWithDiagonals.count(currentGrid))
+      p -> nextState(currentGrid(p), p.neighbors.count(currentGrid))
     }).toMap.withDefaultValue(false)
 
   private def withStuckLights(grid: Map[Pos, Boolean]) =

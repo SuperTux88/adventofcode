@@ -22,7 +22,7 @@ object Day17 extends Year2019 {
 
   private val (robotStartPos, directionChar) = map.find(coord => directions.contains(coord._2)).get
   private val scaffolds = map.filter(_._2 == '#').keys.toSet
-  private val intersections = scaffolds.filter(_.neighbors.forall(scaffolds.contains))
+  private val intersections = scaffolds.filter(_.directions.forall(scaffolds.contains))
 
   private val path = getPath(robotStartPos, directions.indexOf(directionChar))
 

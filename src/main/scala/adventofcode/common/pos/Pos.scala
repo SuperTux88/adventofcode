@@ -29,8 +29,8 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def moveDirectionIndex(direction: Int, steps: Int = 1): Pos =
     Pos(x + Direction.directions(direction)._1 * steps, y + Direction.directions(direction)._2 * steps)
 
-  def neighbors: List[Pos] = Direction.directions.map(this + _)
-  def neighborsWithDiagonals: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
+  def directions: List[Pos] = Direction.directions.map(this + _)
+  def neighbors: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
   def diagonals: List[Pos] = Direction.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
