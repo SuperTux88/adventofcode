@@ -1,6 +1,6 @@
 package adventofcode.common.pos
 
-case class Pos(x: Int, y: Int) extends Ordered[Pos] {
+case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
   def +(direction: Pos): Pos = Pos(x + direction.x, y + direction.y)
 
@@ -11,7 +11,7 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
   def /(div: Int): Pos = Pos(x / div, y / div)
 
   // Manhattan distance
-  def distance(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
+  override def distance(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
 
   def up: Pos = copy(y = y - 1)
   def right: Pos = copy(x = x + 1)
@@ -30,7 +30,7 @@ case class Pos(x: Int, y: Int) extends Ordered[Pos] {
     Pos(x + Direction.directions(direction)._1 * steps, y + Direction.directions(direction)._2 * steps)
 
   def directions: List[Pos] = Direction.directions.map(this + _)
-  def neighbors: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
+  override def neighbors: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
   def diagonals: List[Pos] = Direction.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
