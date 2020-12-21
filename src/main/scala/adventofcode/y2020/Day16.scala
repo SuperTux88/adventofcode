@@ -20,25 +20,24 @@ object Day16 extends Year2020 {
 
   private val validTickets = nearbyTickets.filter(ticket => ticket.forall(value => rules.exists(_.valid(value))))
   private val validForRows = rules.map { rule =>
-    rule -> myTicket.indices.filter(index => validTickets.forall(ticket => rule.valid(ticket(index))))
+    rule -> myTicket.indices.filter(index => validTickets.forall(ticket => rule.valid(ticket(index)))).toSet
   }.toMap
-  private val departureIndexes = reduceRules(validForRows).filter(_._1.name.startsWith("departure")).values
+  private val departureIndexes = reduceToUniqueValues(validForRows).filter(_._1.name.startsWith("departure")).values
 
   printDayPart(2, departureIndexes.map(myTicket(_)).product, "product of departure values: %s")
 
+  // generic function, this is also used for day 21
   @tailrec
-  private def reduceRules(rules: Map[Rule, Seq[Int]]): Map[Rule, Int] = {
-    val validForOne = rules.filter(rule => rule._2.size == 1)
-    if (validForOne.size == rules.size) {
+  def reduceToUniqueValues[K, V](map: Map[K, Set[V]]): Map[K, V] = {
+    val validForOne = map.filter(rule => rule._2.size == 1)
+    if (validForOne.size == map.size) {
       validForOne.view.mapValues(_.head).toMap
     } else {
-      val reduced = rules.view.mapValues { validFor =>
-        if (validFor.size == 1)
-          validFor
-        else
-          validFor.diff(validForOne.flatMap(_._2).toSeq)
+      val reduced = map.view.mapValues { validFor =>
+        if (validFor.size == 1) validFor
+        else validFor -- validForOne.values.flatten.toSet
       }.toMap
-      reduceRules(reduced)
+      reduceToUniqueValues(reduced)
     }
   }
 

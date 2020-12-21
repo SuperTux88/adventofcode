@@ -1,6 +1,6 @@
 package adventofcode.y2020
 
-import scala.annotation.tailrec
+import adventofcode.y2020.Day16.reduceToUniqueValues
 
 object Day21 extends Year2020 {
   override val day = 21
@@ -30,27 +30,11 @@ object Day21 extends Year2020 {
 
   printDayPart(1, countOfSafeIngredients.sum, "count of safe ingredients: %s")
 
-  private val reducedAllergensMap = reduceIngredients(allergensMap)
+  private val reducedAllergensMap = reduceToUniqueValues(allergensMap)
   private val dangerousIngredients = reducedAllergensMap.keys.toSeq.sorted
     .foldLeft(Vector.empty[Ingredient])((result, key) => result :+ reducedAllergensMap(key))
 
   printDayPart(2, dangerousIngredients.mkString(","), "dangerous ingredient: %s")
-
-  @tailrec
-  private def reduceIngredients(allergens: Map[Allergen, Set[Ingredient]]): Map[Allergen, Ingredient] = {
-    val validForOne = allergens.filter(rule => rule._2.size == 1)
-    if (validForOne.size == allergens.size) {
-      validForOne.view.mapValues(_.head).toMap
-    } else {
-      val reduced = allergens.view.mapValues { validFor =>
-        if (validFor.size == 1)
-          validFor
-        else
-          validFor.diff(validForOne.values.flatten.toSet)
-      }.toMap
-      reduceIngredients(reduced)
-    }
-  }
 
   private case class Food(ingredients: Set[Ingredient], allergens: Set[Allergen])
 }
