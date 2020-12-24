@@ -1,52 +1,47 @@
 package adventofcode.y2020
 
-import adventofcode.common.collections.{DoubleLinkedListWithIndex, Node}
-
 import scala.annotation.tailrec
 
 object Day23 extends Year2020 {
   override val day = 23
 
   private val allCups = inputString.map(_.asDigit).toList
-  private val (lowestCup, highestCup) = (allCups.min, allCups.max)
+  private val (firstCup, highestCup) = (allCups.head, allCups.max)
 
-  private val oneP1 = playGame(allCups.head, createLinkedList(allCups), 100, highestCup)
-  private val answerP1 = Iterator.iterate(oneP1.next)(_.next).takeWhile(_.value != 1).map(_.value).mkString
+  private val nextCupsP1 = createCupsLoop(allCups)
+  playGame(firstCup, nextCupsP1, 100, highestCup)
+  private val answerP1 = Iterator.iterate(nextCupsP1(1))(nextCupsP1(_)).takeWhile(_ != 1).mkString
   printDayPart(1, answerP1, "labels on the cups after cup 1: %s")
 
-  private val oneP2 = playGame(allCups.head, createLinkedList(allCups ::: (highestCup + 1 to 1000000).toList), 10000000, 1000000)
+  private val nextCupsP2 = createCupsLoop(allCups ::: (highestCup + 1 to 1000000).toList)
+  playGame(firstCup, nextCupsP2, 10000000, 1000000)
+  printDayPart(2, Iterator.iterate(nextCupsP2(1))(nextCupsP2(_)).take(2).map(_.toLong).product)
 
-  printDayPart(2, Iterator.iterate(oneP2.next)(_.next).take(2).map(_.value.toLong).product)
-
-  private def createLinkedList(cups: List[Int]): DoubleLinkedListWithIndex[Int] = {
-    val linkedCups = new DoubleLinkedListWithIndex(cups.head)
-    cups.tail.foldLeft(linkedCups.get(cups.head)) { (prev, cup) =>
-      linkedCups.insertAfter(cup, prev)
-    }
-    linkedCups
+  private def createCupsLoop(cups: Seq[Int]) = {
+    val nextCups = new Array[Int](cups.size + 1)
+    for ((cup, next) <- cups.view.zip(cups.view.drop(1) ++ cups.view.take(1))) nextCups(cup) = next
+    nextCups
   }
 
-  private def playGame(firstCup: Int, cups: DoubleLinkedListWithIndex[Int], rounds: Int, highestCup: Int): Node[Int] = {
-    (1 to rounds).foldLeft(cups.get(firstCup)) { (currentCup, _) =>
-      val removed = (1 to 3).foldLeft(currentCup, Vector.empty[Int]) {
-        case ((cup, removed), _) =>
-          val toRemove = cup.next
-          cups.remove(toRemove.value)
-          (toRemove, removed :+ toRemove.value)
-      }._2
-      val destination = findDestination(cups, currentCup.value - 1, highestCup: Int)
-      removed.foldLeft(destination)((position, value) => cups.insertAfter(value, position))
-      currentCup.next
-    }
-    cups.get(1)
-  }
+  private def playGame(firstCup: Int, nextCups: Array[Int], rounds: Int, highestCup: Int) =
+    (1 to rounds).foldLeft(firstCup)((currentCup, _) => playRound(nextCups, currentCup, highestCup))
 
-  @tailrec
-  private def findDestination(cups: DoubleLinkedListWithIndex[Int], destination: Int, highestCup: Int): Node[Int] =
-    if (cups.contains(destination))
-      cups.get(destination)
-    else if (destination <= lowestCup)
-      findDestination(cups, highestCup, highestCup)
-    else
-      findDestination(cups, destination - 1, highestCup)
+  private def playRound(nextCups: Array[Int], current: Int, highestCup: Int): Int = {
+    val r1 = nextCups(current)
+    val r2 = nextCups(r1)
+    val r3 = nextCups(r2)
+    nextCups(current) = nextCups(r3) // remove 3 cups from loop
+
+    @tailrec
+    def findDestination(c: Int): Int =
+      if (c == r1 || c == r2 || c == r3) findDestination(nextDestination(c)) else c
+    def nextDestination(c: Int) = if (c > 1) c - 1 else highestCup
+
+    val destination = findDestination(nextDestination(current))
+    // insert 3 removed cups after destination
+    nextCups(r3) = nextCups(destination)
+    nextCups(destination) = r1
+
+    nextCups(current)
+  }
 }
