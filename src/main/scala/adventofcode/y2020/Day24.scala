@@ -8,8 +8,10 @@ import scala.annotation.tailrec
 object Day24 extends Year2020 {
   override val day = 24
 
-  private val tilesPositions = input.getLines().map(line => readLine(line.toList)).toList
-  private val blackTiles = tilesPositions.groupBy(identity).filter(_._2.size % 2 == 1).keySet
+  private val blackTiles = input.getLines().foldLeft(Set.empty[PosHex]) { (blackTiles, line) =>
+    val pos = readLine(line.toList)
+    if (blackTiles.contains(pos)) blackTiles - pos else blackTiles + pos
+  }
 
   printDayPart(1, blackTiles.size, "tiles with black side up: %s")
 
