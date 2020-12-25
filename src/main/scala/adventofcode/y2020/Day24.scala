@@ -1,9 +1,9 @@
 package adventofcode.y2020
 
+import adventofcode.common.MiscFunctions.conwaysGameOfLife
 import adventofcode.common.pos.PosHex
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters._
 
 object Day24 extends Year2020 {
   override val day = 24
@@ -13,8 +13,8 @@ object Day24 extends Year2020 {
 
   printDayPart(1, blackTiles.size, "tiles with black side up: %s")
 
-  private val blackTilesAfter100Days = runCycles(blackTiles)
-  printDayPart(2, blackTilesAfter100Days.size, "tiles with black side up after 100 days: %s")
+  printDayPart(2, conwaysGameOfLife(blackTiles, 100, nextState).size,
+    "tiles with black side up after 100 days: %s")
 
   @tailrec
   private def readLine(line: List[Char], pos: PosHex = PosHex(0, 0)): PosHex = line match {
@@ -28,14 +28,8 @@ object Day24 extends Year2020 {
     case dir => throw new MatchError(s"Invalid direction $dir")
   }
 
-  private def runCycles(map: Set[PosHex], cyclesToRun: Int = 100): Set[PosHex] =
-    (1 to cyclesToRun).foldLeft(map) { (state, _) =>
-      state.flatMap(_.neighbors).par.flatMap { pos =>
-        (state.contains(pos), pos.neighbors.count(state.contains)) match {
-          case (true, 1 | 2) => Some(pos)
-          case (false, 2) => Some(pos)
-          case _ => None
-        }
-      }.seq
-    }
+  private def nextState(isBlack: Boolean, blackNeighbors: Int) = (isBlack, blackNeighbors) match {
+    case (true, 1 | 2) | (false, 2) => true
+    case _ => false
+  }
 }
