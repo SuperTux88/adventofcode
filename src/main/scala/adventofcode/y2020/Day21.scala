@@ -1,6 +1,6 @@
 package adventofcode.y2020
 
-import adventofcode.y2020.Day16.reduceToUniqueValues
+import adventofcode.common.MiscFunctions.reduceToUniqueValues
 
 object Day21 extends Year2020 {
   override val day = 21
