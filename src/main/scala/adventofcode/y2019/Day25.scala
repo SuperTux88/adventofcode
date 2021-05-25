@@ -43,7 +43,7 @@ object Day25 extends Year2019 {
     val initialRoom = parseRoom(initOutput).get
     val shortestSolution = Dijkstra(
       State(initialRoom.name, Set.empty)(initDroid, None, initialRoom),
-      { state: State => state.room.password.nonEmpty },
+      (state: State) => state.room.password.nonEmpty,
       getNeighbors
     )
 

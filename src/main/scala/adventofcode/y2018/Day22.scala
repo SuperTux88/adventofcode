@@ -24,8 +24,8 @@ object Day22 extends Year2018 {
 
   private val duration = AStar(
     State(Pos.zero, Torch),
-    {state: State => state == State(target, Torch)},
-    {state: State => state.neighbors()}
+    (state: State) => state == State(target, Torch),
+    (state: State) => state.neighbors()
   )._1
 
   printDayPart(2, duration)

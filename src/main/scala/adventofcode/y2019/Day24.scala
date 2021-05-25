@@ -19,14 +19,14 @@ object Day24 extends Year2019 {
     (-depth to depth).map { level =>
       level -> (
         if (levels.contains(level)) {
-          transform(levels(level), { pos: Pos => countNeighborsWithLevels(levels, pos, level) })
+          transform(levels(level), (pos: Pos) => countNeighborsWithLevels(levels, pos, level))
         } else {
           val newLevel = (for {
             x <- 0 until 5
             y <- 0 until 5
             if x != 2 || y != 2
           } yield Pos(x, y) -> false).toMap
-          transform(newLevel, { pos: Pos => countNeighborsWithLevels(levels + (level -> newLevel), pos, level) })
+          transform(newLevel, (pos: Pos) => countNeighborsWithLevels(levels + (level -> newLevel), pos, level))
         })
     }.toMap
   }
@@ -35,7 +35,7 @@ object Day24 extends Year2019 {
 
   @tailrec
   private def findRepeat(map: Map[Pos, Boolean], seenStates: Set[Map[Pos, Boolean]] = Set.empty): Map[Pos, Boolean] = {
-    val nextMap = transform(map, { pos: Pos => countNeighbors(map, pos) })
+    val nextMap = transform(map, (pos: Pos) => countNeighbors(map, pos))
 
     if (seenStates.contains(nextMap))
       nextMap

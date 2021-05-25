@@ -44,23 +44,22 @@ object Day20 extends Year2019 {
     case (portals, _) => portals
   } + (start.labelPos -> start) // start needed in portals to create start state
 
-  private val minimalStepsToExit = distanceToExit({ state: State => state.pos == end.labelPos })
+  private val minimalStepsToExit = distanceToExit((state: State) => state.pos == end.labelPos)
   printDayPart(1, minimalStepsToExit, "minimal steps to exit: %s")
 
-  private val minimalStepsToExitWithLevels = distanceToExit({ state: State => state == State(end.labelPos) })
+  private val minimalStepsToExitWithLevels = distanceToExit((state: State) => state == State(end.labelPos))
   printDayPart(2, minimalStepsToExitWithLevels, "minimal steps to exit with recursion: %s")
 
   private def distanceToExit(isExit: State => Boolean) =
     Dijkstra(
       State(start.labelPos),
       isExit,
-      { state: State =>
+      (state: State) =>
         portals.get(state.pos).toList.flatMap(target =>
           walkToLabels(List(target.pos), Set(target.labelPos)).map {
             case (dist, pos) => (dist, State(pos, state.level + levelDiff(pos)))
           }
         ).filter(_._2.level >= 0) // don't go further out than outermost level
-      }
     )._1 - 1
 
   @tailrec

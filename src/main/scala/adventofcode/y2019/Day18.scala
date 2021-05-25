@@ -28,8 +28,8 @@ object Day18 extends Year2019 {
   private def getShortestPath(startPositions: Seq[Pos], map: Map[Pos, Char]): Int = {
     Dijkstra(
       State(startPositions, allKeys, Set.empty),
-      { state: State => state.remainingKeys.isEmpty },
-      { state: State =>
+      (state: State) => state.remainingKeys.isEmpty,
+      (state: State) =>
         state.positions.zipWithIndex.flatMap {
           case (pos, i) =>
             findNextKeys(List(pos), map, state.openDoors).map {
@@ -38,7 +38,6 @@ object Day18 extends Year2019 {
                 (dist, State(state.positions.updated(i, pos), state.remainingKeys - key, state.openDoors + key.toUpper))
             }
         }.toList
-      }
     )._1
   }
 
