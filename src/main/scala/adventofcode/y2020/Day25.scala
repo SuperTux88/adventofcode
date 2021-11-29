@@ -1,17 +1,20 @@
 package adventofcode.y2020
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day25 extends Year2020 {
   override val day = 25
 
-  private val lines = input.getLines()
-  private val cardsPublicKey = lines.next().toInt
-  private val doorsPublicKey = lines.next().toInt
+  override def runDay(input: BufferedSource): Unit = {
+    val lines = input.getLines()
+    val cardsPublicKey = lines.next().toInt
+    val doorsPublicKey = lines.next().toInt
 
-  private val doorsLoopSize = findLoopSize(doorsPublicKey)
+    val doorsLoopSize = findLoopSize(doorsPublicKey)
 
-  printDayPart(1, getEncryptionKey(cardsPublicKey, doorsLoopSize), "encryption key: %s")
+    printDayPart(1, getEncryptionKey(cardsPublicKey, doorsLoopSize), "encryption key: %s")
+  }
 
   @tailrec
   private def findLoopSize(targetKey: Int, loopSize: Int = 1, currentValue: Long = 1L): Int = {

@@ -3,52 +3,57 @@ package adventofcode.y2016
 import adventofcode.Logging
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day11 extends Year2016 {
   override val day: Int = 11
 
-  val FloorRE = """The (\w+) floor contains ([\w ,-]+)\.""".r
-  val GeneratorRE = """a (\w+) generator""".r
-  val MicrochipRE = """a (\w+)-compatible microchip""".r
+  private val FloorRE = """The (\w+) floor contains ([\w ,-]+)\.""".r
+  private val GeneratorRE = """a (\w+) generator""".r
+  private val MicrochipRE = """a (\w+)-compatible microchip""".r
 
-  private val floors = input.getLines().map {
-    case FloorRE(floor, content) => getFloorNumber(floor) -> (content match {
-      case "nothing relevant" => Floor(List.empty)
-      case components => Floor(components.split("(,? and|,) ").map {
-        case GeneratorRE(element) => Generator(element)
-        case MicrochipRE(element) => Microchip(element)
-      }.toList)
-    })
-  }.toMap
+  override def runDay(input: BufferedSource): Unit = {
+    val floors = input.getLines().map {
+      case FloorRE(floor, content) => getFloorNumber(floor) -> (content match {
+        case "nothing relevant" => Floor(List.empty)
+        case components => Floor(components.split("(,? and|,) ").map {
+          case GeneratorRE(element) => Generator(element)
+          case MicrochipRE(element) => Microchip(element)
+        }.toList)
+      })
+    }.toMap
 
-  private val startPart1 = State(floors, 1, List.empty)
-  private val additionalPart2 = List(Generator("elerium"), Microchip("elerium"),
-                                     Generator("dilithium"), Microchip("dilithium"))
-  private val startPart2 = State(floors + (1 -> Floor(floors(1).components ::: additionalPart2)), 1, List.empty)
+    val startPart1 = State(floors, 1, List.empty)
+    val additionalPart2 = List(Generator("elerium"), Microchip("elerium"), Generator("dilithium"), Microchip("dilithium"))
+    val startPart2 = State(floors + (1 -> Floor(floors(1).components ::: additionalPart2)), 1, List.empty)
 
-  private var knownStates = List(startPart1.getStateFingerprint)
+    var knownStates = List(startPart1.getStateFingerprint)
 
-  private val solution = getSolution(List(startPart1)).get
-  printDayPart(1, solution.previousStates.length)
+    val solution = getSolution(List(startPart1), knownStates).get
+    printDayPart(1, solution.previousStates.length)
 
-  knownStates = List(startPart2.getStateFingerprint)
+    knownStates = List(startPart2.getStateFingerprint)
 
-  private val solution2 = getSolution(List(startPart2)).get
-  printDayPart(2, solution2.previousStates.length)
+    val solution2 = getSolution(List(startPart2), knownStates).get
+    printDayPart(2, solution2.previousStates.length)
+  }
 
   @tailrec
-  private def getSolution(states: List[State]): Option[State] = {
+  private def getSolution(states: List[State], knownStates: List[(Int, List[List[Int]])]): Option[State] = {
     if (Logging.debug) println(s"${states.head.previousStates.size} | ${states.size} | ${knownStates.size}")
 
     val solution = states.find(_.isDone)
     if (solution.isDefined) {
       solution
     } else {
-      val nextStates = states.flatMap(_.nextStates)
+      val (nextStates, nextKnownStates) = states.foldLeft((List.empty[State], knownStates)) { (currentStates, state) =>
+        val (nextState, nextKnownStates) = state.nextStates(currentStates._2)
+        (currentStates._1 ::: nextState, nextKnownStates)
+      }
       if (nextStates.isEmpty)
         None
       else
-        getSolution(nextStates)
+        getSolution(nextStates, nextKnownStates)
     }
   }
 
@@ -84,14 +89,13 @@ object Day11 extends Year2016 {
       (position, pairs)
     }
 
-    def nextStates: List[State] = {
+    def nextStates(knownStates: List[(Int, List[List[Int]])]): (List[State], List[(Int, List[List[Int]])]) = {
       val combinations = floors(position).combinations
       val nextStates = nextStatesForFloor(combinations, position + 1) ::: nextStatesForFloor(combinations, position - 1)
 
       val newStates = nextStates.filterNot(state => knownStates.contains(state.getStateFingerprint))
       val uniqueStates = newStates.groupBy(_.getStateFingerprint).values.map(_.head).toList
-      knownStates = knownStates ::: uniqueStates.map(_.getStateFingerprint)
-      uniqueStates
+      (uniqueStates, knownStates ::: uniqueStates.map(_.getStateFingerprint))
     }
 
     private def nextStatesForFloor(combinations: List[List[Component]], to: Int): List[State] = {

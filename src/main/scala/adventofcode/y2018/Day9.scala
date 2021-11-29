@@ -5,13 +5,18 @@ import scala.annotation.tailrec
 object Day9 extends Year2018 {
   override val day = 9
 
-  val InputRE = """(\d+) players; last marble is worth (\d+) points""".r
+  private val InputRE = """(\d+) players; last marble is worth (\d+) points""".r
 
-  val (players, lastMarble) = inputString match {
-    case InputRE(playersStr, lastMarbleStr) => (playersStr.toInt, lastMarbleStr.toInt)
+  override def runDay(input: String): Unit = {
+    val (players, lastMarble) = input match {
+      case InputRE(playersStr, lastMarbleStr) => (playersStr.toInt, lastMarbleStr.toInt)
+    }
+
+    printDayPart(1, play(players, lastMarble).maxBy(_._2)._2)
+    printDayPart(2, play(players, lastMarble * 100).maxBy(_._2)._2)
   }
 
-  def play(lastMarble: Int): Map[Int, Long] = {
+  def play(players: Int, lastMarble: Int): Map[Int, Long] = {
     @tailrec
     def round(circle: MarbleCircle, currentMarble: Int, score: Map[Int, Long]): Map[Int, Long] =
       if (currentMarble > lastMarble) {
@@ -27,9 +32,6 @@ object Day9 extends Year2018 {
 
     round(MarbleCircle(Nil, 0, Nil), 1, Map().withDefaultValue(0))
   }
-
-  printDayPart(1, play(lastMarble).maxBy(_._2)._2)
-  printDayPart(2, play(lastMarble * 100).maxBy(_._2)._2)
 
   private case class MarbleCircle(before: List[Int], current: Int, after: List[Int]) {
     def moveClockwiseAndInsert(marble: Int): MarbleCircle =

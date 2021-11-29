@@ -3,22 +3,25 @@ package adventofcode.y2018
 import adventofcode.common.pos.Direction
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day18 extends Year2018 {
   override val day = 18
 
-  type Acres = Vector[Vector[Char]]
+  private type Acres = Vector[Vector[Char]]
 
-  private val map = input.getLines().map(_.toVector).toVector
+  override def runDay(input: BufferedSource): Unit = {
+    val map = input.getLines().map(_.toVector).toVector
 
-  private val map10 = (1 to 10).foldLeft(map) { (currentMap, _) => transform(currentMap) }
+    val map10 = (1 to 10).foldLeft(map) { (currentMap, _) => transform(currentMap) }
 
-  printDayPart(1, count(map10, '|') * count(map10, '#'))
+    printDayPart(1, count(map10, '|') * count(map10, '#'))
 
-  private val (seenStates, repeatOffset, repeatPattern) = findRepeatOffset(map10, 11)
+    val (seenStates, repeatOffset, repeatPattern) = findRepeatOffset(map10, 11)
 
-  private val resultOffset = (1000000000 - repeatOffset) % repeatPattern + repeatOffset
-  printDayPart(2, count(seenStates(resultOffset), '|') * count(seenStates(resultOffset), '#'))
+    val resultOffset = (1000000000 - repeatOffset) % repeatPattern + repeatOffset
+    printDayPart(2, count(seenStates(resultOffset), '|') * count(seenStates(resultOffset), '#'))
+  }
 
   @tailrec
   private def findRepeatOffset(map: Acres, minute: Int, seenStates: Map[Acres, Int] = Map.empty): (Map[Int, Acres], Int, Int) = {

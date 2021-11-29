@@ -7,13 +7,15 @@ import scala.annotation.tailrec
 object Day1 extends Year2016 {
   override val day: Int = 1
 
-  val (startPos, startDirection) = Pos.zero -> 2 // 0, 0 -> moving down
+  private val (startPos, startDirection) = Pos.zero -> 2 // 0, 0 -> moving down
 
-  private val (positions, _) = inputString.split(", ").map(_.splitAt(1))
-    .foldLeft(Seq(startPos), startDirection)(move)
+  override def runDay(input: String): Unit = {
+    val (positions, _) = input.split(", ").map(_.splitAt(1))
+      .foldLeft(Seq(startPos), startDirection)(move)
 
-  printDayPart(1, positions.last.distance(startPos))
-  printDayPart(2, findFirstDuplicate(positions).distance(startPos))
+    printDayPart(1, positions.last.distance(startPos))
+    printDayPart(2, findFirstDuplicate(positions).distance(startPos))
+  }
 
   private def move(currentState: (Seq[Pos], Int), instruction: (String, String)) = {
     val (positions, direction) = currentState

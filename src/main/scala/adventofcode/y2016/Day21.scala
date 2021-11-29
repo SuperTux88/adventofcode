@@ -1,19 +1,23 @@
 package adventofcode.y2016
 
+import scala.io.BufferedSource
+
 object Day21 extends Year2016 {
   override val day = 21
 
-  val SwapPositionRE = """swap position (\d) with position (\d)""".r
-  val SwapLetterRE = """swap letter (\w) with letter (\w)""".r
-  val RotateRE = """rotate (left|right) (\d) steps?""".r
-  val RotatePositionRE = """rotate based on position of letter (\w)""".r
-  val ReverseRE = """reverse positions (\d) through (\d)""".r
-  val MoveRE = """move position (\d) to position (\d)""".r
+  private val SwapPositionRE = """swap position (\d) with position (\d)""".r
+  private val SwapLetterRE = """swap letter (\w) with letter (\w)""".r
+  private val RotateRE = """rotate (left|right) (\d) steps?""".r
+  private val RotatePositionRE = """rotate based on position of letter (\w)""".r
+  private val ReverseRE = """reverse positions (\d) through (\d)""".r
+  private val MoveRE = """move position (\d) to position (\d)""".r
 
-  val instructions = input.getLines().toList
+  override def runDay(input: BufferedSource): Unit = {
+    val instructions = input.getLines().toList
 
-  printDayPart(1, scramblePassword(instructions, "abcdefgh"), "scrambled password: %s")
-  printDayPart(2, scramblePassword(instructions.reverse, "fbgdceah", reverse = true), "un-scrambled password: %s")
+    printDayPart(1, scramblePassword(instructions, "abcdefgh"), "scrambled password: %s")
+    printDayPart(2, scramblePassword(instructions.reverse, "fbgdceah", reverse = true), "un-scrambled password: %s")
+  }
 
   private def scramblePassword(instructions: List[String], password: String, reverse: Boolean = false) = {
     instructions.foldLeft(password) { (password, instruction) =>

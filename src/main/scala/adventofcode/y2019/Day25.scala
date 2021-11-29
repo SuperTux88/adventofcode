@@ -9,9 +9,6 @@ import scala.io.StdIn
 object Day25 extends Year2019 {
   override val day = 25
 
-  IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
-  IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
-
   private val ListRE = """- ([\w ]+)""".r
   private val RoomRE =
     """== ([\w- ]+) ==
@@ -29,33 +26,37 @@ object Day25 extends Year2019 {
 
   private val badItems = List("infinite loop") // this item starts an infinite loop in the intcode and I don't detect this at the moment
 
-  private val intCode = new IntCode(inputString)
-  private val (initDroid, initOutput) = intCode.startAsciiProgram()
+  override def runDay(intCode: IntCode): Unit = {
+    IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
+    IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
 
-  if (options.interactive) {
-    IntCode.printAsciiIn = false
-    runInteractive(initDroid)
-  } else {
-    IntCode.printAsciiOut = false
-    IntCode.printAsciiIn = false
-    if (Logging.debug && !options.quiet) print("Finding the shortest route ...")
+    val (initDroid, initOutput) = intCode.startAsciiProgram()
 
-    val initialRoom = parseRoom(initOutput).get
-    val shortestSolution = Dijkstra(
-      State(initialRoom.name, Set.empty)(initDroid, None, initialRoom),
-      (state: State) => state.room.password.nonEmpty,
-      getNeighbors
-    )
+    if (options.interactive) {
+      IntCode.printAsciiIn = false
+      runInteractive(initDroid)
+    } else {
+      IntCode.printAsciiOut = false
+      IntCode.printAsciiIn = false
+      if (Logging.debug && !options.quiet) print("Finding the shortest route ...")
 
-    if (Logging.debug && !options.quiet) {
-      print("\r")
-      IntCode.printAsciiOut = true
-      IntCode.printAsciiIn = true
-      shortestSolution._2.reverse.flatMap(_.command).foldLeft(initDroid)((droid, command) => droid.sendAsciiInput(command)._1)
-      println()
+      val initialRoom = parseRoom(initOutput).get
+      val shortestSolution = Dijkstra(
+        State(initialRoom.name, Set.empty)(initDroid, None, initialRoom),
+        (state: State) => state.room.password.nonEmpty,
+        getNeighbors
+      )
+
+      if (Logging.debug && !options.quiet) {
+        print("\r")
+        IntCode.printAsciiOut = true
+        IntCode.printAsciiIn = true
+        shortestSolution._2.reverse.flatMap(_.command).foldLeft(initDroid)((droid, command) => droid.sendAsciiInput(command)._1)
+        println()
+      }
+
+      printDayPart(1, shortestSolution._2.head.room.password.get, "password for the main airlock is: %s")
     }
-
-    printDayPart(1, shortestSolution._2.head.room.password.get, "password for the main airlock is: %s")
   }
 
   private def getNeighbors(state: State): List[(Int, State)] = {

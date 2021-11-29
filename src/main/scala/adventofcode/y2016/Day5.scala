@@ -10,31 +10,31 @@ import scala.util.Random
 object Day5 extends Year2016 {
   override val day: Int = 5
 
-  val doorId = inputString
+  override def runDay(doorId: String): Unit = {
+    val passwordArray = Array.fill[Option[Char]](8)(None)
+    val passwordArray2 = Array.fill[Option[Char]](8)(None)
 
-  val passwordArray = Array.fill[Option[Char]](8)(None)
-  val passwordArray2 = Array.fill[Option[Char]](8)(None)
+    val first8Chars = (0 to 7).scanLeft((0, 0, 0)) { (state, position) =>
+      val char = nextChar(doorId, state._3, passwordArray)
+      addCharToPassword(passwordArray, position, char._1)
+      char
+    }.tail
 
-  val first8Chars = (0 to 7).scanLeft((0, 0, 0)) { (state, position) =>
-    val char = nextChar(doorId, state._3, passwordArray)
-    addCharToPassword(passwordArray, position, char._1)
-    char
-  }.tail
+    if (Logging.results) print("\r")
+    printDayPart(1, first8Chars.map(_._1.toHexString).mkString, "password: %s")
 
-  if (Logging.results) print("\r")
-  printDayPart(1, first8Chars.map(_._1.toHexString).mkString, "password: %s")
-
-  first8Chars.foreach { char =>
-    addCharToPassword(passwordArray2, char._1, char._2)
-    if (Logging.results) (1 to 15).foreach { _ =>
-      printPassword(passwordArray2)
-      Thread.sleep(40)
+    first8Chars.foreach { char =>
+      addCharToPassword(passwordArray2, char._1, char._2)
+      if (Logging.results) (1 to 15).foreach { _ =>
+        printPassword(passwordArray2)
+        Thread.sleep(40)
+      }
     }
-  }
 
-  val password2 = findSecondPassword(passwordArray2, doorId, first8Chars.last._3)
-  if (Logging.results) print("\r")
-  printDayPart(2, password2, "password for second door: %s")
+    val password2 = findSecondPassword(passwordArray2, doorId, first8Chars.last._3)
+    if (Logging.results) print("\r")
+    printDayPart(2, password2, "password for second door: %s")
+  }
 
   @tailrec
   private def nextChar(doorId: String, counter: Int, password: Array[Option[Char]]): (Int, Int, Int) = {
@@ -56,14 +56,14 @@ object Day5 extends Year2016 {
     else password.flatten.mkString
   }
 
-  private def addCharToPassword(password: Array[Option[Char]], position: Int, char: Int) = {
+  private def addCharToPassword(password: Array[Option[Char]], position: Int, char: Int): Unit = {
     if (position < password.length && password(position).isEmpty) {
       password(position) = Some(char.toHexString.last)
       printPassword(password)
     }
   }
 
-  private def printPassword(password: Array[Option[Char]]) = {
+  private def printPassword(password: Array[Option[Char]]): Unit = {
     if (Logging.results) {
       val string = password.map {
         case None => Random.nextInt(15).toHexString

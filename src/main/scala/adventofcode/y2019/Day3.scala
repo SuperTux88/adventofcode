@@ -2,17 +2,21 @@ package adventofcode.y2019
 
 import adventofcode.common.pos.Pos
 
+import scala.io.BufferedSource
+
 object Day3 extends Year2019 {
   override val day = 3
 
-  private val wires = input.getLines().take(2).map(_.split(",").map(parseInstruction).toList).toList
-  private val List(wireA, wireB) = wires.map(generatePath(_))
-  private val crossings = wireA intersect wireB
+  override def runDay(input: BufferedSource): Unit = {
+    val wires = input.getLines().take(2).map(_.split(",").map(parseInstruction).toList).toList
+    val List(wireA, wireB) = wires.map(generatePath(_))
+    val crossings = wireA intersect wireB
 
-  printDayPart(1, crossings.map(_.distance(Pos.zero)).min, "manhatten distance to closest intersection: %s")
+    printDayPart(1, crossings.map(_.distance(Pos.zero)).min, "manhatten distance to closest intersection: %s")
 
-  private val wireDistance = crossings.map(crossing => wireA.indexOf(crossing) + wireB.indexOf(crossing) + 2).min
-  printDayPart(2, wireDistance, "wire distance to closest intersection: %s")
+    val wireDistance = crossings.map(crossing => wireA.indexOf(crossing) + wireB.indexOf(crossing) + 2).min
+    printDayPart(2, wireDistance, "wire distance to closest intersection: %s")
+  }
 
   private def parseInstruction(instruction: String) =
     instruction.splitAt(1) match {

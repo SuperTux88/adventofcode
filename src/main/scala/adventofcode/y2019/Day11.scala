@@ -9,16 +9,16 @@ import scala.annotation.tailrec
 object Day11 extends Year2019 {
   override val day = 11
 
-  private val intCode = new IntCode(inputString)
+  override def runDay(intCode: IntCode): Unit = {
+    val painted = move(intCode)
+    printDayPart(1, painted.size, "painted panels: %s")
 
-  private val painted = move(intCode)
-  printDayPart(1, painted.size, "painted panels: %s")
+    val message = move(intCode, Map(Pos.zero -> 1).withDefaultValue(0))
+    if (Logging.debug) printMap(message)
 
-  private val message = move(intCode, Map(Pos.zero -> 1).withDefaultValue(0))
-  if (Logging.debug) printMap(message)
-
-  private val chars = (0 until 8).map(pos => getCharAt(message, pos))
-  printDayPart(2, chars.map(OCR.readChar).mkString, "registration identifier: %s")
+    val chars = (0 until 8).map(pos => getCharAt(message, pos))
+    printDayPart(2, chars.map(OCR.readChar).mkString, "registration identifier: %s")
+  }
 
   @tailrec
   private def move(robot: IntCode, map: Map[Pos, Int] = Map.empty.withDefaultValue(0), pos: Pos = Pos.zero, direction: Int = 0): Map[Pos, Int] = {

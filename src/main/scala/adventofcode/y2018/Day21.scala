@@ -1,29 +1,33 @@
 package adventofcode.y2018
 
+import scala.io.BufferedSource
+
 object Day21 extends Year2018 {
   override val day = 21
 
-  val elfCode = new ElfCode(input.getLines())
+  override def runDay(input: BufferedSource): Unit = {
+    val elfCode = new ElfCode(input.getLines())
 
-  val instructionWithHaltCheck = elfCode.size - 3
-  val registerWithNumberForExit = elfCode.program(instructionWithHaltCheck)._2.take(2).max
+    val instructionWithHaltCheck = elfCode.size - 3
+    val registerWithNumberForExit = elfCode.program(instructionWithHaltCheck)._2.take(2).max
 
-  var registers = Vector.fill(6)(0)
-  var seen = Set[Int]()
-  var last = 0
+    var registers = Vector.fill(6)(0)
+    var seen = Set[Int]()
+    var last = 0
 
-  while(registers(elfCode.ip) != instructionWithHaltCheck || !seen.contains(registers(registerWithNumberForExit))) {
-    if (registers(elfCode.ip) == instructionWithHaltCheck) {
-      last = registers(registerWithNumberForExit)
-      if (seen.isEmpty) {
-        printDayPart(1, last)
+    while (registers(elfCode.ip) != instructionWithHaltCheck || !seen.contains(registers(registerWithNumberForExit))) {
+      if (registers(elfCode.ip) == instructionWithHaltCheck) {
+        last = registers(registerWithNumberForExit)
+        if (seen.isEmpty) {
+          printDayPart(1, last)
+        }
+        seen += last
       }
-      seen += last
+      registers = elfCode.runInstruction(registers)
     }
-    registers = elfCode.runInstruction(registers)
-  }
 
-  printDayPart(2, last)
+    printDayPart(2, last)
+  }
 }
 
 /*

@@ -5,10 +5,10 @@ import scala.annotation.tailrec
 object Day16 extends Year2016 {
   override val day = 16
 
-  val seed = inputString
-
-  printDayPart(1, calcChecksum(random(seed, 272)), "checksum for data: %s")
-  printDayPart(2, calcChecksum(random(seed, 35651584)), "checksum for data: %s")
+  override def runDay(seed: String): Unit = {
+    printDayPart(1, calcChecksum(random(seed, 272)), "checksum for data: %s")
+    printDayPart(2, calcChecksum(random(seed, 35651584)), "checksum for data: %s")
+  }
 
   @tailrec
   private def random(seed: String, length: Int): String = {

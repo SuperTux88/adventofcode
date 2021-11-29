@@ -9,19 +9,21 @@ object Day24 extends Year2018 {
   private val ImmunitiesRE = """immune to ([\w, ]+)""".r
   private val WeaknessesRE = """weak to ([\w, ]+)""".r
 
-  private val groups = inputString.split("\n\n").map(_.split("\n").iterator)
+  override def runDay(input: String): Unit = {
+    val groups = input.split("\n\n").map(_.split("\n").iterator)
 
-  private val unitGroups = groups.flatMap { group =>
-    val groupType = if (group.next() == "Immune System:") ImmuneSystem else Infection
-    group.map {
-      case UnitGroupRE(count, hp, weaknessesAndImmunities, attackPower, attackType, initiative) =>
-        val (weaknesses, immunities) = parseWeaknessesAndImmunities(weaknessesAndImmunities)
-        UnitGroup(groupType, count.toInt, hp.toInt, immunities, weaknesses, attackPower.toInt, attackType, initiative.toInt)
-    }
-  }.toList
+    val unitGroups = groups.flatMap { group =>
+      val groupType = if (group.next() == "Immune System:") ImmuneSystem else Infection
+      group.map {
+        case UnitGroupRE(count, hp, weaknessesAndImmunities, attackPower, attackType, initiative) =>
+          val (weaknesses, immunities) = parseWeaknessesAndImmunities(weaknessesAndImmunities)
+          UnitGroup(groupType, count.toInt, hp.toInt, immunities, weaknesses, attackPower.toInt, attackType, initiative.toInt)
+      }
+    }.toList
 
-  printDayPart(1, simulate(unitGroups).get._2.map(_.count).sum)
-  printDayPart(2, simulateBoost(unitGroups).map(_.count).sum)
+    printDayPart(1, simulate(unitGroups).get._2.map(_.count).sum)
+    printDayPart(2, simulateBoost(unitGroups).map(_.count).sum)
+  }
 
   // returns map attacking -> defending
   private def targetSelection(groups: Seq[UnitGroup]): Map[Int, Int] = {

@@ -5,12 +5,12 @@ import scala.annotation.tailrec
 object Day7 extends Year2019 {
   override val day = 7
 
-  private val intCode = new IntCode(inputString)
+  override def runDay(intCode: IntCode): Unit = {
+    printDayPart(1, getBestAmplifierOutput(intCode, 0 to 4), "highest possible signal: %s")
+    printDayPart(2, getBestAmplifierOutput(intCode, 5 to 9), "highest possible signal: %s")
+  }
 
-  printDayPart(1, getBestAmplifierOutput(0 to 4), "highest possible signal: %s")
-  printDayPart(2, getBestAmplifierOutput(5 to 9), "highest possible signal: %s")
-
-  private def getBestAmplifierOutput(phaseSettings: Seq[Int]) =
+  private def getBestAmplifierOutput(intCode: IntCode, phaseSettings: Seq[Int]) =
     phaseSettings.permutations.map { phaseOrder =>
       getAmplifierOutput(phaseOrder.map(intCode.run))
     }.max

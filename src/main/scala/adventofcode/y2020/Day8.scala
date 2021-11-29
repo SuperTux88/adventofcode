@@ -1,31 +1,34 @@
 package adventofcode.y2020
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day8 extends Year2020 {
   override val day = 8
 
   private val InstructionRE = """(\w+) ([+-]\d+)""".r
 
-  private val instructions = input.getLines().map {
-    case InstructionRE("acc", param) => Acc(param.toInt)
-    case InstructionRE("jmp", param) => Jmp(param.toInt)
-    case InstructionRE("nop", param) => Nop(param.toInt)
-  }.toVector
+  override def runDay(input: BufferedSource): Unit = {
+    val instructions = input.getLines().map {
+      case InstructionRE("acc", param) => Acc(param.toInt)
+      case InstructionRE("jmp", param) => Jmp(param.toInt)
+      case InstructionRE("nop", param) => Nop(param.toInt)
+    }.toVector
 
-  private val result = run(instructions)
-  printDayPart(1, result.accumulator, "accumulator value before loop: %s")
+    val result = run(instructions)
+    printDayPart(1, result.accumulator, "accumulator value before loop: %s")
 
-  private val changedInstructions = result.executedInstructions.iterator.flatMap { instruction =>
-    instructions(instruction) match {
-      case Acc(_) => None
-      case Jmp(param) => Some(instructions.updated(instruction, Nop(param)))
-      case Nop(param) => Some(instructions.updated(instruction, Jmp(param)))
+    val changedInstructions = result.executedInstructions.iterator.flatMap { instruction =>
+      instructions(instruction) match {
+        case Acc(_) => None
+        case Jmp(param) => Some(instructions.updated(instruction, Nop(param)))
+        case Nop(param) => Some(instructions.updated(instruction, Jmp(param)))
+      }
     }
-  }
 
-  private val fixedResult = changedInstructions.map(run(_)).find(!_.looped).get
-  printDayPart(2, fixedResult.accumulator, "accumulator value after fixing: %s")
+    val fixedResult = changedInstructions.map(run(_)).find(!_.looped).get
+    printDayPart(2, fixedResult.accumulator, "accumulator value after fixing: %s")
+  }
 
   @tailrec
   private def run(instructions: Vector[Instruction], accumulator: Int = 0, pointer: Int = 0, executed: Set[Int] = Set()): Result = {

@@ -5,12 +5,14 @@ import scala.annotation.tailrec
 object Day22 extends Year2020 {
   override val day = 22
 
-  private val players = inputString.split("\n\n").zipWithIndex.map { player =>
-    Player(player._2 + 1, player._1.linesIterator.drop(1).map(_.toInt).toVector)
-  }.toSet
+  override def runDay(input: String): Unit = {
+    val players = input.split("\n\n").zipWithIndex.map { player =>
+      Player(player._2 + 1, player._1.linesIterator.drop(1).map(_.toInt).toVector)
+    }.toSet
 
-  printDayPart(1, getScore(play(players)), "score of winner: %s")
-  printDayPart(2, getScore(playSubGames(players)), "score of winner with recursive games: %s")
+    printDayPart(1, getScore(play(players)), "score of winner: %s")
+    printDayPart(2, getScore(playSubGames(players)), "score of winner with recursive games: %s")
+  }
 
   @tailrec
   private def play(players: Set[Player]): Player =

@@ -4,58 +4,60 @@ import adventofcode.common.NumberHelper.isInRange
 
 import scala.io.StdIn
 
-object Main extends App {
-  private val options = new Options(args.toList)
+object Main {
+  final def main(args: Array[String]): Unit = {
+    val options = new Options(args.toList)
 
-  println(
-    """Advent of Code
-      |==============
-      |""".stripMargin)
+    println(
+      """Advent of Code
+        |==============
+        |""".stripMargin)
 
-  val allDays = if (options.year.isDefined) {
-    if (AllDays.yearExists(options.year.get)) {
-      AllDays.year(options.year.get)
+    val allDays = if (options.year.isDefined) {
+      if (AllDays.yearExists(options.year.get)) {
+        AllDays.year(options.year.get)
+      } else {
+        println(s"No solutions for year ${options.year.get}!")
+        System.exit(1).asInstanceOf[List[DayApp]]
+      }
+    } else if (options.all) {
+      AllDays.allYears
     } else {
-      println(s"No solutions for year ${options.year.get}!")
-      System.exit(1).asInstanceOf[List[DayApp]]
+      print(
+        """Select year:
+          |
+          |  - 2015
+          |  - 2016
+          |  - 2018
+          |  - 2019
+          |  - 2020 (default)
+          |
+          |Year: """.stripMargin)
+
+      readInput {
+        case Int(year) if AllDays.year(year).nonEmpty => Some(AllDays.year(year))
+        case "" => Some(AllDays.year(2020))
+        case _ => None
+      }
     }
-  } else if (options.all) {
-    AllDays.allYears
-  } else {
-    print(
-      """Select year:
-        |
-        |  - 2015
-        |  - 2016
-        |  - 2018
-        |  - 2019
-        |  - 2020 (default)
-        |
-        |Year: """.stripMargin)
 
-    readInput {
-      case Int(year) if AllDays.year(year).nonEmpty => Some(AllDays.year(year))
-      case "" => Some(AllDays.year(2020))
-      case _ => None
+    if (options.hasOptions) {
+      if (options.benchmark.isEmpty) ResultMode.run(allDays, options) else BenchmarkMode.run(allDays, options)
+    } else {
+      print(
+        """Select mode:
+          |
+          |  1) run and print result (default)
+          |  2) run benchmarks
+          |
+          |Mode: """.stripMargin)
+
+      readInput {
+        case "1" | "" => Some(ResultMode)
+        case "2" => Some(BenchmarkMode)
+        case _ => None
+      }.run(allDays, options)
     }
-  }
-
-  if (options.hasOptions) {
-    if (options.benchmark.isEmpty) ResultMode.run() else BenchmarkMode.run()
-  } else {
-    print(
-      """Select mode:
-        |
-        |  1) run and print result (default)
-        |  2) run benchmarks
-        |
-        |Mode: """.stripMargin)
-
-    readInput {
-      case "1" | "" => Some(ResultMode)
-      case "2" => Some(BenchmarkMode)
-      case _ => None
-    }.run()
   }
 
   private def readInput[T](matchInput: String => Option[T]) = {
@@ -68,8 +70,8 @@ object Main extends App {
     result.get
   }
 
-  private trait DaySelectorRunnable extends Runnable {
-    def run(): Unit = {
+  private trait DaySelectorRunnable {
+    def run(allDays: List[DayApp], options: Options): Unit = {
       val daysToRun = if (options.day.isDefined) {
         if (isInRange(options.day.get, 1, allDays.size)) {
           List(allDays(options.day.get - 1))
@@ -92,16 +94,16 @@ object Main extends App {
         }
       }
 
-      runDays(daysToRun)
+      runDays(daysToRun, options)
     }
 
-    def runDays(days: List[DayApp]): Unit
+    def runDays(days: List[DayApp], options: Options): Unit
   }
 
   private object ResultMode extends DaySelectorRunnable {
-    def runDays(days: List[DayApp]): Unit = {
+    def runDays(days: List[DayApp], options: Options): Unit = {
       days.foreach { day =>
-        day.main(args)
+        day.main(options)
       }
     }
   }
@@ -115,7 +117,7 @@ object Main extends App {
       y2020.Day1 -> 1000, y2020.Day2 -> 1000, y2020.Day5 -> 1000, y2020.Day10 -> 1000, y2020.Day11 -> 50, y2020.Day12 -> 1000, y2020.Day13 -> 1000, y2020.Day15 -> 10, y2020.Day20 -> 25, y2020.Day21 -> 1000, y2020.Day22 -> 10, y2020.Day23 -> 25, y2020.Day24 -> 25, y2020.Day25 -> 1000
     ).withDefaultValue(100)
 
-    def runDays(days: List[DayApp]): Unit = {
+    def runDays(days: List[DayApp], options: Options): Unit = {
       Logging.debug = false
       Logging.results = false
 
@@ -144,7 +146,7 @@ object Main extends App {
         print(s"runs: $runs")
         val times = (1 to runs).map { _ =>
           val start = System.nanoTime
-          day.main(args)
+          day.main(options)
           (System.nanoTime - start).toFloat / 1000 / 1000
         }
 

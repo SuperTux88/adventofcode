@@ -4,47 +4,50 @@ import adventofcode.Logging
 import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day15 extends Year2018 {
   override val day = 15
 
-  private val parsedInput = input.getLines().zipWithIndex.map {
-    case (line, y) =>
-      line.zipWithIndex.map {
-        case (symbol@('E'|'G'), x) => ('.',    Some(Enemy(Pos(x, y), symbol)))
-        case (symbol, _)           => (symbol, None)
-      }
-  }.toList
+  override def runDay(input: BufferedSource): Unit = {
+    val parsedInput = input.getLines().zipWithIndex.map {
+      case (line, y) =>
+        line.zipWithIndex.map {
+          case (symbol@('E' | 'G'), x) => ('.', Some(Enemy(Pos(x, y), symbol)))
+          case (symbol, _) => (symbol, None)
+        }
+    }.toList
 
-  private val (map, enemies) = (Grid(parsedInput.map(_.map(_._1))), parsedInput.flatMap(_.flatMap(_._2)))
+    val (map, enemies) = (Grid(parsedInput.map(_.map(_._1))), parsedInput.flatMap(_.flatMap(_._2)))
 
-  private val (survivors, rounds) = simulate(3, enemies)
+    val (survivors, rounds) = simulate(3, map, enemies)
 
-  map.print(survivors)
+    map.print(survivors)
 
-  printDayPart(1, survivors.map(_.hp).sum * rounds)
-  printDayPart(2, simulateWin(4, enemies))
+    printDayPart(1, survivors.map(_.hp).sum * rounds)
+    printDayPart(2, simulateWin(4, map, enemies))
+  }
 
   @tailrec
-  private def simulate(elfAttackPower: Int, players: List[Enemy], playersDone: List[Enemy] = Nil, round: Int = 1): (List[Enemy], Int) = {
+  private def simulate(elfAttackPower: Int, map: Grid, players: List[Enemy], playersDone: List[Enemy] = Nil, round: Int = 1): (List[Enemy], Int) = {
     players match {
       case Nil if playersDone.groupBy(_.symbol).size == 1 => (playersDone, round)
-      case Nil => simulate(elfAttackPower, playersDone.sortBy(_.pos), Nil, round + 1)
+      case Nil => simulate(elfAttackPower, map, playersDone.sortBy(_.pos), Nil, round + 1)
       case currentPlayer :: playersTodo =>
-        implicit val otherPlayers: List[Enemy] = playersTodo ::: playersDone
+        val otherPlayers: List[Enemy] = playersTodo ::: playersDone
         val targets = otherPlayers.filter(_.symbol != currentPlayer.symbol)
 
         if (targets.isEmpty) {
           (currentPlayer :: otherPlayers, round - 1)
         } else {
           var newPos = currentPlayer.pos
-          val freeEnemyPositions = targets.flatMap(_.freeNeighbors)
+          val freeEnemyPositions = targets.flatMap(_.freeNeighbors(map, otherPlayers))
 
           if (!freeEnemyPositions.contains(newPos)) {
-            val newPositions = findNearestPosition(currentPlayer.pos, freeEnemyPositions)
+            val newPositions = findNearestPosition(map, otherPlayers, currentPlayer.pos, freeEnemyPositions)
             if (newPositions.nonEmpty) {
-              val possibleDirections = currentPlayer.pos.directions.filter(pos => map.isFree(pos))
-              val nearestDirection = findNearestPosition(newPositions.min, possibleDirections)
+              val possibleDirections = currentPlayer.pos.directions.filter(pos => map.isFree(otherPlayers, pos))
+              val nearestDirection = findNearestPosition(map, otherPlayers, newPositions.min, possibleDirections)
               if (nearestDirection.nonEmpty) newPos = nearestDirection.min
             }
           }
@@ -66,18 +69,18 @@ object Day15 extends Year2018 {
               val newTodo = patchPlayers(playersTodo, targetOption, targetAfterHit)
               val newDone = patchPlayers(playersDone, targetOption, targetAfterHit)
 
-              simulate(elfAttackPower, newTodo, currentPlayer.copy(pos = newPos) :: newDone, round)
+              simulate(elfAttackPower, map, newTodo, currentPlayer.copy(pos = newPos) :: newDone, round)
           }
         }
     }
   }
 
   @tailrec
-  def simulateWin(elfAttackPower: Int, players: List[Enemy]): Int = {
+  def simulateWin(elfAttackPower: Int, map: Grid, players: List[Enemy]): Int = {
     printDebug(s"Trying elf attack power: $elfAttackPower")
     val elves = players.count(_.symbol == 'E')
 
-    val (survivors, rounds) = simulate(elfAttackPower, players)
+    val (survivors, rounds) = simulate(elfAttackPower, map, players)
     map.print(survivors)
 
     if (survivors.count(_.symbol == 'E') == elves) {
@@ -85,7 +88,7 @@ object Day15 extends Year2018 {
       survivors.map(_.hp).sum * rounds
     } else {
       printDebug(s"Elf died after $rounds rounds :(")
-      simulateWin(elfAttackPower + 1, players)
+      simulateWin(elfAttackPower + 1, map, players)
     }
   }
 
@@ -96,11 +99,11 @@ object Day15 extends Year2018 {
       case None => players
     }
 
-  def findNearestPosition(pos: Pos, targets: Seq[Pos])(implicit players: Seq[Enemy]): Seq[Pos] = {
+  def findNearestPosition(map: Grid, players: Seq[Enemy], pos: Pos, targets: Seq[Pos]): Seq[Pos] = {
     @tailrec
     def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
       val nextSteps = current.flatMap { pos =>
-        pos.directions.filter(pos => map.isFree(pos) && !visited.contains(pos))
+        pos.directions.filter(pos => map.isFree(players, pos) && !visited.contains(pos))
       }.distinct
 
       val found = nextSteps.intersect(targets)
@@ -117,14 +120,14 @@ object Day15 extends Year2018 {
     def takeHit(attackPower: Int): Option[Enemy] =
       if (hp > attackPower) Some(copy(hp = hp - attackPower)) else None
 
-    def freeNeighbors(implicit players: Seq[Enemy]): Seq[Pos] =
-      pos.directions.filter(map.isFree(_))
+    def freeNeighbors(map: Grid, players: Seq[Enemy]): Seq[Pos] =
+      pos.directions.filter(map.isFree(players, _))
 
     def stats: String = s"$symbol($hp)"
   }
 
   private case class Grid(grid: Seq[Seq[Char]]) {
-    def isFree(pos: Pos)(implicit players: Seq[Enemy]): Boolean =
+    def isFree(players: Seq[Enemy], pos: Pos): Boolean =
       grid(pos.y)(pos.x) != '#' && !players.exists(_.pos == pos)
 
     def print(enemies: Seq[Enemy]): Unit = if (Logging.debug)

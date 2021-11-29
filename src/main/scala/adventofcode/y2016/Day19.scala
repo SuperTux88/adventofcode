@@ -3,10 +3,12 @@ package adventofcode.y2016
 object Day19 extends Year2016 {
   override val day = 19
 
-  val elves = inputString.toInt
+  override def runDay(input: String): Unit = {
+    val elves = input.toInt
 
-  printDayPart(1, josephus(elves))
-  printDayPart(2, part2(elves))
+    printDayPart(1, josephus(elves))
+    printDayPart(2, part2(elves))
+  }
 
   private def josephus(elves: Int) =
     Integer.parseInt(elves.toBinaryString.substring(1) + 1, 2)

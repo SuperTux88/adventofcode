@@ -1,12 +1,16 @@
 package adventofcode.y2016
 
+import scala.io.BufferedSource
+
 object Day18 extends Year2016 {
   override val day = 18
 
-  val firstRow = input.map(_ == '.').toList
+  override def runDay(input: BufferedSource): Unit = {
+    val firstRow = input.map(_ == '.').toList
 
-  printDayPart(1, countSafe(firstRow, 40))
-  printDayPart(2, countSafe(firstRow, 400000))
+    printDayPart(1, countSafe(firstRow, 40))
+    printDayPart(2, countSafe(firstRow, 400000))
+  }
 
   private def countSafe(firstRow: List[Boolean], rows: Int) = {
     val lastIndex = firstRow.length - 1

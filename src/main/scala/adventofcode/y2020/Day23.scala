@@ -5,17 +5,19 @@ import scala.annotation.tailrec
 object Day23 extends Year2020 {
   override val day = 23
 
-  private val allCups = inputString.map(_.asDigit).toList
-  private val (firstCup, highestCup) = (allCups.head, allCups.max)
+  override def runDay(input: String): Unit = {
+    val allCups = input.map(_.asDigit).toList
+    val (firstCup, highestCup) = (allCups.head, allCups.max)
 
-  private val nextCupsP1 = createCupsLoop(allCups)
-  playGame(firstCup, nextCupsP1, 100, highestCup)
-  private val answerP1 = Iterator.iterate(nextCupsP1(1))(nextCupsP1(_)).takeWhile(_ != 1).mkString
-  printDayPart(1, answerP1, "labels on the cups after cup 1: %s")
+    val nextCupsP1 = createCupsLoop(allCups)
+    playGame(firstCup, nextCupsP1, 100, highestCup)
+    val answerP1 = Iterator.iterate(nextCupsP1(1))(nextCupsP1(_)).takeWhile(_ != 1).mkString
+    printDayPart(1, answerP1, "labels on the cups after cup 1: %s")
 
-  private val nextCupsP2 = createCupsLoop(allCups ::: (highestCup + 1 to 1000000).toList)
-  playGame(firstCup, nextCupsP2, 10000000, 1000000)
-  printDayPart(2, Iterator.iterate(nextCupsP2(1))(nextCupsP2(_)).take(2).map(_.toLong).product)
+    val nextCupsP2 = createCupsLoop(allCups ::: (highestCup + 1 to 1000000).toList)
+    playGame(firstCup, nextCupsP2, 10000000, 1000000)
+    printDayPart(2, Iterator.iterate(nextCupsP2(1))(nextCupsP2(_)).take(2).map(_.toLong).product)
+  }
 
   private def createCupsLoop(cups: Seq[Int]) = {
     val nextCups = new Array[Int](cups.size + 1)

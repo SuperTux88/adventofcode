@@ -1,16 +1,20 @@
 package adventofcode.y2016
 
+import scala.io.BufferedSource
+
 object Day15 extends Year2016 {
   override val day = 15
 
-  val DiscRE = """Disc #(\d) has (\d+) positions; at time=0, it is at position (\d+).""".r
+  private val DiscRE = """Disc #(\d) has (\d+) positions; at time=0, it is at position (\d+).""".r
 
-  private val discs = input.getLines().map {
-    case DiscRE(discNo, positions, currentPos) => Disc(discNo.toInt, positions.toInt, currentPos.toInt)
-  }.toList
+  override def runDay(input: BufferedSource): Unit = {
+    val discs = input.getLines().map {
+      case DiscRE(discNo, positions, currentPos) => Disc(discNo.toInt, positions.toInt, currentPos.toInt)
+    }.toList
 
-  printDayPart(1, chineseRemainderTheorem(discs))
-  printDayPart(2, chineseRemainderTheorem(Disc(discs.length + 1, 11, 0) :: discs))
+    printDayPart(1, chineseRemainderTheorem(discs))
+    printDayPart(2, chineseRemainderTheorem(Disc(discs.length + 1, 11, 0) :: discs))
+  }
 
   private def chineseRemainderTheorem(discs: List[Disc]) = {
     val max = discs.map(_.positions).product

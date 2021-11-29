@@ -3,25 +3,29 @@ package adventofcode.y2018
 import adventofcode.Logging
 import adventofcode.common.pos.Pos
 
+import scala.io.BufferedSource
+
 object Day17 extends Year2018 {
   override val day = 17
 
-  val ClayVerticalRE = """x=(\d+), y=(\d+)\.\.(\d+)""".r
-  val ClayHorizontalRE = """y=(\d+), x=(\d+)\.\.(\d+)""".r
+  private val ClayVerticalRE = """x=(\d+), y=(\d+)\.\.(\d+)""".r
+  private val ClayHorizontalRE = """y=(\d+), x=(\d+)\.\.(\d+)""".r
 
-  private val clay = input.getLines().flatMap {
-    case ClayVerticalRE(x, yFrom, yTo) => (yFrom.toInt to yTo.toInt).map(Pos(x.toInt, _))
-    case ClayHorizontalRE(y, xFrom, xTo) => (xFrom.toInt to xTo.toInt).map(Pos(_, y.toInt))
-  }.toSet
-  private val maxDepth = clay.maxBy(_.y).y
+  override def runDay(input: BufferedSource): Unit = {
+    implicit val clay: Set[Pos] = input.getLines().flatMap {
+      case ClayVerticalRE(x, yFrom, yTo) => (yFrom.toInt to yTo.toInt).map(Pos(x.toInt, _))
+      case ClayHorizontalRE(y, xFrom, xTo) => (xFrom.toInt to xTo.toInt).map(Pos(_, y.toInt))
+    }.toSet
+    implicit val maxDepth: Int = clay.maxBy(_.y).y
 
-  private val water = flow(Pos(500, clay.minBy(_.y).y))
-  printMap(water)
+    val water = flow(Pos(500, clay.minBy(_.y).y))
+    printMap(clay, water)
 
-  printDayPart(1, water.size)
-  printDayPart(2, water.count(_._2))
+    printDayPart(1, water.size)
+    printDayPart(2, water.count(_._2))
+  }
 
-  private def flow(pos: Pos, water: Map[Pos, Boolean] = Map[Pos, Boolean]()): Map[Pos, Boolean] = {
+  private def flow(pos: Pos, water: Map[Pos, Boolean] = Map[Pos, Boolean]())(implicit clay: Set[Pos], maxDepth: Int): Map[Pos, Boolean] = {
     def free(pos: Pos) = !clay.contains(pos) && !water.getOrElse(pos, false)
 
     def iterate(pos: Pos, line: Map[Pos, Boolean] = Map[Pos, Boolean]())(direction: Pos => Pos) =
@@ -49,9 +53,9 @@ object Day17 extends Year2018 {
     } else water
   }
 
-  private def printMap(water: Map[Pos, Boolean]): Unit = if (Logging.debug) {
+  private def printMap(clay: Set[Pos], water: Map[Pos, Boolean]): Unit = if (Logging.debug) {
     val xRange = (water.keys ++ clay).minBy(_.x).x to (water.keys ++ clay).maxBy(_.x).x
-    (clay.minBy(_.y).y to maxDepth).foreach { y =>
+    (clay.minBy(_.y).y to clay.maxBy(_.y).y).foreach { y =>
       println(xRange.map { x =>
         if (clay.contains(Pos(x, y))) '#'
         else if (water.getOrElse(Pos(x, y), false)) '~'

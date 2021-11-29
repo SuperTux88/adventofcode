@@ -4,6 +4,7 @@ import adventofcode.common.NumberHelper.lcm
 import adventofcode.common.pos.Pos3D
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day12 extends Year2019 {
   override val day = 12
@@ -12,17 +13,19 @@ object Day12 extends Year2019 {
   private val axisFunctions = Seq[Pos3D => Int](_.x, _.y, _.z)
   private val velocityFunctions = Seq[((Int, Int, Int)) => Int](_._1, _._2, _._3)
 
-  private val moons = input.getLines().takeWhile(_.nonEmpty).map {
-    case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
-  }.toVector
+  override def runDay(input: BufferedSource): Unit = {
+    val moons = input.getLines().takeWhile(_.nonEmpty).map {
+      case MoonRE(x, y, z) => (Pos3D(x.toInt, y.toInt, z.toInt), (0, 0, 0))
+    }.toVector
 
-  private val energy = Iterator.iterate(moons)(step).drop(1000).next().map {
-    case (pos, vel) =>
-      (pos.x.abs + pos.y.abs + pos.z.abs) * (vel._1.abs + vel._2.abs + vel._3.abs)
-  }.sum
-  printDayPart(1, energy, "total energy after 1000 steps: %s")
+    val energy = Iterator.iterate(moons)(step).drop(1000).next().map {
+      case (pos, vel) =>
+        (pos.x.abs + pos.y.abs + pos.z.abs) * (vel._1.abs + vel._2.abs + vel._3.abs)
+    }.sum
+    printDayPart(1, energy, "total energy after 1000 steps: %s")
 
-  printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)), "loop after %s steps")
+    printDayPart(2, lcm(findLoop(step(moons)).map(_.toLong)), "loop after %s steps")
+  }
 
   private def step(moons: Vector[(Pos3D, (Int, Int, Int))]) = {
     def compare(a: Pos3D, b: Pos3D, f: Pos3D => Int) = f(a).compareTo(f(b))

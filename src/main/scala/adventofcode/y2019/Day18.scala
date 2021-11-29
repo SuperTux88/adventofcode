@@ -7,25 +7,32 @@ import scala.annotation.tailrec
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
+import scala.io.BufferedSource
 
 object Day18 extends Year2019 {
   override val day = 18
 
-  private val map = Pos.parseMap(input.getLines(), char => char)
+  override def runDay(input: BufferedSource): Unit = {
+    val map = Pos.parseMap(input.getLines(), char => char)
 
-  private val allKeys = map.values.filter(_.isLower).toSet
-  private val startPos = map.find(_._2 == '@').get._1
+    val allKeys = map.values.filter(_.isLower).toSet
+    val startPos = map.find(_._2 == '@').get._1
 
-  private val futurePart1 = Future { getShortestPath(Seq(startPos), map) }
+    val futurePart1 = Future {
+      getShortestPath(Seq(startPos), map, allKeys)
+    }
 
-  private val map2 = map + (startPos -> '#') ++ startPos.directions.map(_ -> '#')
+    val map2 = map + (startPos -> '#') ++ startPos.directions.map(_ -> '#')
 
-  private val futurePart2 = Future { getShortestPath(startPos.diagonals, map2) }
+    val futurePart2 = Future {
+      getShortestPath(startPos.diagonals, map2, allKeys)
+    }
 
-  printDayPart(1, Await.result(futurePart1, Duration.Inf), "shortest path to all keys: %s")
-  printDayPart(2, Await.result(futurePart2, Duration.Inf), "shortest path with robots: %s")
+    printDayPart(1, Await.result(futurePart1, Duration.Inf), "shortest path to all keys: %s")
+    printDayPart(2, Await.result(futurePart2, Duration.Inf), "shortest path with robots: %s")
+  }
 
-  private def getShortestPath(startPositions: Seq[Pos], map: Map[Pos, Char]): Int = {
+  private def getShortestPath(startPositions: Seq[Pos], map: Map[Pos, Char], allKeys: Set[Char]): Int = {
     Dijkstra(
       State(startPositions, allKeys, Set.empty),
       (state: State) => state.remainingKeys.isEmpty,

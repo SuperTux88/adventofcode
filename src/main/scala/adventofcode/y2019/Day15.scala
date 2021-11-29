@@ -12,17 +12,17 @@ object Day15 extends Year2019 {
   // special order: north (1), south (2), west (3), and east (4)
   private val directions = List((1, (0, -1)), (2, (0, 1)), (3, (-1, 0)), (4, (1, 0)))
 
-  private val intCode = new IntCode(inputString)
+  override def runDay(intCode: IntCode): Unit = {
+    val exploreResult = exploreMap(List((Pos.zero, intCode)))
+    val (oxygenSystem, (_, steps)) = exploreResult.find(_._2._1 == 2).get
 
-  private val exploreResult = exploreMap(List((Pos.zero, intCode)))
-  private val (oxygenSystem, (_, steps)) = exploreResult.find(_._2._1 == 2).get
+    if (Logging.debug) printMap(exploreResult.view.mapValues(_._1))
 
-  if (Logging.debug) printMap(exploreResult.view.mapValues(_._1))
+    printDayPart(1, steps, "fewest steps to oxygent system: %s")
 
-  printDayPart(1, steps, "fewest steps to oxygent system: %s")
-
-  private val freeSpace = exploreResult.filter(_._2._1 == 1).keys.toList
-  printDayPart(2, fillWithOxygen(List(oxygenSystem), freeSpace), "minutes to fill area: %s")
+    val freeSpace = exploreResult.filter(_._2._1 == 1).keys.toList
+    printDayPart(2, fillWithOxygen(List(oxygenSystem), freeSpace), "minutes to fill area: %s")
+  }
 
   @tailrec
   private def exploreMap(current: List[(Pos, IntCode)], visited: Map[Pos, (Int, Int)] = Map(Pos.zero -> (1, 0)), steps: Int = 1): Map[Pos, (Int, Int)] =

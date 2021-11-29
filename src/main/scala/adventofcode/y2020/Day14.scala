@@ -1,18 +1,22 @@
 package adventofcode.y2020
 
+import scala.io.BufferedSource
+
 object Day14 extends Year2020 {
   override val day = 14
 
   private val MaskRE = """mask = (\w+)""".r
   private val MemoryRE = """mem\[(\d+)] = (\d+)""".r
 
-  private val program = input.getLines().map {
-    case MaskRE(mask) => Mask(mask)
-    case MemoryRE(address, value) => Memory(address.toInt, value.toLong)
-  }.toList
+  override def runDay(input: BufferedSource): Unit = {
+    val program = input.getLines().map {
+      case MaskRE(mask) => Mask(mask)
+      case MemoryRE(address, value) => Memory(address.toInt, value.toLong)
+    }.toList
 
-  printDayPart(1, runProgram(program, maskValue).values.sum, "sum of values in memory: %s")
-  printDayPart(2, runProgram(program, maskToFloatingAddresses).values.sum, "sum of values in memory with floating addresses: %s")
+    printDayPart(1, runProgram(program, maskValue).values.sum, "sum of values in memory: %s")
+    printDayPart(2, runProgram(program, maskToFloatingAddresses).values.sum, "sum of values in memory with floating addresses: %s")
+  }
 
   private def runProgram(instructions: List[Instruction], processMemoryInstruction: (Memory, State) => Map[Long, Long]) =
     instructions.tail.foldLeft(State(Map.empty[Long, Long], instructions.head.asInstanceOf[Mask])) { (state, instruction) =>

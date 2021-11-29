@@ -4,28 +4,31 @@ import adventofcode.common.NumberHelper.gcd
 import adventofcode.common.pos.Pos
 
 import scala.collection.parallel.CollectionConverters._
+import scala.io.BufferedSource
 
 object Day10 extends Year2019 {
   override val day = 10
 
-  private val asteroids = input.getLines().zipWithIndex.flatMap {
-    case (line, y) =>
-      line.zipWithIndex.flatMap {
-        case ('#', x) => Some(Pos(x, y))
-        case _ => None
-      }
-  }.toSet
+  override def runDay(input: BufferedSource): Unit = {
+    val asteroids = input.getLines().zipWithIndex.flatMap {
+      case (line, y) =>
+        line.zipWithIndex.flatMap {
+          case ('#', x) => Some(Pos(x, y))
+          case _ => None
+        }
+    }.toSet
 
-  private val (stationPos, visibleAsteroids) = asteroids.par.map { asteroid =>
-    asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)
-  }.maxBy(_._2.size)
+    val (stationPos, visibleAsteroids) = asteroids.par.map { asteroid =>
+      asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)
+    }.maxBy(_._2.size)
 
-  printDayPart(1, visibleAsteroids.size, "visible asteroids: %s")
+    printDayPart(1, visibleAsteroids.size, "visible asteroids: %s")
 
-  private val vaporizeOrder = getVaporizeOrder(stationPos, asteroids - stationPos)
+    val vaporizeOrder = getVaporizeOrder(stationPos, asteroids - stationPos)
 
-  private val twohundredthAsteroid = vaporizeOrder(199)
-  printDayPart(2, twohundredthAsteroid.x * 100 + twohundredthAsteroid.y)
+    val twohundredthAsteroid = vaporizeOrder(199)
+    printDayPart(2, twohundredthAsteroid.x * 100 + twohundredthAsteroid.y)
+  }
 
   private def getVisibleAsteroids(asteroid: Pos, otherAsteroids: Set[Pos]) =
     otherAsteroids.filterNot { otherAsteroid =>

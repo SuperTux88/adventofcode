@@ -1,22 +1,26 @@
 package adventofcode.y2015
 
+import scala.io.BufferedSource
+
 object Day23 extends Year2015 {
   override val day: Int = 23
 
-  val CommandRE = """(\w+) ([ab])""".r
-  val JumpCommandRE = """jmp ([+-]\d+)""".r
-  val JumpIfCommandRE = """(ji[oe]) ([ab]), ([+-]\d+)""".r
+  private val CommandRE = """(\w+) ([ab])""".r
+  private val JumpCommandRE = """jmp ([+-]\d+)""".r
+  private val JumpIfCommandRE = """(ji[oe]) ([ab]), ([+-]\d+)""".r
 
-  private val commands = input.getLines().map {
-    case CommandRE(command, register) => Command(command, Some(register(0)), None)
-    case JumpCommandRE(offset) => Command("jmp", None, Some(offset.toInt))
-    case JumpIfCommandRE(command, register, offset) => Command(command, Some(register(0)), Some(offset.toInt))
-  }.toList
+  override def runDay(input: BufferedSource): Unit = {
+    val commands = input.getLines().map {
+      case CommandRE(command, register) => Command(command, Some(register(0)), None)
+      case JumpCommandRE(offset) => Command("jmp", None, Some(offset.toInt))
+      case JumpIfCommandRE(command, register, offset) => Command(command, Some(register(0)), Some(offset.toInt))
+    }.toList
 
-  printDayPart(1, runCommands(Map())('b').toInt)
-  printDayPart(2, runCommands(Map('a' -> 1L))('b').toInt)
+    printDayPart(1, runCommands(commands)('b').toInt)
+    printDayPart(2, runCommands(commands, Map('a' -> 1L))('b').toInt)
+  }
 
-  private def runCommands(initialRegisters: Map[Char, Long]) = {
+  private def runCommands(commands: List[Command], initialRegisters: Map[Char, Long] = Map()) = {
     var registers = initialRegisters.withDefaultValue(0L)
     var currentCommand = 0
 

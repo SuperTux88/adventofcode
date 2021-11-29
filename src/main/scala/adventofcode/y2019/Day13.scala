@@ -11,24 +11,26 @@ object Day13 extends Year2019 {
 
   private val SCORE_POS = Pos(-1, 0)
 
-  private val intCode = new IntCode(inputString).setMemory(0, 2)
+  override def runDay(input: IntCode): Unit = {
+    val intCode = input.setMemory(0, 2)
 
-  private val initGame = intCode.run()
-  private val initMap = parseOutput(initGame.output)
+    val initGame = intCode.run()
+    val initMap = parseOutput(initGame.output)
 
-  if (options.interactive) {
-    val con = new tools.jline.console.ConsoleReader()
-    println("\u001b[2J\u001B[25;0HUse 'a', 's' and 'd' key to move left or stay where you are or move right.")
-    playInteractive(intCode, initMap, con)
-  } else {
-    if (Logging.debug) {
-      printMap(initMap)
-      if (!options.quiet) print("\u001b[2J")
+    if (options.interactive) {
+      val con = new tools.jline.console.ConsoleReader()
+      println("\u001b[2J\u001B[25;0HUse 'a', 's' and 'd' key to move left or stay where you are or move right.")
+      playInteractive(intCode, initMap, con)
+    } else {
+      if (Logging.debug) {
+        printMap(initMap)
+        if (!options.quiet) print("\u001b[2J")
+      }
+
+      val endScore = play(initGame, initMap)
+      printDayPart(1, countBlocks(initMap), "blocks in game: %s")
+      printDayPart(2, endScore, "end score: %s")
     }
-
-    val endScore = play(initGame, initMap)
-    printDayPart(1, countBlocks(initMap), "blocks in game: %s")
-    printDayPart(2, endScore, "end score: %s")
   }
 
   @tailrec

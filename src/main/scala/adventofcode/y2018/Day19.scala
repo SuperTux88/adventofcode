@@ -1,27 +1,31 @@
 package adventofcode.y2018
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day19 extends Year2018 {
   override val day = 19
 
-  val elfCode = new ElfCode(input.getLines())
+  private val instructionWhereFactorizationStarts = 1
 
-  val instructionWhereFactorizationStarts = 1
-  val registerWithNumberToFactor = elfCode.program(elfCode.size - 3)._2(2)
+  override def runDay(input: BufferedSource): Unit = {
+    implicit val elfCode: ElfCode = new ElfCode(input.getLines())
 
-  printDayPart(1, elfCode.runProgram().head)
-  printDayPart(2, factors(findNumberToFactor(Vector(1, 0, 0, 0, 0, 0))).sum)
-
-  @tailrec
-  final def findNumberToFactor(registers: Vector[Int]): Int = {
-    if (registers(elfCode.ip) != instructionWhereFactorizationStarts)
-      findNumberToFactor(elfCode.runInstruction(registers))
-    else
-      registers(registerWithNumberToFactor)
+    printDayPart(1, elfCode.runProgram().head)
+    printDayPart(2, factors(findNumberToFactor(Vector(1, 0, 0, 0, 0, 0))).sum)
   }
 
-  def factors(num: Int) = {
+  @tailrec
+  private final def findNumberToFactor(registers: Vector[Int])(implicit elfCode: ElfCode): Int = {
+    if (registers(elfCode.ip) != instructionWhereFactorizationStarts)
+      findNumberToFactor(elfCode.runInstruction(registers))
+    else {
+      val registerWithNumberToFactor = elfCode.program(elfCode.size - 3)._2(2)
+      registers(registerWithNumberToFactor)
+    }
+  }
+
+  private def factors(num: Int) = {
     (1 to num).filter { divisor =>
       num % divisor == 0
     }.flatMap(f => Set(f, num / f)).toSet

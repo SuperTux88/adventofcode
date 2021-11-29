@@ -5,14 +5,14 @@ import scala.annotation.tailrec
 object Day23 extends Year2019 {
   override val day = 23
 
-  private val intCode = new IntCode(inputString)
+  override def runDay(intCode: IntCode): Unit = {
+    val computers = (0 to 49).map(address => address -> intCode.run(address)).toMap
 
-  private val computers = (0 to 49).map(address => address -> intCode.run(address)).toMap
+    val (newComputers, toNAT) = runUntilIdle(computers)
 
-  private val (newComputers, toNAT) = runUntilIdle(computers)
-
-  printDayPart(1, toNAT.last, "first Y for address 255: %s")
-  printDayPart(2, runUntilDuplicate(newComputers, toNAT), "first duplicate Y from NAT: %s")
+    printDayPart(1, toNAT.last, "first Y for address 255: %s")
+    printDayPart(2, runUntilDuplicate(newComputers, toNAT), "first duplicate Y from NAT: %s")
+  }
 
   @tailrec
   private def runUntilIdle(computers: Map[Int, IntCode], messages: Map[Long, Vector[Long]] = Map.empty): (Map[Int, IntCode], Vector[Long]) = {

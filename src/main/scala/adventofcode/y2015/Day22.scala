@@ -1,17 +1,22 @@
 package adventofcode.y2015
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day22 extends Year2015 {
   override val day: Int = 22
-  private val spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
-  private val bossStats = input.getLines().map(_.split(':')(1).trim.toInt)
-  private val boss = Boss(bossStats.next(), bossStats.next())
 
-  printDayPart(1, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = false),
-    "least amount of mana: %s")
-  printDayPart(2, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = true),
-    "least amount of mana in hard mode: %s")
+  private val spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
+
+  override def runDay(input: BufferedSource): Unit = {
+    val bossStats = input.getLines().map(_.split(':')(1).trim.toInt)
+    val boss = Boss(bossStats.next(), bossStats.next())
+
+    printDayPart(1, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = false),
+      "least amount of mana: %s")
+    printDayPart(2, simulate(Seq(GameState(Wizard(50, 0, 500), boss, 0, Seq())), Int.MaxValue, hard = true),
+      "least amount of mana in hard mode: %s")
+  }
 
   @tailrec
   private def simulate(games: Seq[GameState], bestGameMana: Int, hard: Boolean): Int = games match {

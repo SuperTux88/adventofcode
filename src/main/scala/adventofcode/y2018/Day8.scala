@@ -3,10 +3,12 @@ package adventofcode.y2018
 object Day8 extends Year2018 {
   override val day = 8
 
-  val (metadataSum, totalValue, _) = calculateNode(inputString.split(" ").map(_.toInt).toList)
+  override def runDay(input: String): Unit = {
+    val (metadataSum, totalValue, _) = calculateNode(input.split(" ").map(_.toInt).toList)
 
-  printDayPart(1, metadataSum)
-  printDayPart(2, totalValue)
+    printDayPart(1, metadataSum)
+    printDayPart(2, totalValue)
+  }
 
   private def calculateNode(numbers: List[Int]): (Int, Int, List[Int]) = {
     val childrenCount :: metadataCount :: body = numbers

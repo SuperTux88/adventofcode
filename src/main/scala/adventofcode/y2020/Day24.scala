@@ -4,19 +4,22 @@ import adventofcode.common.MiscFunctions.conwaysGameOfLife
 import adventofcode.common.pos.PosHex
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day24 extends Year2020 {
   override val day = 24
 
-  private val blackTiles = input.getLines().foldLeft(Set.empty[PosHex]) { (blackTiles, line) =>
-    val pos = readLine(line.toList)
-    if (blackTiles.contains(pos)) blackTiles - pos else blackTiles + pos
+  override def runDay(input: BufferedSource): Unit = {
+    val blackTiles = input.getLines().foldLeft(Set.empty[PosHex]) { (blackTiles, line) =>
+      val pos = readLine(line.toList)
+      if (blackTiles.contains(pos)) blackTiles - pos else blackTiles + pos
+    }
+
+    printDayPart(1, blackTiles.size, "tiles with black side up: %s")
+
+    printDayPart(2, conwaysGameOfLife(blackTiles, 100, nextState).size,
+      "tiles with black side up after 100 days: %s")
   }
-
-  printDayPart(1, blackTiles.size, "tiles with black side up: %s")
-
-  printDayPart(2, conwaysGameOfLife(blackTiles, 100, nextState).size,
-    "tiles with black side up after 100 days: %s")
 
   @tailrec
   private def readLine(line: List[Char], pos: PosHex = PosHex(0, 0)): PosHex = line match {

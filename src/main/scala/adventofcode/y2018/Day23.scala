@@ -3,23 +3,25 @@ package adventofcode.y2018
 import adventofcode.common.pos.Pos3D
 
 import scala.collection.mutable
+import scala.io.BufferedSource
 
 object Day23 extends Year2018 {
   override val day = 23
 
   private val NanoBotRE = """pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)""".r
 
-  private val bots = input.getLines().map {
-    case NanoBotRE(x, y, z, r) => Bot(Pos3D(x.toInt, y.toInt, z.toInt), r.toInt)
-  }.toList
-
-  private val strongestBot = bots.maxBy(_.range)
-
-  printDayPart(1, bots.count(strongestBot.isInRange))
-
   private val center = Pos3D(0, 0, 0)
 
-  printDayPart(2, findClosestWithMostBots(bots).distance(center))
+  override def runDay(input: BufferedSource): Unit = {
+    val bots = input.getLines().map {
+      case NanoBotRE(x, y, z, r) => Bot(Pos3D(x.toInt, y.toInt, z.toInt), r.toInt)
+    }.toList
+
+    val strongestBot = bots.maxBy(_.range)
+
+    printDayPart(1, bots.count(strongestBot.isInRange))
+    printDayPart(2, findClosestWithMostBots(bots).distance(center))
+  }
 
   private trait Octahedron {
     def pos: Pos3D

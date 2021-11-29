@@ -4,18 +4,21 @@ import adventofcode.Logging
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day20 extends Year2018 {
   override val day = 20
 
-  private val map = process(input.drop(1))
+  override def runDay(input: BufferedSource): Unit = {
+    val map = process(input.drop(1))
 
-  printMap(map)
+    printMap(map)
 
-  private val distances = walkMap(map.filter(_._2 == '.').keys.toSet, map)
+    val distances = walkMap(map.filter(_._2 == '.').keys.toSet, map)
 
-  printDayPart(1, distances.maxBy(_._2)._2)
-  printDayPart(2, distances.count(_._2 >= 1000))
+    printDayPart(1, distances.maxBy(_._2)._2)
+    printDayPart(2, distances.count(_._2 >= 1000))
+  }
 
   @tailrec
   private def process(

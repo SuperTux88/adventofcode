@@ -3,9 +3,11 @@ package adventofcode.y2015
 object Day11 extends Year2015 {
   override val day: Int = 11
 
-  val part1 = nextValidPassword(inputString)
-  printDayPart(1, part1, "next valid password: %s")
-  printDayPart(2, nextValidPassword(part1), "next valid password: %s")
+  override def runDay(input: String): Unit = {
+    val part1 = nextValidPassword(input)
+    printDayPart(1, part1, "next valid password: %s")
+    printDayPart(2, nextValidPassword(part1), "next valid password: %s")
+  }
 
   private def nextValidPassword(oldPassword: String) = {
     var reversePassword = oldPassword.toList.reverse

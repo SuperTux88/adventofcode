@@ -5,12 +5,14 @@ import adventofcode.common.NumberHelper.isInRange
 object Day4 extends Year2020 {
   override val day = 4
 
-  private val passports = inputString.split("\n\n").map(Passport.parsePassport)
+  override def runDay(input: String): Unit = {
+    val passports = input.split("\n\n").map(Passport.parsePassport)
 
-  private val allRequiredFieldsPassports = passports.filter(_.allRequiredFields).toSeq
+    val allRequiredFieldsPassports = passports.filter(_.allRequiredFields).toSeq
 
-  printDayPart(1, allRequiredFieldsPassports.size, "valid passports: %s")
-  printDayPart(2, allRequiredFieldsPassports.count(_.allFieldsValid), "passports with valid fields: %s")
+    printDayPart(1, allRequiredFieldsPassports.size, "valid passports: %s")
+    printDayPart(2, allRequiredFieldsPassports.count(_.allFieldsValid), "passports with valid fields: %s")
+  }
 
   private object Passport {
     private val requiredFields = Set("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")

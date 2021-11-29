@@ -1,16 +1,19 @@
 package adventofcode.y2020
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day18 extends Year2020 {
   override val day = 18
 
   private val ParenthesesRE = """(.*)\(([\d +*]+)\)(.*)""".r
 
-  private val lines = input.getLines().toList
+  override def runDay(input: BufferedSource): Unit = {
+    val lines = input.getLines().toList
 
-  printDayPart(1, lines.map(solveLine(_, leftToRight)).sum, "sum of results: %s")
-  printDayPart(2, lines.map(solveLine(_, additionsFirst)).sum, "sum of results with precedence: %s")
+    printDayPart(1, lines.map(solveLine(_, leftToRight)).sum, "sum of results: %s")
+    printDayPart(2, lines.map(solveLine(_, additionsFirst)).sum, "sum of results with precedence: %s")
+  }
 
   @tailrec
   private def solveLine(line: String, precedence: Seq[String] => Long): Long =

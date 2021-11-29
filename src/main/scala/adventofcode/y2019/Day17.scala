@@ -5,46 +5,48 @@ import adventofcode.common.pos.{Direction, Pos}
 object Day17 extends Year2019 {
   override val day = 17
 
-  IntCode.printDelay = 1
-  IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
-  IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
-
   private val directions = List('^', '>', 'v', '<')
 
-  private val intCode = new IntCode(inputString).setMemory(0, 2)
-  private val (initRobot, initOutput) = intCode.startAsciiProgram()
+  override def runDay(input: IntCode): Unit = {
+    IntCode.printDelay = 1
+    IntCode.printAsciiIn = IntCode.printAsciiIn && !options.quiet
+    IntCode.printAsciiOut = IntCode.printAsciiOut && !options.quiet
 
-  private val map = initOutput.split('\n').takeWhile(_.nonEmpty).zipWithIndex.flatMap {
-    case (line, y) => line.zipWithIndex.map {
-      case (char, x) => Pos(x, y) -> char
-    }
-  }.toMap
+    val intCode = input.setMemory(0, 2)
+    val (initRobot, initOutput) = intCode.startAsciiProgram()
 
-  private val (robotStartPos, directionChar) = map.find(coord => directions.contains(coord._2)).get
-  private val scaffolds = map.filter(_._2 == '#').keys.toSet
-  private val intersections = scaffolds.filter(_.directions.forall(scaffolds.contains))
+    val map = initOutput.split('\n').takeWhile(_.nonEmpty).zipWithIndex.flatMap {
+      case (line, y) => line.zipWithIndex.map {
+        case (char, x) => Pos(x, y) -> char
+      }
+    }.toMap
 
-  private val path = getPath(robotStartPos, directions.indexOf(directionChar))
+    val (robotStartPos, directionChar) = map.find(coord => directions.contains(coord._2)).get
+    val scaffolds = map.filter(_._2 == '#').keys.toSet
+    val intersections = scaffolds.filter(_.directions.forall(scaffolds.contains))
 
-  private val functions = getSubPathFunctions(List(path)).head.toMap
-  private val mainRoutine = getMainRoutine(path, functions.map(f => f._2.toVector -> f._1))
-  private val inputs = mainRoutine.mkString(",") +: functions.map(_._2.mkString(",")).toVector :+ "n"
+    val path = getPath(scaffolds, robotStartPos, directions.indexOf(directionChar))
 
-  private val output = inputs.foldLeft((initRobot, List.empty[Long])) {
-    case ((robot, _), nextInput) => robot.sendAsciiInput(nextInput)
-  }._2
+    val functions = getSubPathFunctions(List(path)).head.toMap
+    val mainRoutine = getMainRoutine(path, functions.map(f => f._2.toVector -> f._1))
+    val inputs = mainRoutine.mkString(",") +: functions.map(_._2.mkString(",")).toVector :+ "n"
 
-  printDayPart(1, intersections.map(pos => pos.x * pos.y).sum)
-  printDayPart(2, output.last, "collected dust: %s")
+    val output = inputs.foldLeft((initRobot, List.empty[Long])) {
+      case ((robot, _), nextInput) => robot.sendAsciiInput(nextInput)
+    }._2
 
-  private def getPath(pos: Pos, dir: Int): List[String] = {
+    printDayPart(1, intersections.map(pos => pos.x * pos.y).sum)
+    printDayPart(2, output.last, "collected dust: %s")
+  }
+
+  private def getPath(scaffolds: Set[Pos], pos: Pos, dir: Int): List[String] = {
     if (scaffolds.contains(pos.moveDirectionIndex(dir))) {
       val walkedPath = Iterator.iterate(pos)(_.moveDirectionIndex(dir)).drop(1).takeWhile(scaffolds.contains).toList
-      walkedPath.length.toString :: getPath(walkedPath.last, dir)
+      walkedPath.length.toString :: getPath(scaffolds, walkedPath.last, dir)
     } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateLeft(dir)))) {
-      "R" :: getPath(pos, Direction.rotateLeft(dir))
+      "R" :: getPath(scaffolds, pos, Direction.rotateLeft(dir))
     } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateRight(dir)))) {
-      "L" :: getPath(pos, Direction.rotateRight(dir))
+      "L" :: getPath(scaffolds, pos, Direction.rotateRight(dir))
     } else {
       Nil
     }

@@ -1,6 +1,7 @@
 package adventofcode.y2015
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day21 extends Year2015 {
   override val day: Int = 21
@@ -28,18 +29,20 @@ object Day21 extends Year2015 {
     Item("Defense +2", 40, 0, 2),
     Item("Defense +3", 80, 0, 3))
 
-  private val boss = Player.boss(input.getLines().map(_.split(':')(1).trim.toInt))
+  override def runDay(input: BufferedSource): Unit = {
+    val boss = Player.boss(input.getLines().map(_.split(':')(1).trim.toInt))
 
-  private val combinations = for {
+    val combinations = for {
       weapon <- weapons
       armor <- armors
       ring1 <- rings
       ring2 <- rings - ring1
-  } yield Player.player(weapon, armor, ring1, ring2)
-  private val sortedCombinations = combinations.toSeq.sortBy(_.cost)
+    } yield Player.player(weapon, armor, ring1, ring2)
+    val sortedCombinations = combinations.toSeq.sortBy(_.cost)
 
-  printDayPart(1, sortedCombinations.dropWhile(!simulate(_, boss)).head.cost, "cheapest win: %s")
-  printDayPart(2, sortedCombinations.reverse.dropWhile(simulate(_, boss)).head.cost, "most expensive to lose: %s")
+    printDayPart(1, sortedCombinations.dropWhile(!simulate(_, boss)).head.cost, "cheapest win: %s")
+    printDayPart(2, sortedCombinations.reverse.dropWhile(simulate(_, boss)).head.cost, "most expensive to lose: %s")
+  }
 
   @tailrec
   private def simulate(attacker: Player, enemy: Player): Boolean =
@@ -58,9 +61,9 @@ object Day21 extends Year2015 {
       }
   }
   private object Player {
-    def player(items: Item*) =
+    def player(items: Item*): Player =
       Player("Player", 100, items.map(_.damage).sum, items.map(_.armor).sum, items.map(_.cost).sum)
-    def boss(stats: Iterator[Int]) =
+    def boss(stats: Iterator[Int]): Player =
       Player("Boss", stats.next(), stats.next(), stats.next(), 0)
   }
 }

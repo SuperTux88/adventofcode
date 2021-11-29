@@ -1,17 +1,20 @@
 package adventofcode.y2016
 
 import scala.collection.immutable.ArraySeq
+import scala.io.BufferedSource
 
 object Day7 extends Year2016 {
   override val day: Int = 7
 
-  val AbbaRE = """.*(\w)((?!\1)\w)(\2)\1.*""".r
-  val HypernetRE = """\[|\]""".r
+  private val AbbaRE = """.*(\w)((?!\1)\w)(\2)\1.*""".r
+  private val HypernetRE = """\[|\]""".r
 
-  private val ips = input.getLines().map(parseIP).toList
+  override def runDay(input: BufferedSource): Unit = {
+    val ips = input.getLines().map(parseIP).toList
 
-  printDayPart(1, ips.count(_.supportsTLS))
-  printDayPart(2, ips.count(_.supportsSSL))
+    printDayPart(1, ips.count(_.supportsTLS))
+    printDayPart(2, ips.count(_.supportsSSL))
+  }
 
   private def parseIP(ip: String) = {
     IP(ArraySeq.unsafeWrapArray(HypernetRE.split(ip)).zipWithIndex.map(s => NetSequence(s._1, s._2 % 2 != 0)))

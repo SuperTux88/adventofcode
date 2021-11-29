@@ -3,35 +3,38 @@ package adventofcode.y2019
 import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
+import scala.io.BufferedSource
 
 object Day24 extends Year2019 {
   override val day = 24
 
-  private val map = Pos.parseMap(input.getLines(), char => char == '#')
+  override def runDay(input: BufferedSource): Unit = {
+    val map = Pos.parseMap(input.getLines(), char => char == '#')
 
-  private val bugsInFirstRepeatedState = findRepeat(map).groupBy(_._2)(true).keys
-  private val biodiversityPoints = bugsInFirstRepeatedState.map { pos => math.pow(2, pos.x + pos.y * 5).toLong }
+    val bugsInFirstRepeatedState = findRepeat(map).groupBy(_._2)(true).keys
+    val biodiversityPoints = bugsInFirstRepeatedState.map { pos => math.pow(2, pos.x + pos.y * 5).toLong }
 
-  printDayPart(1, biodiversityPoints.sum, "biodiversity rating for first repeated state: %s")
+    printDayPart(1, biodiversityPoints.sum, "biodiversity rating for first repeated state: %s")
 
-  private val levelsAfter200Minutes = (1 to 200).foldLeft(Map(0 -> (map - Pos(2, 2)))) { (levels, minute) =>
-    val depth = (minute + 1) / 2
-    (-depth to depth).map { level =>
-      level -> (
-        if (levels.contains(level)) {
-          transform(levels(level), (pos: Pos) => countNeighborsWithLevels(levels, pos, level))
-        } else {
-          val newLevel = (for {
-            x <- 0 until 5
-            y <- 0 until 5
-            if x != 2 || y != 2
-          } yield Pos(x, y) -> false).toMap
-          transform(newLevel, (pos: Pos) => countNeighborsWithLevels(levels + (level -> newLevel), pos, level))
-        })
-    }.toMap
+    val levelsAfter200Minutes = (1 to 200).foldLeft(Map(0 -> (map - Pos(2, 2)))) { (levels, minute) =>
+      val depth = (minute + 1) / 2
+      (-depth to depth).map { level =>
+        level -> (
+          if (levels.contains(level)) {
+            transform(levels(level), (pos: Pos) => countNeighborsWithLevels(levels, pos, level))
+          } else {
+            val newLevel = (for {
+              x <- 0 until 5
+              y <- 0 until 5
+              if x != 2 || y != 2
+            } yield Pos(x, y) -> false).toMap
+            transform(newLevel, (pos: Pos) => countNeighborsWithLevels(levels + (level -> newLevel), pos, level))
+          })
+      }.toMap
+    }
+
+    printDayPart(2, levelsAfter200Minutes.flatMap(_._2.values).count(identity), "there are %s bugs after 200 minutes")
   }
-
-  printDayPart(2, levelsAfter200Minutes.flatMap(_._2.values).count(identity), "there are %s bugs after 200 minutes")
 
   @tailrec
   private def findRepeat(map: Map[Pos, Boolean], seenStates: Set[Map[Pos, Boolean]] = Set.empty): Map[Pos, Boolean] = {

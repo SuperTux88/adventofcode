@@ -1,20 +1,26 @@
 package adventofcode.y2015
 
+import scala.io.BufferedSource
+
 object Day8 extends Year2015 {
   override val day: Int = 8
 
-  val AsciiRE = """(\\x..|\\\"|\\\\)""".r
-  val charsToEscape = Set('\\', '"')
+  private val AsciiRE = """(\\x..|\\"|\\\\)""".r
+  private val charsToEscape = Set('\\', '"')
 
-  //printDayPart(1, part1)
-  printDayPart(1, part1NoRegex)
-  printDayPart(2, part2)
+  override def runDay(input: BufferedSource): Unit = {
+    val lines = input.getLines().toSeq
 
-  private def part1 = input.getLines().map { line =>
+    //printDayPart(1, part1(lines))
+    printDayPart(1, part1NoRegex(lines))
+    printDayPart(2, part2(lines))
+  }
+
+  private def part1(lines: Seq[String]) = lines.map { line =>
     line.length - AsciiRE.replaceAllIn(line, " ").length + 2
   }.sum
 
-  private def part1NoRegex = input.getLines().map(_.toCharArray).map { line =>
+  private def part1NoRegex(lines: Seq[String]) = lines.map(_.toCharArray).map { line =>
     var count = 0
     val it = line.iterator
     while(it.hasNext) {
@@ -30,7 +36,7 @@ object Day8 extends Year2015 {
     count
   }.sum
 
-  private def part2 = input.getLines().map { line =>
+  private def part2(lines: Seq[String]) = lines.map { line =>
     line.count(charsToEscape) + 2
   }.sum
 }

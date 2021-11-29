@@ -3,11 +3,13 @@ package adventofcode.y2015
 object Day10 extends Year2015 {
   override val day: Int = 10
 
-  val sameDigitsRE = """(\w)\1*""".r
+  private val sameDigitsRE = """(\w)\1*""".r
 
-  val part1 = transform(inputString, 40)
-  printDayPart(1, part1.length)
-  printDayPart(2, transform(part1, 10).length)
+  override def runDay(input: String): Unit = {
+    val part1 = transform(input, 40)
+    printDayPart(1, part1.length)
+    printDayPart(2, transform(part1, 10).length)
+  }
 
   private def transform(inputStr: String, iterations: Int) = {
     var string = inputStr

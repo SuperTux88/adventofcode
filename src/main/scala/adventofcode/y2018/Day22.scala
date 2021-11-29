@@ -5,42 +5,46 @@ import adventofcode.common.pos.Pos
 import adventofcode.common.search.AStar
 
 import scala.collection.mutable
+import scala.io.BufferedSource
 
 object Day22 extends Year2018 {
   override val day = 22
 
-  private val lines = input.getLines().toList
-  private val depth = lines.head.split(" ")(1).toInt
-  private val Array(targetX, targetY) = lines(1).split(" ")(1).split(",").map(_.toInt)
-  private val target = Pos(targetX, targetY)
+  override def runDay(input: BufferedSource): Unit = {
+    val lines = input.getLines().toList
+    val depth = lines.head.split(" ")(1).toInt
+    val Array(targetX, targetY) = lines(1).split(" ")(1).split(",").map(_.toInt)
+    val target = Pos(targetX, targetY)
 
-  private val map = mutable.Map.empty[Pos, Region]
+    val cave = Cave(mutable.Map.empty[Pos, Region], depth, target)
 
-  Seq(Pos.zero, target, target.left, target.up).foreach(getRegion)
+    Seq(Pos.zero, target, target.left, target.up).foreach(getRegion(_)(cave))
 
-  printMap()
+    printMap(cave)
 
-  printDayPart(1, map.map(_._2.riskLevel).sum)
+    printDayPart(1, cave.map.map(_._2.riskLevel).sum)
 
-  private val duration = AStar(
-    State(Pos.zero, Torch),
-    (state: State) => state == State(target, Torch),
-    (state: State) => state.neighbors()
-  )._1
+    val duration = AStar(
+      State(Pos.zero, Torch),
+      (state: State) => state == State(target, Torch),
+      (state: State) => state.neighbors(cave)
+    )._1
 
-  printDayPart(2, duration)
+    printDayPart(2, duration)
+  }
 
-  private def getRegion(pos: Pos): Region = map.getOrElseUpdate(pos, calculateRegion(pos.x, pos.y))
+  private def getRegion(pos: Pos)(implicit cave: Cave): Region =
+    cave.map.getOrElseUpdate(pos, calculateRegion(pos.x, pos.y))
 
-  private def calculateRegion(x: Int, y: Int): Region = {
+  private def calculateRegion(x: Int, y: Int)(implicit cave: Cave): Region = {
     val geologicIndex = Pos(x, y) match {
       case Pos.zero => 0
-      case pos if pos == target => 0
+      case pos if pos == cave.target => 0
       case Pos(_, 0) => x * 16807
       case Pos(0, _) => y * 48271
       case pos => getRegion(pos.left).erosionLevel * getRegion(pos.up).erosionLevel
     }
-    val erosionLevel = (geologicIndex + depth) % 20183
+    val erosionLevel = (geologicIndex + cave.depth) % 20183
     Region(geologicIndex, erosionLevel)
   }
 
@@ -56,14 +60,14 @@ object Day22 extends Year2018 {
   }
 
   private case class State(pos: Pos, tool: Tool) {
-    def neighbors(): List[(Int, Int, State)] = {
+    def neighbors(implicit cave: Cave): List[(Int, Int, State)] = {
       val newTool = Seq(Torch, ClimbingGear, Neither).find {
         t => t != tool && getRegion(pos).regionType.valid(t)
       }.get
 
-      (7, pos.distance(target), State(pos, newTool)) :: pos.directions.filter { newPos =>
+      (7, pos.distance(cave.target), State(pos, newTool)) :: pos.directions.filter { newPos =>
         newPos.positive && getRegion(newPos).regionType.valid(tool)
-      }.map(newPos => (1, newPos.distance(target), State(newPos, tool)))
+      }.map(newPos => (1, newPos.distance(cave.target), State(newPos, tool)))
     }
   }
 
@@ -88,9 +92,11 @@ object Day22 extends Year2018 {
     override def toString: String = "|"
   }
 
-  private def printMap(): Unit = if (Logging.debug) {
-    (0 to targetY).foreach { y =>
-      println((0 to targetX).map(x => map(Pos(x, y)).regionType).mkString)
+  private def printMap(state: Cave): Unit = if (Logging.debug) {
+    (0 to state.target.y).foreach { y =>
+      println((0 to state.target.x).map(x => state.map(Pos(x, y)).regionType).mkString)
     }
   }
+
+  private case class Cave(map: mutable.Map[Pos, Region], depth: Int, target: Pos)
 }
