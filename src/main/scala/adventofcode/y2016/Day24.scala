@@ -41,7 +41,7 @@ object Day24 extends Year2016 {
       var currentPositions = List(this)
       var visited = List(this)
 
-      while(!visited.contains(to)) {
+      while (!visited.contains(to)) {
         currentPositions = currentPositions.flatMap { pos =>
           directions.map(pos + _).filter(pos => !pos.isWall(maze) && !visited.contains(pos))
         }.distinct

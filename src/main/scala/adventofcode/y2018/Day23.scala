@@ -55,7 +55,7 @@ object Day23 extends Year2018 {
     val Q = mutable.PriorityQueue(((bots.count(initialBox.overlaps), -initialBox.range), initialBox))(Ordering.by(_._1))
     val seen = mutable.Set[Octahedron]()
 
-    while(Q.nonEmpty) {
+    while (Q.nonEmpty) {
       val (currentHeuristic, currentBox) = Q.dequeue()
       if (currentBox.range == 0) {
         val sameBotCountPositions = currentBox.pos :: Q.filter(_._1 == currentHeuristic).map(_._2.pos).toList

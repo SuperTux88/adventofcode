@@ -14,7 +14,7 @@ object AStar {
     val Q = mutable.PriorityQueue((0, 0, List(start)))(Ordering.by(-_._2)) // order by heuristic
     val seen = mutable.Set[T]()
 
-    while(Q.nonEmpty) {
+    while (Q.nonEmpty) {
       val (cost, _, current) = Q.dequeue()
       if (isTarget(current.head)) {
         return (cost, current)

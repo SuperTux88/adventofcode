@@ -24,7 +24,7 @@ object Day23 extends Year2015 {
     var registers = initialRegisters.withDefaultValue(0L)
     var currentCommand = 0
 
-    while(currentCommand >= 0 && currentCommand < commands.size) {
+    while (currentCommand >= 0 && currentCommand < commands.size) {
       commands(currentCommand) match {
         case Command("hlf", Some(reg), _) =>
           registers += reg -> registers(reg) / 2
@@ -36,8 +36,8 @@ object Day23 extends Year2015 {
           registers += reg -> (registers(reg) + 1)
           currentCommand += 1
         case Command("jmp", _, Some(offset)) => currentCommand += offset
-        case Command("jie", Some(reg), Some(offset)) => currentCommand += (if(registers(reg) % 2 == 0) offset else 1)
-        case Command("jio", Some(reg), Some(offset)) => currentCommand += (if(registers(reg) == 1) offset else 1)
+        case Command("jie", Some(reg), Some(offset)) => currentCommand += (if (registers(reg) % 2 == 0) offset else 1)
+        case Command("jio", Some(reg), Some(offset)) => currentCommand += (if (registers(reg) == 1) offset else 1)
         case command => throw new MatchError(s"Invalid $command")
       }
     }

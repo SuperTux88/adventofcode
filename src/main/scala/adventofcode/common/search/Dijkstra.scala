@@ -14,7 +14,7 @@ object Dijkstra {
     val Q = mutable.PriorityQueue((0, List(start)))(Ordering.by(-_._1)) // order by cost
     val seen = mutable.Set[T]()
 
-    while(Q.nonEmpty) {
+    while (Q.nonEmpty) {
       val (cost, current) = Q.dequeue()
       if (isTarget(current.head)) {
         return (cost, current)

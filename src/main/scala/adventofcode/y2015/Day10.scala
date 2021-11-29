@@ -30,7 +30,7 @@ object Day10 extends Year2015 {
     var currentDigit = str.charAt(0)
     var counter = 0
     str.foreach { d =>
-      if(currentDigit == d) {
+      if (currentDigit == d) {
         counter += 1
       } else {
         ret ++= counter.toString + currentDigit

@@ -23,7 +23,7 @@ object Day8 extends Year2015 {
   private def part1NoRegex(lines: Seq[String]) = lines.map(_.toCharArray).map { line =>
     var count = 0
     val it = line.iterator
-    while(it.hasNext) {
+    while (it.hasNext) {
       it.next() match {
         case '\\' => count += (it.next() match {
             case 'x' => it.next(); it.next(); 3

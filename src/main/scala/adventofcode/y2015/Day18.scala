@@ -10,7 +10,7 @@ object Day18 extends Year2015 {
 
   override def runDay(input: BufferedSource): Unit = {
     val initialGrid = Pos.parseMap(input.getLines(), char => char == '#').filter(_._2).keySet
-    val emptyGrid = (for {x <- 0 to 99; y <- 0 to 99} yield Pos(x, y)).toSet
+    val emptyGrid = (for (x <- 0 to 99; y <- 0 to 99) yield Pos(x, y)).toSet
     val nextGrid = (_: Set[Pos], _: Int) => emptyGrid
 
     printDayPart(1, conwaysGameOfLife(initialGrid, 100, nextState, nextPositions = nextGrid).size,
