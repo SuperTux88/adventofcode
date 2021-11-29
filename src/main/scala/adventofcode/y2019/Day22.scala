@@ -1,7 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.common.NumberHelper.modInv
-import adventofcode.common.NumberHelper.ExtendedLong
+import adventofcode.common.NumberHelper.ExtendedIntegral
 
 import scala.io.BufferedSource
 

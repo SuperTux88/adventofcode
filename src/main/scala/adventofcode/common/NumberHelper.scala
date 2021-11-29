@@ -63,10 +63,12 @@ object NumberHelper {
     }
   }
 
-  implicit class ExtendedLong(val l: Long) {
+  import math.Integral.Implicits.infixIntegralOps
+
+  implicit class ExtendedIntegral[A: Integral](val n: A) {
     /**
       * positive modulo
       */
-    def %+(d: Long): Long = (l + d) % d
+    def %+(d: A): A = (n + d) % d
   }
 }

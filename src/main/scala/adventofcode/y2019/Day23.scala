@@ -30,8 +30,8 @@ object Day23 extends Year2019 {
           }
         )
     }
-    if (messages.keys == Set(255))
-      (newComputers, messages(255))
+    if (messages.keys == Set(255L))
+      (newComputers, messages(255L))
     else
       runUntilIdle(newComputers, newMessages)
   }

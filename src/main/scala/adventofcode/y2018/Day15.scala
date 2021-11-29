@@ -76,7 +76,7 @@ object Day15 extends Year2018 {
   }
 
   @tailrec
-  def simulateWin(elfAttackPower: Int, map: Grid, players: List[Enemy]): Int = {
+  private def simulateWin(elfAttackPower: Int, map: Grid, players: List[Enemy]): Int = {
     printDebug(s"Trying elf attack power: $elfAttackPower")
     val elves = players.count(_.symbol == 'E')
 
@@ -99,7 +99,7 @@ object Day15 extends Year2018 {
       case None => players
     }
 
-  def findNearestPosition(map: Grid, players: Seq[Enemy], pos: Pos, targets: Seq[Pos]): Seq[Pos] = {
+  private def findNearestPosition(map: Grid, players: Seq[Enemy], pos: Pos, targets: Seq[Pos]): Seq[Pos] = {
     @tailrec
     def step(visited: List[Pos], current: List[Pos]): List[Pos] = {
       val nextSteps = current.flatMap { pos =>

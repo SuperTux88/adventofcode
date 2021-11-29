@@ -14,9 +14,9 @@ object Day9 extends Year2016 {
     case MarkerRE(before, count, multiplier, after) =>
       val (selected, remainder) = after.splitAt(count.toInt)
 
-      val length = if (recursive) decompressedLength(selected, recursive) else selected.length
+      val length: Long = if (recursive) decompressedLength(selected, recursive) else selected.length
 
-      before.length + length * multiplier.toInt + decompressedLength(remainder, recursive)
+      before.length + length * multiplier.toLong + decompressedLength(remainder, recursive)
     case _ => string.length
   }
 }
