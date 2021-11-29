@@ -50,7 +50,7 @@ object Day4 extends Year2015 {
     val start = currentTime
 
     import ExecutionContext.Implicits.global
-    do {
+    while (result.isEmpty) {
       val future = Future[Int] {
         calculateFirstInBatch(input, nextBatch)
       }
@@ -61,12 +61,12 @@ object Day4 extends Year2015 {
           queue.remove(future)
       }
       queue.put(future)
-    } while(result.isEmpty)
+    }
 
     val first = currentTime
 
     import scala.language.postfixOps
-    while(!queue.isEmpty) { Await.result(queue.poll, 2 seconds) }
+    while (!queue.isEmpty) { Await.result(queue.poll, 2 seconds) }
 
     printDebug(s"with $numberOfZeroes zeros | first result after in ${first - start}ms | finished after ${currentTime - start}ms")
     result.min

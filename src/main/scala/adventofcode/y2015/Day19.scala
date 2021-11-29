@@ -18,17 +18,17 @@ object Day19 extends Year2015 {
       case (from, to) => transition(from, to, medicine)
     }.distinct
 
+    printDayPart(1, distinctMolecules.size)
+
     var counter = 0
     var molecule = medicine
 
-    printDayPart(1, distinctMolecules.size)
-
-    do {
+    while (molecule != "e") { // why does this work? :D
       molecule = replacements.flatMap {
         case (from, to) => transition(to, from, molecule)
       }.distinct.minBy(_.length)
       counter += 1
-    } while (molecule != "e") // why does this work? :D
+    }
 
     printDayPart(2, counter)
   }

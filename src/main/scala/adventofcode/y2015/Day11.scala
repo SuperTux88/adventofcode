@@ -10,13 +10,13 @@ object Day11 extends Year2015 {
   }
 
   private def nextValidPassword(oldPassword: String) = {
-    var reversePassword = oldPassword.toList.reverse
+    var reverseNextPassword = nextPassword(oldPassword.toList.reverse)
 
-    do {
-      reversePassword = nextPassword(reversePassword)
-    } while (!containsIncreasingStraightOfThreeChars(reversePassword) || !containsTwoPairs(reversePassword))
+    while (!containsIncreasingStraightOfThreeChars(reverseNextPassword) || !containsTwoPairs(reverseNextPassword)) {
+      reverseNextPassword = nextPassword(reverseNextPassword)
+    }
 
-    reversePassword.reverse.mkString
+    reverseNextPassword.reverse.mkString
   }
 
   private def nextPassword(reversePassword: List[Char]): List[Char] = reversePassword match {
