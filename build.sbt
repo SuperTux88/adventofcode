@@ -2,11 +2,12 @@ name := "adventofcode"
 
 version := "5.0"
 
-scalaVersion := "2.13.6"
+scalaVersion := "3.1.0"
 scalacOptions ++= Seq(
   "-deprecation",
   "-unchecked",
-  "-Wunused:imports,patvars,locals,params"
+  "-explain",
+  "-explain-types",
 )
 
 mainClass in assembly := Some("adventofcode.Main")
