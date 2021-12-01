@@ -9,10 +9,9 @@ object Day1 extends Year2021 {
     val depths = input.getLines().takeWhile(_.nonEmpty).map(_.toInt).toSeq
 
     printDayPart(1, countIncreasing(depths), "depth measurement increases %s times")
-
-    val depthGroups = depths.sliding(3).map(_.sum).toSeq
-    printDayPart(2, countIncreasing(depthGroups), "depth sliding window increases %s times")
+    printDayPart(2, countIncreasing(depths, 3), "depth sliding window increases %s times")
   }
 
-  private def countIncreasing(numbers: Seq[Int]) = numbers.sliding(2).count { case Seq(a, b) => a < b }
+  private def countIncreasing(numbers: Seq[Int], groupSize: Int = 1) =
+    numbers.sliding(groupSize + 1).count(n => n.head < n.last)
 }
