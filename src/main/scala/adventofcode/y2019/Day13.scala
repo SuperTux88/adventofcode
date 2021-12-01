@@ -45,7 +45,7 @@ object Day13 extends Year2019 {
   }
 
   @tailrec
-  private def playInteractive(game: IntCode, map: Map[Pos, Int], con: ConsoleReader): Int = {
+  private def playInteractive(game: IntCode, map: Map[Pos, Int], con: ConsoleReader): Unit = {
     val state = parseOutput(game.output, map)
 
     if (game.isRunning) {
@@ -61,7 +61,7 @@ object Day13 extends Year2019 {
       playInteractive(game.run(input), state, con)
     } else {
       println("GAME OVER!!!")
-      System.exit(1).asInstanceOf[Int]
+      System.exit(1)
     }
   }
   private def parseOutput(output: Iterator[Long], map: Map[Pos, Int] = Map.empty) =
