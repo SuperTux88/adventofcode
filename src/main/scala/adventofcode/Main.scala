@@ -30,13 +30,14 @@ object Main {
           |  - 2016
           |  - 2018
           |  - 2019
-          |  - 2020 (default)
+          |  - 2020
+          |  - 2021 (default)
           |
           |Year: """.stripMargin)
 
       readInput {
         case Int(year) if AllDays.year(year).nonEmpty => Some(AllDays.year(year))
-        case "" => Some(AllDays.year(2020))
+        case "" => Some(AllDays.year(2021))
         case _ => None
       }
     }
