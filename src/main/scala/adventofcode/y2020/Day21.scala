@@ -1,6 +1,6 @@
 package adventofcode.y2020
 
-import adventofcode.common.MiscFunctions.reduceToUniqueValues
+import MiscFunctions.reduceToUniqueValues
 
 import scala.io.BufferedSource
 

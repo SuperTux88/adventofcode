@@ -1,6 +1,6 @@
 package adventofcode.y2020
 
-import adventofcode.common.MiscFunctions.conwaysGameOfLife
+import adventofcode.common.misc.ConwaysGameOfLife
 import adventofcode.common.pos.PosHex
 
 import scala.annotation.tailrec
@@ -17,7 +17,7 @@ object Day24 extends Year2020 {
 
     printDayPart(1, blackTiles.size, "tiles with black side up: %s")
 
-    printDayPart(2, conwaysGameOfLife(blackTiles, 100, nextState).size,
+    printDayPart(2, ConwaysGameOfLife.run(blackTiles, 100, nextState, ConwaysGameOfLife.neighbors).size,
       "tiles with black side up after 100 days: %s")
   }
 
