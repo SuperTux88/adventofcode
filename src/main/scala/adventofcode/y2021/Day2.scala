@@ -7,7 +7,7 @@ import scala.io.BufferedSource
 object Day2 extends Year2021 {
   override val day = 2
 
-  private val InstructionRE = """(\w+) (\d+)""".r
+  private val InstructionRE = """(forward|down|up) (\d+)""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val instructions = input.getLines().takeWhile(_.nonEmpty).map {
@@ -26,8 +26,7 @@ object Day2 extends Year2021 {
 
     printDayPart(1, finalPos.x * finalPos.y, "product if final position: %s")
 
-    val finalPos2 = instructions.foldLeft((Pos(0, 0), 0)) { (state, instr) =>
-      val (pos, aim) = state
+    val finalPos2 = instructions.foldLeft((Pos(0, 0), 0)) { case ((pos, aim), instr) =>
       instr match {
         case Forward(dist) => (pos + (dist, aim * dist), aim)
         case Down(x) => (pos, aim + x)
@@ -38,7 +37,8 @@ object Day2 extends Year2021 {
     printDayPart(2, finalPos2.x * finalPos2.y, "product if final position with aim: %s")
   }
 
-  private case class Forward(distance: Int)
-  private case class Down(value: Int)
-  private case class Up(value: Int)
+  private sealed trait Instruction
+  private case class Forward(distance: Int) extends Instruction
+  private case class Down(value: Int) extends Instruction
+  private case class Up(value: Int) extends Instruction
 }
