@@ -21,10 +21,7 @@ object Day3 extends Year2021 {
       "life support rating of the submarine: %s")
   }
 
-  private def countBits(bits: Seq[Boolean]) =
-    bits.groupBy(identity).toMap.view.mapValues(_.size).toMap.withDefaultValue(0)
-
-  private def mostCommonBit(bits: Seq[Boolean]) = countBits(bits)(true) * 2 >= bits.size
+  private def mostCommonBit(bits: Seq[Boolean]) = bits.count(identity) * 2 >= bits.size
 
   private def toInt(bits: Seq[Boolean]) = Integer.parseInt(bits.map(if _ then '1' else '0').mkString, 2)
 
