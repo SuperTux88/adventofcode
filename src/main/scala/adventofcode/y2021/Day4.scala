@@ -8,13 +8,13 @@ import scala.io.BufferedSource
 object Day4 extends Year2021 {
   override val day = 4
 
-  override def runDay(input: String): Unit = {
-    val (numbersIn, boardsIn) = input.splitAt(input.indexOf("\n\n"))
-    val numbers = numbersIn.split(",").map(_.toInt).toList
-    val boards = boardsIn.trim.split("\n\n").map { board =>
-      board.linesIterator.zipWithIndex.flatMap { case (line, lineNumber) =>
-        line.trim.split(" +").zipWithIndex.map { case (number, numberIndex) =>
-          (number.toInt, Pos(numberIndex, lineNumber))
+  override def runDay(input: BufferedSource): Unit = {
+    val lines = input.getLines()
+    val numbers = lines.next().split(",").map(_.toInt).toList
+    val boards = lines.grouped(6).map(_.filter(_.nonEmpty)).takeWhile(_.nonEmpty).map { board =>
+      board.zipWithIndex.flatMap { case (line, y) =>
+        line.trim.split(" +").zipWithIndex.map { case (number, x) =>
+          (number.toInt, Pos(x, y))
         }
       }.toMap
     }.map(Board(_)).toSeq
