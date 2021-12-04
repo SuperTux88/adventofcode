@@ -1,7 +1,7 @@
 package adventofcode
 
 object AllDays {
-  def allYears: List[DayApp] = (2015 to 2020).flatMap(year).toList
+  def allYears: List[DayApp] = (2015 to 2021).flatMap(year).toList
 
   def year(year: Int): List[DayApp] =
       (1 to 25).map(dayObj(year, _)).takeWhile(_.isDefined).flatten.toList
