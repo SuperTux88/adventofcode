@@ -1,6 +1,7 @@
 package adventofcode.y2016
 
 import adventofcode.Logging
+import adventofcode.common.pos.Pos
 
 import scala.io.BufferedSource
 
@@ -20,7 +21,7 @@ object Day22 extends Year2016 {
 
     val (width, height) = (grid.map(_.x).max + 1, grid.map(_.y).max + 1)
     val emptyNode = grid.find(_.isEmpty).get
-    val gridMap = grid.map(node => (node.x, node.y) -> node).toMap
+    val gridMap = grid.map(node => Pos(node.x, node.y) -> node).toMap
 
     val topX = toTop(gridMap, emptyNode)
     val stepsToTop = emptyNode.x - topX + emptyNode.y
@@ -28,7 +29,7 @@ object Day22 extends Year2016 {
 
     printDayPart(2, shortestPath)
 
-    if (Logging.debug) printMap(gridMap, width, height, emptyNode)
+    if (Logging.debug) Pos.printMap(gridMap, _.mapChar(emptyNode, width))
   }
 
   private case class Node(x: Int, y: Int, size: Int, used: Int, avail: Int, use: Int) {
@@ -45,15 +46,10 @@ object Day22 extends Year2016 {
   private def countPairs(nodes: List[Node]) =
     nodes.count { node => node.used != 0 && nodes.exists(n => n.avail > node.used) }
 
-  private def toTop(map: Map[(Int, Int), Node], node: Node) = {
+  private def toTop(map: Map[Pos, Node], node: Node) = {
     var (x, y) = (node.x, node.y)
-    while (!map(x, y - 1).isWall(node)) y -= 1
-    while (map(x, y - 1).isWall(node)) x -= 1
+    while (!map(Pos(x, y - 1)).isWall(node)) y -= 1
+    while (map(Pos(x, y - 1)).isWall(node)) x -= 1
     x
   }
-
-  private def printMap(map: Map[(Int, Int), Node], width: Int, height: Int, emptyNode: Node): Unit =
-    (0 until height).foreach { y =>
-      println((0 until width).map(x => map(x, y).mapChar(emptyNode, width)).mkString)
-    }
 }

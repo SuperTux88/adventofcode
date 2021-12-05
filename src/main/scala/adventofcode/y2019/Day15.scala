@@ -16,7 +16,11 @@ object Day15 extends Year2019 {
     val exploreResult = exploreMap(List((Pos.zero, intCode)))
     val (oxygenSystem, (_, steps)) = exploreResult.find(_._2._1 == 2).get
 
-    if (Logging.debug) printMap(exploreResult.view.mapValues(_._1))
+    if (Logging.debug) Pos.printMap(exploreResult.withDefaultValue(0, 0), _._1 match {
+      case 0 => '█'
+      case 1 => ' '
+      case 2 => 'O'
+    })
 
     printDayPart(1, steps, "fewest steps to oxygent system: %s")
 
@@ -50,15 +54,6 @@ object Day15 extends Year2019 {
       val nextSteps = current.flatMap { pos => pos.directions.filter(todo.contains) }
       fillWithOxygen(nextSteps, todo.filterNot(nextSteps.contains), minutes + 1)
     }
-
-  private def printMap(map: MapView[Pos, Int]): Unit =
-    (map.keys.map(_.y).min to map.keys.map(_.y).max).foreach(y =>
-      println((map.keys.map(_.x).min to map.keys.map(_.x).max).map(x => map.getOrElse(Pos(x, y), 0) match {
-        case 0 => "█"
-        case 1 => " "
-        case 2 => "O"
-      }).mkString)
-    )
 
   private case class DroidState(intCode: IntCode, pos: Pos, output: Int)
 }

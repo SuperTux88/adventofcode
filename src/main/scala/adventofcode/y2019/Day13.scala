@@ -79,13 +79,11 @@ object Day13 extends Year2019 {
   }
 
   private def printMap(map: Map[Pos, Int]): Unit =
-    (0 to map.keys.map(_.y).max).foreach(y =>
-      println((0 to map.keys.map(_.x).max).map(x => map(Pos(x, y)) match {
-        case 0 => " "
-        case 1 => "█"
-        case 2 => "#"
-        case 3 => "‾"
-        case 4 => "o"
-      }).mkString)
-    )
+    Pos.printMap(map.withDefaultValue(0), _ match {
+      case 0 => ' '
+      case 1 => '█'
+      case 2 => '#'
+      case 3 => '‾'
+      case 4 => 'o'
+    }, Some(Pos(0, 0)))
 }

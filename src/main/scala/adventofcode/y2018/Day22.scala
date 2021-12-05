@@ -20,7 +20,7 @@ object Day22 extends Year2018 {
 
     Seq(Pos.zero, target, target.left, target.up).foreach(getRegion(_)(cave))
 
-    printMap(cave)
+    if (Logging.debug) Pos.printMap(cave.map.toMap, _.regionType.asChar)
 
     printDayPart(1, cave.map.map(_._2.riskLevel).sum)
 
@@ -78,24 +78,19 @@ object Day22 extends Year2018 {
 
   sealed trait RegionType {
     def valid(tool: Tool): Boolean
+    def asChar: Char
   }
   private case object Rocky extends RegionType {
     override def valid(tool: Tool): Boolean = tool != Neither
-    override def toString: String = "."
+    override def asChar: Char = '.'
   }
   private case object Wet extends RegionType {
     override def valid(tool: Tool): Boolean = tool != Torch
-    override def toString: String = "="
+    override def asChar: Char = '='
   }
   private case object Narrow extends RegionType {
     override def valid(tool: Tool): Boolean = tool != ClimbingGear
-    override def toString: String = "|"
-  }
-
-  private def printMap(state: Cave): Unit = if (Logging.debug) {
-    (0 to state.target.y).foreach { y =>
-      println((0 to state.target.x).map(x => state.map(Pos(x, y)).regionType).mkString)
-    }
+    override def asChar: Char = '|'
   }
 
   private case class Cave(map: mutable.Map[Pos, Region], depth: Int, target: Pos)

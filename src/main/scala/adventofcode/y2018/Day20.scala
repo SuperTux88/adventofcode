@@ -12,7 +12,7 @@ object Day20 extends Year2018 {
   override def runDay(input: BufferedSource): Unit = {
     val map = process(input.drop(1))
 
-    printMap(map)
+    if (Logging.debug) Pos.printMap(map.withDefaultValue('#'), identity)
 
     val distances = walkMap(map.filter(_._2 == '.').keys.toSet, map)
 
@@ -76,12 +76,5 @@ object Day20 extends Year2018 {
     }
 
     step(rooms, Set(Pos.zero))
-  }
-
-  private def printMap(map: Map[Pos, Char]): Unit = if (Logging.debug) {
-    val (minX, maxX, minY, maxY) = (map.minBy(_._1.x)._1.x, map.maxBy(_._1.x)._1.x, map.minBy(_._1.y)._1.y, map.maxBy(_._1.y)._1.y)
-    (minY - 1 to maxY + 1).foreach { y =>
-      println((minX - 1 to maxX + 1).map(x => map.getOrElse(Pos(x, y), "#")).mkString)
-    }
   }
 }

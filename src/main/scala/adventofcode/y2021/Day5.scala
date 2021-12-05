@@ -1,6 +1,5 @@
 package adventofcode.y2021
 
-import adventofcode.Logging
 import adventofcode.common.pos.Pos
 
 import scala.io.BufferedSource
