@@ -16,7 +16,7 @@ object Day6 extends Year2021 {
   private def calculateDay(perDaysRemaining: Map[Int, Long]) = {
     perDaysRemaining.foldLeft(Map[Int, Long]().withDefaultValue(0L)) { (state, daysRemaining) =>
       daysRemaining match {
-        case (0, count) => state.updated(6, state(6) + count).updated(8, state(8) + count)
+        case (0, count) => state.updated(6, state(6) + count).updated(8, count)
         case (remaining, count) => state.updated(remaining - 1, state(remaining - 1) + count)
       }
     }
