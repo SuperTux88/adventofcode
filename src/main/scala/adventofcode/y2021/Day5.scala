@@ -21,16 +21,9 @@ object Day5 extends Year2021 {
     printDayPart(2, gridWithDiagonals.values.count(_ >= 2), "dangerous areas with diagonal vents: %s")
   }
 
-  private def rangeWithReverse(from: Int, to: Int) = if from < to then from to to else from to to by -1
-
-  private def posRange(from: Pos, to: Pos) =
-    if (from.x == to.x)
-      rangeWithReverse(from.y, to.y).map(y => Pos(from.x, y))
-    else if (from.y == to.y)
-      rangeWithReverse(from.x, to.x).map(x => Pos(x, from.y))
-    else
-      rangeWithReverse(from.x, to.x).zip(rangeWithReverse(from.y, to.y)).map(Pos(_, _))
-
-  private def markVent(map: Map[Pos, Int], from: Pos, to: Pos) =
-    posRange(from, to).foldLeft(map)((m, p) => m.updated(p, m(p) + 1))
+  private def markVent(map: Map[Pos, Int], from: Pos, to: Pos) = {
+    val diff = Seq((from.x - to.x).abs, (from.y - to.y).abs).max + 1
+    val dir = Pos(to.x.compare(from.x), to.y.compare(from.y))
+    Iterator.iterate(from)(_ + dir).take(diff).foldLeft(map)((m, p) => m.updated(p, m(p) + 1))
+  }
 }
