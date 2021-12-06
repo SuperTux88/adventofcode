@@ -1,5 +1,7 @@
 package adventofcode.y2020
 
+import adventofcode.common.IterableImplicits
+
 import scala.io.BufferedSource
 
 object Day10 extends Year2020 {
@@ -9,9 +11,7 @@ object Day10 extends Year2020 {
     val adapters = input.getLines().map(_.toInt).toVector.sorted
     val joltages = 0 +: adapters :+ adapters.last + 3
 
-    val steps = joltages.sliding(2).map(group => group(1) - group(0))
-      .toList.groupBy(identity).view.mapValues(_.size)
-
+    val steps = joltages.sliding(2).map(group => group(1) - group(0)).toSeq.groupCount(identity)
     printDayPart(1, steps(1) * steps(3))
 
     val ways = joltages.zip(1 to joltages.size).reverse.tail

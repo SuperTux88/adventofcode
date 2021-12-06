@@ -1,5 +1,6 @@
 package adventofcode.y2018
 
+import adventofcode.common.IterableImplicits
 import adventofcode.common.pos.Direction
 
 import scala.annotation.tailrec
@@ -54,7 +55,7 @@ object Day18 extends Year2018 {
         case Some(line) => line.lift(x + xOffset)
         case None => None
       }
-    }.groupBy(identity).view.mapValues(_.size).toMap.withDefaultValue(0)
+    }.groupCount(identity).withDefaultValue(0L)
 
   private def count(map: Acres, char: Char) = map.flatten.count(_ == char)
 }
