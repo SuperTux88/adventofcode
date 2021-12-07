@@ -1,5 +1,7 @@
 package adventofcode.y2021
 
+import adventofcode.common.NumberHelper.increasingSum
+
 import scala.annotation.tailrec
 
 object Day7 extends Year2021 {
@@ -20,7 +22,7 @@ object Day7 extends Year2021 {
   }
 
   private def increasingFuelCostToTarget(crabs: Seq[Int], target: Int) =
-    crabs.map(c => math.abs(c - target)).map(diff => diff * (diff + 1) / 2).sum
+    crabs.map(c => increasingSum(math.abs(c - target))).sum
 
   private def getInitialDirection(crabs: Seq[Int], target: Int) = {
     val costs = Seq(-1, 0, +1).map(d => increasingFuelCostToTarget(crabs, target + d))

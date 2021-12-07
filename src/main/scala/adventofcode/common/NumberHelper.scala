@@ -23,6 +23,11 @@ object NumberHelper {
   def isInRange(n: Long, min: Long, max: Long): Boolean = min <= n && n <= max
 
   /**
+    * Sum of increasing numbers: 1 + 2 + 3 + ... + n
+    */
+  def increasingSum(n: Int): Int = n * (n + 1) / 2
+
+  /**
     * modular inverse
     */
   // from https://rosettacode.org/wiki/Modular_inverse#Scala
