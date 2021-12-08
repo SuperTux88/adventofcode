@@ -21,7 +21,7 @@ object Day8 extends Year2021 {
   private case class Entry(patterns: Set[Set[Char]], output: Seq[Set[Char]]) {
     def getOutputValue(): Int = {
       val digitMap = getDigitMap()
-      output.map(digitMap).foldLeft(0)(_ * 10 + _)
+      output.map(digitMap).reduceLeft(_ * 10 + _)
     }
 
     private def getDigitMap() = {
