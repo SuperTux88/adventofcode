@@ -51,7 +51,7 @@ object Pos {
       }
     }.toMap
 
-  def printMap[V](map: Map[Pos, V], mapChar: (value: V) => Char, min: Option[Pos] = None, max: Option[Pos] = None): Unit = {
+  def printMap[V](map: Map[Pos, V], mapChar: V => Char, min: Option[Pos] = None, max: Option[Pos] = None): Unit = {
     (min.getOrElse(map.keys.minBy(_.y)).y to max.getOrElse(map.keys.maxBy(_.y)).y).foreach(y =>
       println((min.getOrElse(map.keys.minBy(_.x)).x to max.getOrElse(map.keys.maxBy(_.x)).x)
         .map(x => mapChar(map(Pos(x, y)))).mkString)
