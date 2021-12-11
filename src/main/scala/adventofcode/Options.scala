@@ -73,7 +73,7 @@ class Options(args: List[String]) {
         |--all                 Select all days of a year to run.
         |--benchmark [<runs>]  Enable benchmark mode. Without value it selects the optimal number of runs for each day automatically.
         |--interactive         Run in interactive mode to solve manually. This is only available for a few days where this makes sense.
-        |--quiet               Print less intcode output. With this some of the intcode days run faster in single-day-mode because of less waiting for output.
+        |--quiet               Print less output. With this some of the days run faster in single-day-mode because of less waiting for output.
         |--help                Shows this help. :)
         |""".stripMargin)
 }

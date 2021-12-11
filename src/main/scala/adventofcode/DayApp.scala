@@ -47,6 +47,9 @@ trait DayApp {
 object Logging {
   var debug = true
   var results = true
+
+  def wrap8BitColor(string: String, color: Int) = s"[38;5;${color}m${string}${RESET}"
+  def wrap8BitColor(string: String, color: Int, background: Int) = s"[38;5;${color};48;5;${background}m${string}${RESET}"
 }
 
 object Solutions {
