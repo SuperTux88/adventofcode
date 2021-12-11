@@ -23,25 +23,25 @@ object Day11 extends Year2021 {
 
   private def step(octopuses: Map[Pos, Int]): (Int, Map[Pos, Int]) = {
     @tailrec
-    def cycle(state: Map[Pos, Int], flashed: Set[Pos] = Set.empty): (Map[Pos, Int], Set[Pos]) = {
+    def cycle(state: Map[Pos, Int], flashed: Int = 0): (Int, Map[Pos, Int]) = {
       val nowFlashing = state.filter(_._2 > 9).keys.toSet
       if (nowFlashing.isEmpty) {
-        (state, flashed)
+        (flashed, state)
       } else {
         val newState = nowFlashing.foldLeft(state) { (currentState, pos) =>
           pos.neighbors.foldLeft(currentState) { (currentState, neighbor) =>
             currentState.get(neighbor) match {
               case None => currentState
+              case Some(0) => currentState
               case Some(value) => currentState.updated(neighbor, value + 1)
             }
-          }
+          }.updated(pos, 0)
         }
-        cycle(newState -- nowFlashing, flashed ++ nowFlashing)
+        cycle(newState, flashed + nowFlashing.size)
       }
     }
 
-    val (stateAfterFlashing, flashedInRound) = cycle(octopuses.view.mapValues(_ + 1).toMap)
-    (flashedInRound.size, flashedInRound.foldLeft(stateAfterFlashing)(_.updated(_, 0)))
+    cycle(octopuses.view.mapValues(_ + 1).toMap)
   }
 
   @tailrec
