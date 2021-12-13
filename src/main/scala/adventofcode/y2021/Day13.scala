@@ -27,13 +27,10 @@ object Day13 extends Year2021 {
 
     val finishedPoints = folds.foldLeft(afterFirstfold)(fold)
     val pointsMap = finishedPoints.map(_ -> 1).toMap.withDefaultValue(0)
+    if (Logging.debug) OCR.printImage(pointsMap)
 
-    if (Logging.debug) Pos.printMap(pointsMap, _ match {
-      case 0 => ' '
-      case 1 => '█'
-    })
-    val chars = (0 until 8).map(getCharAt(pointsMap, _))
-    printDayPart(2, chars.map(OCR.readChar).mkString, "code to activate the infrared thermal imaging camera system: %s")
+    printDayPart(2, OCR.readMessage(pointsMap, 8, Pos(5, 6)),
+      "code to activate the infrared thermal imaging camera system: %s")
   }
 
   private def fold(points: Set[Pos], fold: Fold): Set[Pos] =
@@ -43,11 +40,6 @@ object Day13 extends Year2021 {
       case FoldY(y) =>
         points.map(point => if (point.y > y) then point.copy(y = -(point.y - y) + y) else point)
     }
-
-  private def getCharAt(image: Map[Pos, Int], position: Int) = {
-    val start = position * 5
-    (0 until 6).map(y => (start until start + 5).map(x => image(Pos(x, y))))
-  }
 
   private sealed trait Fold
   private case class FoldX(x: Int) extends Fold

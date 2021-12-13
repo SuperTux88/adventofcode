@@ -14,13 +14,9 @@ object Day11 extends Year2019 {
     printDayPart(1, painted.size, "painted panels: %s")
 
     val message = move(intCode, Map(Pos.zero -> 1).withDefaultValue(0))
-    if (Logging.debug) Pos.printMap(message, _ match {
-      case 0 => ' '
-      case 1 => '█'
-    })
+    if (Logging.debug) OCR.printImage(message)
 
-    val chars = (0 until 8).map(pos => getCharAt(message, pos))
-    printDayPart(2, chars.map(OCR.readChar).mkString, "registration identifier: %s")
+    printDayPart(2, OCR.readMessage(message, 8, Pos(5, 6), Pos(1, 0)), "registration identifier: %s")
   }
 
   @tailrec
@@ -39,10 +35,5 @@ object Day11 extends Year2019 {
     } else {
       map
     }
-  }
-
-  private def getCharAt(image: Map[Pos, Int], position: Int) = {
-    val start = position * 5 + 1
-    (0 until 6).map(y => (start until start + 5).map(x => image(Pos(x, y))))
   }
 }

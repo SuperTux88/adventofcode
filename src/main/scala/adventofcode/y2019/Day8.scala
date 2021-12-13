@@ -2,6 +2,7 @@ package adventofcode.y2019
 
 import adventofcode.Logging
 import adventofcode.common.OCR
+import adventofcode.common.pos.Pos
 
 import scala.io.BufferedSource
 
@@ -19,22 +20,9 @@ object Day8 extends Year2019 {
     printDayPart(1, fewestZeros.count(_ == 1) * fewestZeros.count(_ == 2))
 
     val decodedImage = encodedImage.transpose.map(_.find(_ != 2).get).grouped(width).toSeq
+    val decodedImageMap = OCR.convertToMap(decodedImage, identity)
+    if (Logging.debug) OCR.printImage(decodedImageMap)
 
-    if (Logging.debug) {
-      decodedImage.foreach { line =>
-        println(line.map {
-          case 0 => " "
-          case 1 => "█"
-        }.mkString)
-      }
-    }
-
-    val chars = (0 until 5).map(pos => getCharAt(decodedImage, pos))
-    printDayPart(2, chars.map(OCR.readChar).mkString, "parsed password: %s")
-  }
-
-  private def getCharAt(image: Seq[Seq[Int]], position: Int) = {
-    val start = position * 5
-    image.map(line => line.slice(start, start + 5))
+    printDayPart(2, OCR.readMessage(decodedImageMap, 5, Pos(5, 6)), "parsed password: %s")
   }
 }

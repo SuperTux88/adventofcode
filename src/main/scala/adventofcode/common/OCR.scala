@@ -1,6 +1,27 @@
 package adventofcode.common
 
+import adventofcode.common.pos.Pos
+
 object OCR {
+  def convertToMap[A](image: Seq[Seq[A]], convert: A => Int): Map[Pos, Int] = image.zipWithIndex.flatMap {
+    case (line, y) => line.zipWithIndex.map {
+      case (value, x) => Pos(x, y) -> convert(value)
+    }
+  }.toMap
+
+  def printImage(image: Map[Pos, Int]) = Pos.printMap(image, _ match {
+    case 0 => ' '
+    case 1 => '█'
+  })
+
+  def readMessage(image: Map[Pos, Int], numberOfChars: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0) =
+    (0 until numberOfChars).map(pos => readChar(getCharAt(image, pos, charSize, offset, space))).mkString
+
+  def getCharAt(image: Map[Pos, Int], position: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0) = {
+    val start = position * (charSize.x + space) + offset.x
+    (offset.y until charSize.y + offset.y).map(y => (start until start + charSize.x).map(x => image(Pos(x, y))))
+  }
+
   def readChar(char: Seq[Seq[Int]]): Char =
     fonts(char.head.length, char.length).getOrElse(char, '_')
 

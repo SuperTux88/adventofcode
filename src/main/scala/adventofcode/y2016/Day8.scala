@@ -2,6 +2,7 @@ package adventofcode.y2016
 
 import adventofcode.Logging
 import adventofcode.common.OCR
+import adventofcode.common.pos.Pos
 
 import scala.io.BufferedSource
 
@@ -28,16 +29,11 @@ object Day8 extends Year2016 {
 
     printDayPart(1, screen.map(_.count(identity)).sum, "total %s pixels are lit")
 
-    val chars = (0 to 9).map(pos => getCharAt(screen, pos))
+    val screenMap = OCR.convertToMap(screen.map(_.toSeq).toSeq, if _ then 1 else 0)
+    if (Logging.debug) OCR.printImage(screenMap)
 
-    printDayPart(2, chars.map(OCR.readChar).mkString, "the code is: %s")
-    if (Logging.debug) screen.foreach(line => println(line.map(if (_) "█" else " ").mkString))
+    printDayPart(2, OCR.readMessage(screenMap, 10, Pos(5, 6)), "the code is: %s")
   }
 
   private def rotate(row: Array[Boolean], by: Int) = row.takeRight(by) ++ row.dropRight(by)
-
-  private def getCharAt(screen: Array[Array[Boolean]], position: Int) = {
-    val start = position * 5
-    screen.map(line => line.slice(start, start + 5).map(if (_) 1 else 0).toSeq).toSeq
-  }
 }
