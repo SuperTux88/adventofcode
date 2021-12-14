@@ -1,5 +1,7 @@
 package adventofcode.y2020
 
+import adventofcode.common.MapImplicits.ListMapImplicits
+
 import scala.annotation.tailrec
 import scala.io.BufferedSource
 
@@ -22,10 +24,10 @@ object Day7 extends Year2020 {
       }
     }.toMap
 
-    val reverseRules = rules.foldLeft(Map.empty[String, List[String]].withDefaultValue(List())) { (reverseMap, rule) =>
+    val reverseRules = rules.foldLeft(Map.empty[String, List[String]].withDefaultValue(Nil)) { (reverseMap, rule) =>
       val (color, contents) = rule
       contents.keys.foldLeft(reverseMap) { (currentMap, content) =>
-        currentMap.updated(content, color :: currentMap(content))
+        currentMap.prependWith(content, color)
       }
     }
 

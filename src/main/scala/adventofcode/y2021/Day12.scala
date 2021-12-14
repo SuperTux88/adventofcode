@@ -1,6 +1,7 @@
 package adventofcode.y2021
 
 import adventofcode.common.IterableImplicits
+import adventofcode.common.MapImplicits.ListMapImplicits
 
 import scala.collection.parallel.immutable.ParSeq
 import scala.io.BufferedSource
@@ -14,8 +15,8 @@ object Day12 extends Year2021 {
   override def runDay(input: BufferedSource): Unit = {
     val connections = input.getLines().takeWhile(_.nonEmpty).flatMap {
       line => parseConnection(line.split("-").map(parseCave))
-    }.foldLeft(Map[Cave, List[Cave]]()) {
-      case (conns, (from, to)) => conns.updated(from, to :: conns.getOrElse(from, Nil))
+    }.foldLeft(Map[Cave, List[Cave]]().withDefaultValue(Nil)) {
+      case (conns, (from, to)) => conns.prependWith(from, to)
     }
 
     printDayPart(1, countPaths(connections), "number of paths without visiting small caves twice: %s")

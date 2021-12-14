@@ -1,5 +1,6 @@
 package adventofcode.y2021
 
+import adventofcode.common.MapImplicits.IntegralMapImplicits
 import adventofcode.common.pos.Pos
 
 import scala.io.BufferedSource
@@ -24,6 +25,6 @@ object Day5 extends Year2021 {
   private def markVent(map: Map[Pos, Int], from: Pos, to: Pos) = {
     val diff = Seq((from.x - to.x).abs, (from.y - to.y).abs).max + 1
     val dir = Pos(to.x.compare(from.x), to.y.compare(from.y))
-    Iterator.iterate(from)(_ + dir).take(diff).foldLeft(map)((m, p) => m.updated(p, m(p) + 1))
+    Iterator.iterate(from)(_ + dir).take(diff).foldLeft(map)(_.changeBy(_, 1))
   }
 }

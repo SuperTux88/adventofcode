@@ -1,5 +1,7 @@
 package adventofcode.y2021
 
+import adventofcode.common.MapImplicits.IntegralMapImplicits
+
 import scala.io.BufferedSource
 
 object Day14 extends Year2021 {
@@ -30,15 +32,13 @@ object Day14 extends Year2021 {
   private def stepCount(pairsCounter: Map[(Char, Char), Long], pairInsertions: Map[(Char, Char), Char]) =
     pairsCounter.foldLeft(Map[(Char, Char), Long]().withDefaultValue(0L)) {
       case (counter, (pair@(a, b), countCount)) => {
-        val insert = pairInsertions(pair)
-        val newA = (a, insert)
-        val newB = (insert, b)
-        counter.updated(newA, counter(newA) + countCount).updated(newB, counter(newB) + countCount)
+        val c = pairInsertions(pair)
+        counter.changeBy((a, c), countCount).changeBy((c, b), countCount)
       }
     }
 
   private def countElements(pairsCounter: Map[(Char, Char), Long], polymerTemplate: List[Char]): Map[Char, Long] = {
     val counter = pairsCounter.groupMapReduce(_._1._1)(_._2)(_ + _)
-    counter.updated(polymerTemplate.last, counter(polymerTemplate.last) + 1)
+    counter.changeBy(polymerTemplate.last, 1)
   }
 }
