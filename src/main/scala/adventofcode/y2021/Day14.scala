@@ -29,8 +29,7 @@ object Day14 extends Year2021 {
 
   private def stepCount(pairsCounter: Map[(Char, Char), Long], pairInsertions: Map[(Char, Char), Char]) =
     pairsCounter.foldLeft(Map[(Char, Char), Long]().withDefaultValue(0L)) {
-      case (counter, (pair, countCount)) => {
-        val (a, b) = pair
+      case (counter, (pair@(a, b), countCount)) => {
         val insert = pairInsertions(pair)
         val newA = (a, insert)
         val newB = (insert, b)
