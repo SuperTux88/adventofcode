@@ -11,36 +11,34 @@ object Day15 extends Year2021 {
   override def runDay(input: BufferedSource): Unit = {
     val map = Pos.parseMap(input.getLines(), _.asDigit);
     val end = map.keys.maxBy(identity)
+
+    printDayPart(1, getLowestRisk(Pos.zero, end, getRiskValue(map)), "lowest risk to the bottom right: %s")
+
     val size = end + (1, 1)
-
-    printDayPart(1, getLowestRisk(Pos.zero, end, map), "lowest risk to the bottom right: %s")
-
     val endBig = size * 5 - Pos(1, 1)
-
-    val fullMap = (0 to endBig.x).flatMap { x =>
-      (0 to endBig.y).map { y =>
-        val pos = Pos(x, y)
-        pos -> getPosValue(map, pos, size)
-      }
-    }.toMap
-
-    printDayPart(2, getLowestRisk(Pos.zero, endBig, fullMap), "lowest risk to the bottom right with full map: %s")
+    printDayPart(2, getLowestRisk(Pos.zero, endBig, getRiskValueForFullMap(map, size)),
+      "lowest risk to the bottom right with full map: %s")
   }
 
-  private def getLowestRisk(start: Pos, end: Pos, map: Map[Pos, Int]): Int = {
-    Dijkstra(
-      start,
-      _ == end,
-      _.directions.filter(map.contains(_)).map((next) => (map(next), next))
-    )._1
-  }
+  private def getLowestRisk(start: Pos, end: Pos, riskValue: Pos => Option[(Int, Pos)]): Int =
+    Dijkstra(start, _ == end, _.directions.flatMap(riskValue))._1
 
-  private def getPosValue(map: Map[Pos, Int], pos: Pos, size: Pos): Int = {
-    val origPos = Pos(pos.x % size.x, pos.y % size.y)
-    val xDiff = pos.x / size.x
-    val yDiff = pos.y / size.y
+  private def getRiskValue(map: Map[Pos, Int])(pos: Pos): Option[(Int, Pos)] =
+    map.get(pos) match {
+      case None => None
+      case Some(value) => Some(value, pos)
+    }
 
-    val newPosValue = map(origPos) + xDiff + yDiff
-    if newPosValue > 9 then newPosValue % 9 else newPosValue
+  private def getRiskValueForFullMap(map: Map[Pos, Int], size: Pos)(pos: Pos): Option[(Int, Pos)] = {
+    if (pos.x >= size.x * 5 || pos.y >= size.y * 5)
+      return None
+    map.get(Pos(pos.x % size.x, pos.y % size.y)) match {
+      case None => None
+      case Some(value) =>
+        val xDiff = pos.x / size.x
+        val yDiff = pos.y / size.y
+        val newRiskValue = value + xDiff + yDiff
+        Some(if newRiskValue > 9 then newRiskValue % 9 else newRiskValue, pos)
+    }
   }
 }
