@@ -1,6 +1,6 @@
 package adventofcode.y2019
 
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 import scala.io.BufferedSource
 
 object Day6 extends Year2019 {

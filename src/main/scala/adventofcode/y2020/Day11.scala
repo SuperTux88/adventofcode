@@ -3,7 +3,7 @@ package adventofcode.y2020
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 import scala.collection.parallel.ParMap
 import scala.io.BufferedSource
 

@@ -3,7 +3,7 @@ package adventofcode.y2019
 import adventofcode.common.NumberHelper.gcd
 import adventofcode.common.pos.Pos
 
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 import scala.io.BufferedSource
 
 object Day10 extends Year2019 {

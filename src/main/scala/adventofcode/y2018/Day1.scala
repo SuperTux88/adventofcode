@@ -1,7 +1,7 @@
 package adventofcode.y2018
 
 import scala.io.BufferedSource
-import scala.util.control.Breaks._
+import scala.util.control.Breaks.*
 
 object Day1 extends Year2018 {
   override val day = 1

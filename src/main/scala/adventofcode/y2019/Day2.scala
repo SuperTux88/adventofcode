@@ -1,6 +1,6 @@
 package adventofcode.y2019
 
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 
 object Day2 extends Year2019 {
   override val day = 2

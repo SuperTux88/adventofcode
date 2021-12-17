@@ -3,7 +3,7 @@ package adventofcode.y2021
 import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 
 object Day17 extends Year2021 {
   override val day = 17

@@ -2,7 +2,7 @@ package adventofcode.y2015
 
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 object Day4 extends Year2015 {
