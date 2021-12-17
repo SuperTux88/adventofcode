@@ -11,7 +11,7 @@ object Day8 extends Year2018 {
   }
 
   private def calculateNode(numbers: List[Int]): (Int, Int, List[Int]) = {
-    val childrenCount :: metadataCount :: body = numbers
+    val childrenCount :: metadataCount :: body = numbers: @unchecked
 
     var remainingNumbers = body
 

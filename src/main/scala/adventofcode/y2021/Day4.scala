@@ -28,7 +28,7 @@ object Day4 extends Year2021 {
 
   @tailrec
   private def play(boards: Seq[Board], numbers: List[Int]): (Board, Int) = {
-    val (number :: remaining) = numbers
+    val number :: remaining = numbers: @unchecked
     val newBoards = boards.map(_.mark(number))
     newBoards.find(_._2) match {
       case Some(bingoBoard, true) => (bingoBoard, number)
@@ -38,7 +38,7 @@ object Day4 extends Year2021 {
 
   @tailrec
   private def playAll(boards: Seq[Board], numbers: List[Int]): (Board, Int) = {
-    val (number :: remaining) = numbers
+    val number :: remaining = numbers: @unchecked
     boards.map(_.mark(number)) match {
       case Seq((lastBoard, true)) => (lastBoard, number)
       case newBoards => playAll(newBoards.filterNot(_._2).map(_._1), remaining)

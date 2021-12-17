@@ -41,7 +41,7 @@ object Day10 extends Year2021 {
         if (PAIRS.contains(head)) {
           validateLine(remaining, head :: open)
         } else {
-          val lastOpen :: remainingOpen = open
+          val lastOpen :: remainingOpen = open: @unchecked
           if (PAIRS(lastOpen) == head)
             validateLine(remaining, remainingOpen)
           else

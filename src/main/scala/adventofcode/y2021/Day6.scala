@@ -15,7 +15,7 @@ object Day6 extends Year2021 {
   }
 
   private def calculateDay(perDaysRemaining: Vector[Long]) = {
-    val zeroDays +: nonZeroDays = perDaysRemaining
+    val zeroDays +: nonZeroDays = perDaysRemaining: @unchecked
     nonZeroDays.updated(6, nonZeroDays(6) + zeroDays) :+ zeroDays
   }
 }

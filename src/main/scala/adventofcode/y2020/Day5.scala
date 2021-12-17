@@ -13,15 +13,15 @@ object Day5 extends Year2020 {
         case 'B' | 'R' => '1'
       }
       Integer.parseInt(binary, 2)
-    }.toSeq.sorted
+    }.toList.sorted
 
     printDayPart(1, seatIds.last, "highest seat ID: %s")
     printDayPart(2, findFreeSeat(seatIds.head, seatIds.tail), "my seat ID: %s")
   }
 
   @tailrec
-  private def findFreeSeat(lastSeat: Int, remainingSeats: Seq[Int]): Int = {
-    val current :: next = remainingSeats
+  private def findFreeSeat(lastSeat: Int, remainingSeats: List[Int]): Int = {
+    val current :: next = remainingSeats: @unchecked
     if (current - 1 == lastSeat)
       findFreeSeat(current, next)
     else

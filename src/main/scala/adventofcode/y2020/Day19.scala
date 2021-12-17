@@ -33,7 +33,7 @@ object Day19 extends Year2020 {
     if (ruleNumbersToCheck.isEmpty) {
       message.isEmpty
     } else {
-      val currentRuleNumbers :: remainingRuleNumbers = ruleNumbersToCheck
+      val currentRuleNumbers :: remainingRuleNumbers = ruleNumbersToCheck: @unchecked
       rules(currentRuleNumbers) match {
         case CharRule(char) =>
           message.startsWith(char) && isValid(message.drop(1), rules, remainingRuleNumbers)
