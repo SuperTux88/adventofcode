@@ -13,11 +13,11 @@ object Day18 extends Year2021 {
     val numbers = input.getLines().takeWhile(_.nonEmpty).toList
 
     val reduced = numbers.reduce(reduceAll).toList
-    printDayPart(1, parse(reduced).magnitude, "magnitude of final sum: %s")
+    printDayPart(1, calculateMagintude(reduced), "magnitude of final sum: %s")
 
     val reducedPairs: List[List[Char]] = (numbers.combinations(2) ++ numbers.reverse.combinations(2)).toList
       .par.map(_.reduce(reduceAll).toList).toList
-    printDayPart(2, reducedPairs.map(parse(_).magnitude).max, "largest magnitude of pairs: %s")
+    printDayPart(2, reducedPairs.map(calculateMagintude(_)).max, "largest magnitude of pairs: %s")
   }
 
   private def reduceAll(current: String, next: String): String = reduceNumber(s"[$current,$next]".toList).mkString
@@ -64,12 +64,12 @@ object Day18 extends Year2021 {
         Some(s"${string.substring(0, number.start)}[${half},${half + value % 2}]${string.substring(number.end)}")
     }
 
-  private def parse(smailfishNumber: List[Char]): SnailfishNumber =
+  private def calculateMagintude(smailfishNumber: List[Char]): Int =
     smailfishNumber match {
       case '[' :: tail =>
         val (a, b) = tail.splitAt(indexOfPairComma(tail))
-        Pair(parse(a), parse(b.tail))
-      case number => Number(number.head.asDigit)
+        calculateMagintude(a) * 3 + calculateMagintude(b.tail) * 2
+      case number => number.head.asDigit
     }
 
   @tailrec
@@ -80,14 +80,4 @@ object Day18 extends Year2021 {
       case ',' :: tail if depth == 0 => index
       case _ :: tail => indexOfPairComma(tail, index + 1, depth)
     }
-
-  private sealed trait SnailfishNumber {
-    def magnitude: Int
-  }
-  private case class Number(value: Int) extends SnailfishNumber {
-    override def magnitude: Int = value
-  }
-  private case class Pair(left: SnailfishNumber, right: SnailfishNumber) extends SnailfishNumber {
-    override def magnitude: Int = left.magnitude * 3 + right.magnitude * 2
-  }
 }
