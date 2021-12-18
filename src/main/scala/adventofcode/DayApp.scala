@@ -1,15 +1,16 @@
 package adventofcode
 
 import scala.collection.mutable
-import scala.io.{BufferedSource, Source}
+import scala.compiletime.uninitialized
 import scala.io.AnsiColor.{GREEN, RED, RESET}
+import scala.io.{BufferedSource, Source}
 
 trait DayApp {
   val day: Int
   val year: Int
 
   protected def options: Options = _options
-  private[this] var _options: Options = _
+  private var _options: Options = uninitialized
 
   final def main(args: Array[String]): Unit = {
     main(new Options(args.toList))
