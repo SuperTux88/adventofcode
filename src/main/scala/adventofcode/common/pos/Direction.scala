@@ -30,4 +30,31 @@ object Direction {
         case 3 => rotateLeft
       }
   }
+
+  implicit class DirectionPos3D(pos: Pos3D) {
+    def rotateLeft: Pos3D = Pos3D(pos.z, pos.y, -pos.x)
+    def rotateRight: Pos3D = Pos3D(-pos.z, pos.y, pos.x)
+    def tiltLeft: Pos3D = Pos3D(pos.y, -pos.x, pos.z)
+    def tiltRight: Pos3D = Pos3D(-pos.y, pos.x, pos.z)
+    def tiltForward: Pos3D = Pos3D(pos.x, -pos.z, pos.y)
+    def tiltBackwards: Pos3D = Pos3D(pos.x, pos.z, -pos.y)
+
+    // rotate around 0,0,0 - only supports 90 degree steps
+    def rotate(index: Int): Pos3D = {
+      val tilted = index % 6 match { // tilt/flip in 6 directions
+        case 0 => pos
+        case 1 => tiltRight
+        case 2 => Pos3D(-pos.x, -pos.y, pos.z)
+        case 3 => tiltLeft
+        case 4 => tiltForward
+        case 5 => tiltBackwards
+      }
+      index / 6 % 4 match { // rotate in all 4 directions
+        case 0 => tilted
+        case 1 => tilted.rotateRight
+        case 2 => Pos3D(-tilted.x, tilted.y, -tilted.z)
+        case 3 => tilted.rotateLeft
+      }
+    }
+  }
 }
