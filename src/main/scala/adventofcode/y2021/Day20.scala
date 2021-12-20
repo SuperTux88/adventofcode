@@ -37,8 +37,8 @@ object Day20 extends Year2021 {
 
   private def nextSize(originalSize: (Pos, Pos))(_image: Set[Pos], cycle: Int): Set[Pos] = {
     val extra = cycle % 2 match {
-      case 0 => cycle * 3
-      case 1 => cycle * 3 + 4
+      case 0 => cycle + 1
+      case 1 => cycle + 3
     }
     val (min, max) = originalSize
     (for (x <- min.x - extra to max.x + extra; y <- min.y - extra to max.y + extra) yield Pos(x, y)).toSet
