@@ -8,11 +8,13 @@ import scala.io.BufferedSource
 object Day20 extends Year2021 {
   override val day = 20
 
-  private val pixelGroup = List((-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1))
+  private val pixelGroupOffsets = (for (y <- -1 to 1; x <- -1 to 1) yield (x, y)).toList
 
   override def runDay(input: BufferedSource): Unit = {
     val lines = input.getLines()
-    val algorithm = lines.next.map(_ == '#').toList
+    val algorithm = lines.next.map(_ == '#').zipWithIndex.map { case (value, index) =>
+      f"${index.toBinaryString.toInt}%09d".map(_ == '1').toList -> value
+    }.toMap
     val image = lines.drop(1).takeWhile(_.nonEmpty).zipWithIndex.flatMap {
       case (line, y) => line.zipWithIndex.flatMap {
         case ('#', x) => Some(Pos(x, y))
@@ -27,11 +29,11 @@ object Day20 extends Year2021 {
     printDayPart(2, result50.size, "lit pixels after 50 iterations: %s")
   }
 
-  private def run(image: Set[Pos], cyclesToRun: Int, algorithm: List[Boolean]): Set[Pos] =
-    ConwaysGameOfLife.run(image, cyclesToRun, nextPixelState(algorithm), nextSize(image.min, image.max), getPixelValue)
+  private def run(image: Set[Pos], cyclesToRun: Int, algorithm: Map[List[Boolean], Boolean]): Set[Pos] =
+    ConwaysGameOfLife.run(image, cyclesToRun, nextPixelState(algorithm), nextSize(image.min, image.max), getPixelKey)
 
-  private def nextPixelState(algorithm: List[Boolean])(_active: Boolean, algorithmIndex: Int): Boolean =
-    algorithm(algorithmIndex)
+  private def nextPixelState(algorithm: Map[List[Boolean], Boolean])(_active: Boolean, algorithmKey: List[Boolean]) =
+    algorithm(algorithmKey)
 
   private def nextSize(originalSize: (Pos, Pos))(_image: Set[Pos], cycle: Int): Set[Pos] = {
     val extra = cycle % 2 match {
@@ -42,8 +44,6 @@ object Day20 extends Year2021 {
     (for (x <- min.x - extra to max.x + extra; y <- min.y - extra to max.y + extra) yield Pos(x, y)).toSet
   }
 
-  private def getPixelValue(pos: Pos, image: Set[Pos]): Int =
-    Integer.parseInt(pixelGroup.map(offset => if image.contains(pos + offset) then '1' else '0').mkString, 2)
-
-  private def printMap(image: Set[Pos]) = Pos.printMap(image.map(_ -> '#').toMap.withDefaultValue(' '), identity)
+  private def getPixelKey(pos: Pos, image: Set[Pos]): List[Boolean] =
+    pixelGroupOffsets.map(offset => image.contains(pos + offset))
 }
