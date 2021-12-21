@@ -3,23 +3,24 @@ package adventofcode.y2021
 import adventofcode.common.MapImplicits.IntegralMapImplicits
 
 import scala.annotation.tailrec
-import scala.io.BufferedSource
 
 object Day21 extends Year2021 {
   override val day = 21
 
-  private val PlayerRE = """Player (\d+) starting position: (\d+)""".r
+  private val PlayersRE =
+    """Player 1 starting position: (\d+)
+      |Player 2 starting position: (\d+)""".stripMargin.r
 
   private val quantumDice = (for (a <- 1 to 3; b <- 1 to 3; c <- 1 to 3) yield List(a, b, c)).toList
 
-  override def runDay(input: BufferedSource): Unit = {
-    val List(player1, player2) = input.getLines().takeWhile(_.nonEmpty).map {
-      case PlayerRE(i, pos) => Player(i.toInt, pos.toInt)
-    }.toList
+  override def runDay(input: String): Unit = {
+    val players = input match {
+      case PlayersRE(p1, p2) => (Player(p1.toInt), Player(p2.toInt))
+    }
 
     val testDice = Iterator.iterate(1)(_ % 100 + 1)
-    printDayPart(1, playTest((player1, player2), testDice))
-    printDayPart(2, playQuantum(Map((player1, player2) -> 1L)), "number of universes the winning player wins: %s")
+    printDayPart(1, playTest(players, testDice))
+    printDayPart(2, playQuantum(Map(players -> 1L)), "number of universes the winning player wins: %s")
   }
 
   @tailrec
@@ -49,7 +50,7 @@ object Day21 extends Year2021 {
       playQuantum(stillRunning, newWinCount)
   }
 
-  private case class Player(i: Int, pos: Int, score: Int = 0) {
+  private case class Player(pos: Int, score: Int = 0) {
     def move(moves: List[Int]) = {
       val target = (moves.foldLeft(pos)(_ + _) - 1) % 10 + 1
       copy(pos = target, score = score + target)
