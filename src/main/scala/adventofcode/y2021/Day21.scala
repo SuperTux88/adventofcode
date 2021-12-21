@@ -34,13 +34,12 @@ object Day21 extends Year2021 {
 
   @tailrec
   private def playQuantum(states: Map[(Player, Player), Long], winCount: (Long, Long) = (0L, 0L)): Long = {
-    val newStates = states.keys.foldLeft(Map[(Player, Player), Long]().withDefaultValue(0L)) { (newStates, players) =>
-      val currentStateCount = states(players)
-      val (currentPlayer, otherPlayer) = players
-      quantumDice.foldLeft(newStates) { (newStates, dice) =>
-        val newPlayers = (otherPlayer, currentPlayer.move(dice))
-        newStates.changeBy(newPlayers, currentStateCount)
-      }
+    val newStates = states.foldLeft(Map[(Player, Player), Long]().withDefaultValue(0L)) {
+      case (newStates, ((currentPlayer, otherPlayer), currentStateCount)) =>
+        quantumDice.foldLeft(newStates) { (newStates, dice) =>
+          val newPlayers = (otherPlayer, currentPlayer.move(dice))
+          newStates.changeBy(newPlayers, currentStateCount)
+        }
     }
     val (wonStates, stillRunning) = newStates.partition { case ((_, currentPlayer), _) => currentPlayer.score >= 21 }
     val newWinCount = (winCount._2, winCount._1 + wonStates.values.sum)
