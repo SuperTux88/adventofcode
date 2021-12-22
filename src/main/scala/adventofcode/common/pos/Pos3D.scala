@@ -9,6 +9,11 @@ case class Pos3D(x: Int, y: Int, z: Int) extends PosTrait[Pos3D] {
   // Manhattan distance
   override def distance(other: Pos3D): Int = (x - other.x).abs + (y - other.y).abs + (z - other.z).abs
 
+  def cubeSize(to: Pos3D, including: Boolean = true): Long = {
+    val offset = if including then 1 else 0
+    ((x - to.x).abs.toLong + offset) * ((y - to.y).abs.toLong + offset) * ((z - to.z).abs.toLong + offset)
+  }
+
   override def neighbors: Seq[Pos3D] =
     for {
       x <- -1 to 1
