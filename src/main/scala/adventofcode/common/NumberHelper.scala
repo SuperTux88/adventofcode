@@ -22,6 +22,12 @@ object NumberHelper {
     */
   def isInRange(n: Long, min: Long, max: Long): Boolean = min <= n && n <= max
 
+  def rangeWithReverse(from: Int, end: Int, inclusive: Boolean = true): Seq[Int] = {
+    val step = if from < end then 1 else -1
+    if inclusive then Range.inclusive(from, end, step) else Range(from, end, step)
+  }
+
+
   /**
     * Sum of increasing numbers: 1 + 2 + 3 + ... + n
     */
