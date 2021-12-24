@@ -13,13 +13,13 @@ object Day23 extends Year2021 {
   private val TARGET_ROOMS = Map(Amber() -> 3, Bronze() -> 5, Copper() -> 7, Desert() -> 9)
 
   override def runDay(input: BufferedSource): Unit = {
-    val initialRooms = parseLines(input.getLines().takeWhile(_.nonEmpty).toList)
+    val initialRooms = parseLines(input.getLines().takeWhile(_.nonEmpty))
 
     printDayPart(1, getLowestEnergy(initialRooms), "least energy required to organize the amphipods: %s")
 
     val foldedLines =
       """  #D#C#B#A#
-        |  #D#B#A#C#""".stripMargin.linesIterator.toList
+        |  #D#B#A#C#""".stripMargin.linesIterator
     val unfoldedRooms = parseLines(foldedLines)
       .map { case (index, folded) => index -> (initialRooms(index).head :: folded ::: initialRooms(index).tail) }
     printDayPart(2, getLowestEnergy(unfoldedRooms, 4), "least energy required to organize the amphipods after unfold: %s")
@@ -36,12 +36,23 @@ object Day23 extends Year2021 {
 
   private def getMoveOutStates(state: State, roomSize: Int): List[(Int, State)] =
     state.rooms.filterNot { case (pos, room) => room.forall(TARGET_ROOMS(_) == pos) }.toList.flatMap {
-      case (roomPos, room) => HALLWAY_INDEXES
-        .filter(hallwayPos => rangeWithReverse(roomPos, hallwayPos).forall(p => !state.hallway.contains(p)))
-        .map { hallwayPos =>
-          ((roomSize - room.size + 1 + (roomPos - hallwayPos).abs) * room.head.energy,
-            State(state.rooms.updated(roomPos, room.tail), state.hallway.updated(hallwayPos, room.head)))
-        }
+      (_: @unchecked) match {
+        case (roomPos, amphipod :: newRoom) =>
+          val targetRoomPos = TARGET_ROOMS(amphipod)
+          val targetRoom = state.rooms(targetRoomPos)
+          if (targetRoom.forall(_ == amphipod)
+            && rangeWithReverse(roomPos, targetRoomPos).forall(p => !state.hallway.contains(p)))
+            val dist = roomSize - newRoom.size + (roomPos - targetRoomPos).abs + roomSize - targetRoom.size
+            val newRooms = state.rooms.updated(roomPos, newRoom).updated(targetRoomPos, amphipod :: targetRoom)
+            List((dist * amphipod.energy, State(newRooms, state.hallway)))
+          else
+            HALLWAY_INDEXES
+              .filter(hallwayPos => rangeWithReverse(roomPos, hallwayPos).forall(p => !state.hallway.contains(p)))
+              .map { hallwayPos =>
+                ((roomSize - newRoom.size + (roomPos - hallwayPos).abs) * amphipod.energy,
+                  State(state.rooms.updated(roomPos, newRoom), state.hallway.updated(hallwayPos, amphipod)))
+              }
+      }
     }
 
   private def getMoveInStates(state: State, roomSize: Int): List[(Int, State)] =
@@ -57,8 +68,8 @@ object Day23 extends Year2021 {
           None
     }
 
-  private def parseLines(lines: List[String]) =
-    lines.reverse.foldLeft(TARGET_ROOMS.values.map(_ -> List.empty[Amphipod]).toMap) { (rooms, line) =>
+  private def parseLines(lines: Iterator[String]) =
+    lines.toList.reverse.foldLeft(TARGET_ROOMS.values.map(_ -> List.empty[Amphipod]).toMap) { (rooms, line) =>
       line.zipWithIndex.foldLeft(rooms) {
         case (rooms, ('A', x)) => rooms.updated(x, Amber() :: rooms(x))
         case (rooms, ('B', x)) => rooms.updated(x, Bronze() :: rooms(x))
