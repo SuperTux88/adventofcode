@@ -55,42 +55,11 @@ object Day24 extends Year2021 {
   // difference between first and second number in mul/div pair
   private def getDiff(pair: (InputVariables, InputVariables)) = {
     val (mul, div) = pair
-    val divZ = getChanges(div).filter(_._3 == DivZ()).map(_._2)
-    val mulResult = getChanges(mul).map(_._3.eval(0))
-    val diff = mulResult.min - divZ.min
+    // (input + mul.addY) => z
+    // (z     + div.addX) == input
+    val diff = mul.addY + div.addX
     Map(mul.index -> (diff * -1), div.index -> diff)
   }
 
-  private def getChanges(variables: InputVariables) =
-    for (input <- 1 to 9; modZ <- 0 to 25) yield (input, modZ, getChange(input, modZ, variables))
-
-  private def getChange(w: Int, z: Int, variables: InputVariables): Change = {
-    val x = z + variables.addX != w
-    if (x && variables.divZ)
-      AddY(w + variables.addY)
-    else if (x && !variables.divZ)
-      MulZAddY(w + variables.addY)
-    else if (variables.divZ)
-      DivZ()
-    else
-      SameZ() // doesn't happen?
-  }
-
   private case class InputVariables(index: Int, divZ: Boolean, addX: Int, addY: Int)
-
-  private sealed trait Change {
-    def eval(z: Int): Int
-  }
-  private case class SameZ() extends Change {
-    override def eval(z: Int): Int = z
-  }
-  private case class DivZ() extends Change {
-    override def eval(z: Int): Int = z / 26
-  }
-  private case class AddY(y: Int) extends Change {
-    override def eval(z: Int): Int = z + y
-  }
-  private case class MulZAddY(y: Int) extends Change {
-    override def eval(z: Int): Int = z * 26 + y
-  }
 }
