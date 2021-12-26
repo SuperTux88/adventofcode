@@ -9,30 +9,25 @@ object Day25 extends Year2021 {
   override val day = 25
 
   override def runDay(input: BufferedSource): Unit = {
-    val map = Pos.parseMap(input.getLines().takeWhile(_.nonEmpty), identity)
-    val size = map.max._1
-    val (east, south) = map.filter(_._2 != '.').partition(_._2 == '>')
+    val grid = input.getLines().map(_.toVector).toVector
 
-    printDayPart(1, getSteps(east.keySet, south.keySet, size), "first step on which no cucumbers move: %s")
+    printDayPart(1, steps(grid), "first step on which no sea cucumbers move: %s")
   }
 
-  private def getSteps(east: Set[Pos], south: Set[Pos], size: Pos): Int = {
-    @tailrec
-    def step(east: Set[Pos], south: Set[Pos], steps: Int): Int = {
-      val newEast = east.map { cucumber =>
-        val newCucumber = if cucumber.x == size.x then Pos(0, cucumber.y) else cucumber.right
-        if east.contains(newCucumber) || south.contains(newCucumber) then cucumber else newCucumber
-      }
-      val newSouth = south.map { cucumber =>
-        val newCucumber = if cucumber.y == size.y then Pos(cucumber.x, 0) else cucumber.down
-        if newEast.contains(newCucumber) || south.contains(newCucumber) then cucumber else newCucumber
-      }
-      if (south == newSouth && east == newEast)
-        steps
-      else
-        step(newEast, newSouth, steps + 1)
+  @tailrec
+  private def steps(grid: Vector[Vector[Char]], step: Int = 1): Int = {
+    val newGrid = grid.map(move(_, '>')).transpose.map(move(_, 'v')).transpose
+
+    if (grid == newGrid)
+      step
+    else
+      steps(newGrid, step + 1)
+  }
+
+  private def move(line: Vector[Char], direction: Char): Vector[Char] =
+    line.zipWithIndex.map {
+      case ('.', index) if line((index + line.size - 1) % line.size) == direction => direction
+      case (`direction`, index) if line((index + 1) % line.size) == '.' => '.'
+      case (c, _) => c
     }
-
-    step(east, south, 0) + 1
-  }
 }
