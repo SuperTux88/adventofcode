@@ -1,5 +1,7 @@
 package adventofcode.y2015
 
+import scala.collection.mutable
+
 object Day10 extends Year2015 {
   override val day: Int = 10
 
@@ -26,7 +28,7 @@ object Day10 extends Year2015 {
     })
 
   private def transformOnce(str: String) = {
-    val ret = new StringBuilder
+    val ret = new mutable.StringBuilder
     var currentDigit = str.charAt(0)
     var counter = 0
     str.foreach { d =>

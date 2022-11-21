@@ -5,7 +5,7 @@ import scala.io.BufferedSource
 object Day4 extends Year2016 {
   override val day: Int = 4
 
-  private val RoomRE = """([\w-]+)-(\d+)\[(\w{5})\]""".r
+  private val RoomRE = """([\w-]+)-(\d+)\[(\w{5})]""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val realRooms = input.getLines().map {

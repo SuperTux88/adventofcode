@@ -5,7 +5,7 @@ import scala.io.BufferedSource
 object Day15 extends Year2015 {
   override val day: Int = 15
 
-  private val IngredientRE = """([\w]+): capacity ([-\d]+), durability ([-\d]+), flavor ([-\d]+), texture ([-\d]+), calories ([-\d]+)""".r
+  private val IngredientRE = """(\w+): capacity ([-\d]+), durability ([-\d]+), flavor ([-\d]+), texture ([-\d]+), calories ([-\d]+)""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val ingredients = input.getLines().map {

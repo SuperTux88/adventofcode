@@ -5,7 +5,7 @@ import scala.io.BufferedSource
 object Day4 extends Year2018 {
   override val day = 4
 
-  private val EventRE = """\[\d{4}-\d{2}-\d{2} \d{2}:(\d{2})\] ([\w\s#]+)""".r
+  private val EventRE = """\[\d{4}-\d{2}-\d{2} \d{2}:(\d{2})] ([\w\s#]+)""".r
   private val ShiftRE = """Guard #(\d+) begins shift""".r
 
   override def runDay(input: BufferedSource): Unit = {

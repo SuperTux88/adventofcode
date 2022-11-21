@@ -6,7 +6,7 @@ object Day19 extends Year2020 {
   override val day = 19
 
   private val RuleRE = """(\d+): (.*)""".r
-  private val CharRE = """\"(\w)\"""".r
+  private val CharRE = """"(\w)"""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val lines = input.getLines()

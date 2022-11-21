@@ -7,7 +7,7 @@ object Day7 extends Year2016 {
   override val day: Int = 7
 
   private val AbbaRE = """.*(\w)((?!\1)\w)(\2)\1.*""".r
-  private val HypernetRE = """\[|\]""".r
+  private val HypernetRE = """[\[\]]""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val ips = input.getLines().map(parseIP).toList

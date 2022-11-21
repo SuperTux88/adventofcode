@@ -6,7 +6,7 @@ object Day12 extends Year2015 {
   override val day: Int = 12
 
   private val IntRE = """-?\d+""".r
-  private val InnerObjectRE = """\{[^{}]+\}""".r
+  private val InnerObjectRE = """\{[^{}]+}""".r
   private val RedValueRE = """:"red"""".r.unanchored
 
   override def runDay(json: String): Unit = {
