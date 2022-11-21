@@ -1,6 +1,6 @@
 package adventofcode.y2018
 
-import scala.annotation.tailrec
+import scala.annotation.{tailrec, unused}
 
 object Day9 extends Year2018 {
   override val day = 9
@@ -60,6 +60,7 @@ object Day9 extends Year2018 {
         }
       }
 
+    @unused
     def print(): Unit = printDebug(s"${before.reverse.mkString(" ")} ($current) ${after.mkString(" ")}")
   }
 }

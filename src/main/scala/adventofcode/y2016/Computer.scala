@@ -23,7 +23,7 @@ class Computer(instructionLines: Iterator[String]) {
     case OutRE(reg)         => Out(reg)
   }.toList
 
-  val registers = Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0)
+  private val registers = Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0)
 
   def run: Map[String, Int] = runInstructions(None, i => println(i))
   def run(initValue: (String, Int), out: Int => Unit = i => println(i)): Map[String, Int] =
@@ -72,21 +72,21 @@ class Computer(instructionLines: Iterator[String]) {
     def toggle: Instruction
   }
   private case class Copy(from: Any, to: String) extends Instruction {
-    override def toggle = Jump(from, valueOrRegisterKey(to))
+    override def toggle: Instruction = Jump(from, valueOrRegisterKey(to))
   }
   private case class Inc(reg: String) extends Instruction {
-    override def toggle = Dec(reg)
+    override def toggle: Instruction = Dec(reg)
   }
   private case class Dec(reg: String) extends Instruction {
-    override def toggle = Inc(reg)
+    override def toggle: Instruction = Inc(reg)
   }
   private case class Jump(cond: Any, steps: Any) extends Instruction {
-    override def toggle = Copy(cond, steps.toString)
+    override def toggle: Instruction = Copy(cond, steps.toString)
   }
   private case class Toggle(target: Any) extends Instruction {
-    override def toggle = Inc(target.toString)
+    override def toggle: Instruction = Inc(target.toString)
   }
   private case class Out(reg: String) extends Instruction {
-    override def toggle = Inc(reg)
+    override def toggle: Instruction = Inc(reg)
   }
 }

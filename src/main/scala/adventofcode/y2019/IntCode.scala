@@ -42,7 +42,7 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
   @tailrec
   private def run(memory: Vector[Long], ip: Int, inputs: Vector[Long], outputs: Iterator[Long], relativeBase: Long): IntCode = {
     def param(parameter: Int) = // TODO refactor parameter modes to remove duplicate check?
-      (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
+      (memory(ip) / pow(10, parameter + 1) % 10).toInt match {
         case 0 | 1 => // position mode and immediate mode
           memory(ip + parameter)
         case 2 => // relative mode
@@ -50,7 +50,7 @@ class IntCode private(val memory: Vector[Long], ip: Int = 0, val output: Iterato
       }
 
     def value(parameter: Int) =
-      (memory(ip.toInt) / pow(10, parameter + 1) % 10).toInt match {
+      (memory(ip) / pow(10, parameter + 1) % 10).toInt match {
         case 0 | 2 => // position mode and relative mode
           memory.lift(param(parameter).toInt).getOrElse(0L)
         case 1 => // immediate mode

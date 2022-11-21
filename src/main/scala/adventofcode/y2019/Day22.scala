@@ -67,7 +67,7 @@ object Day22 extends Year2019 {
   }
   private case class Cut(n: Int) extends ShuffleTechnique {
     override def shuffle(deck: Vector[Int]): Vector[Int] = {
-      val (init, tail) = deck.splitAt((n %+ deck.length).toInt)
+      val (init, tail) = deck.splitAt(n %+ deck.length)
       tail ++ init
     }
     override def reversePosLinear(a: Long, b: Long, size: Long): (Long, Long) = (a, b + n)

@@ -1,5 +1,6 @@
 package adventofcode.y2015
 
+import scala.annotation.unused
 import scala.io.BufferedSource
 
 object Day8 extends Year2015 {
@@ -16,6 +17,7 @@ object Day8 extends Year2015 {
     printDayPart(2, part2(lines))
   }
 
+  @unused
   private def part1(lines: Seq[String]) = lines.map { line =>
     line.length - AsciiRE.replaceAllIn(line, " ").length + 2
   }.sum

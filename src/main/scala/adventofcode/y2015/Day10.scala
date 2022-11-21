@@ -1,5 +1,6 @@
 package adventofcode.y2015
 
+import scala.annotation.unused
 import scala.collection.mutable
 
 object Day10 extends Year2015 {
@@ -22,6 +23,7 @@ object Day10 extends Year2015 {
   }
 
   // slow
+  @unused
   private def transformOnceRegex(string: String) =
     sameDigitsRE.replaceAllIn(string, m => {
       m.matched.length.toString + m.matched.charAt(0)

@@ -2,6 +2,7 @@ package adventofcode.common.misc
 
 import adventofcode.common.pos.PosTrait
 
+import scala.annotation.unused
 import scala.collection.parallel.CollectionConverters.*
 
 /**
@@ -20,6 +21,6 @@ object ConwaysGameOfLife {
       }.seq
     }
 
-  def neighbors[P <: PosTrait[P]](state: Set[P], i: Int): Set[P] =
+  def neighbors[P <: PosTrait[P]](state: Set[P], @unused i: Int): Set[P] =
     state.flatMap(_.neighbors)
 }

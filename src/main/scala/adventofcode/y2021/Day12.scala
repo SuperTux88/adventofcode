@@ -3,6 +3,7 @@ package adventofcode.y2021
 import adventofcode.common.IterableImplicits
 import adventofcode.common.MapImplicits.ListMapImplicits
 
+import scala.annotation.tailrec
 import scala.collection.parallel.immutable.ParSeq
 import scala.io.BufferedSource
 
@@ -24,6 +25,7 @@ object Day12 extends Year2021 {
   }
 
   private def countPaths(connections: Map[Cave, List[Cave]], allowOneSmallDuplicate: Boolean = false) = {
+    @tailrec
     def findPaths(paths: ParSeq[List[Cave]] = ParSeq(List(START))): ParSeq[List[Cave]] = {
       if (paths.forall(_.head == END)) {
         paths

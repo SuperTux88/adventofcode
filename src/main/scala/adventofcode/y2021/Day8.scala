@@ -15,16 +15,16 @@ object Day8 extends Year2021 {
 
     val countUniqueDigits = entries.flatMap(_.output.map(_.size)).count(UNIQUE_NUMBERS.contains)
     printDayPart(1, countUniqueDigits, "number of unique numbers in outputs: %s")
-    printDayPart(2, entries.map(_.getOutputValue()).sum, "sum of output values: %s")
+    printDayPart(2, entries.map(_.getOutputValue).sum, "sum of output values: %s")
   }
 
   private case class Entry(patterns: Set[Set[Char]], output: Seq[Set[Char]]) {
-    def getOutputValue(): Int = {
-      val digitMap = getDigitMap()
+    def getOutputValue: Int = {
+      val digitMap = getDigitMap
       output.map(digitMap).reduceLeft(_ * 10 + _)
     }
 
-    private def getDigitMap() = {
+    private def getDigitMap = {
       val one = patterns.find(_.size == 2).get
       val four = patterns.find(_.size == 4).get
       val seven = patterns.find(_.size == 3).get

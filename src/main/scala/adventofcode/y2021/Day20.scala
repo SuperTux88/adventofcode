@@ -38,7 +38,7 @@ object Day20 extends Year2021 {
     }._1
 
   private def getPixelValue(pos: Pos, image: Vector[Vector[Boolean]], size: Pos, default: Boolean) =
-    pixelGroupOffsets.map(offset => pos + offset).map { (pos) =>
+    pixelGroupOffsets.map(offset => pos + offset).map { pos =>
       if pos.x >= 0 && pos.x < size.x && pos.y >= 0 && pos.y < size.y then image(pos.y)(pos.x) else default
     }
 

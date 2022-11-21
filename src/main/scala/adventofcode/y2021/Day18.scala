@@ -65,7 +65,7 @@ object Day18 extends Year2021 {
     (pair: @unchecked) match {
       case '[' :: tail => indexOfPairComma(tail, index + 1, depth + 1)
       case ']' :: tail => indexOfPairComma(tail, index + 1, depth - 1)
-      case ',' :: tail if depth == 0 => index
+      case ',' :: _ if depth == 0 => index
       case _ :: tail => indexOfPairComma(tail, index + 1, depth)
     }
 

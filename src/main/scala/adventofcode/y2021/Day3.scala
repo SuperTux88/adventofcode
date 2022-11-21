@@ -14,7 +14,7 @@ object Day3 extends Year2021 {
 
     printDayPart(1, toInt(gammaRate) * toInt(epsilonRate), "power consumption of the submarine: %s")
 
-    val oxygenGeneratorRating = filterBinary(report, mostCommonBit(_))
+    val oxygenGeneratorRating = filterBinary(report, mostCommonBit)
     val co2ScrubberRating = filterBinary(report, !mostCommonBit(_))
 
     printDayPart(2, toInt(oxygenGeneratorRating) * toInt(co2ScrubberRating),

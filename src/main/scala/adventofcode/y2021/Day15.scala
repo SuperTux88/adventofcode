@@ -9,7 +9,7 @@ object Day15 extends Year2021 {
   override val day = 15
 
   override def runDay(input: BufferedSource): Unit = {
-    val map = Pos.parseMap(input.getLines(), _.asDigit);
+    val map = Pos.parseMap(input.getLines(), _.asDigit)
     val end = map.keys.maxBy(identity)
 
     printDayPart(1, getLowestRisk(Pos.zero, end, getRiskValue(map)), "lowest risk to the bottom right: %s")

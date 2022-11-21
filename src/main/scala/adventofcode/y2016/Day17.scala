@@ -44,6 +44,6 @@ object Day17 extends Year2016 {
     private def isInGrid = x >= 0 && y >= 0 && x < 4 && y < 4
   }
   private object State {
-    val directions = List((0, -1, 'U'), (0, 1, 'D'), (-1, 0, 'L'), (1, 0, 'R'))
+    val directions: List[(Int, Int, Char)] = List((0, -1, 'U'), (0, 1, 'D'), (-1, 0, 'L'), (1, 0, 'R'))
   }
 }

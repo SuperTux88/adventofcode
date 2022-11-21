@@ -35,8 +35,8 @@ object Day17 extends Year2021 {
       fire(area, pos + velocity, (Seq(velocity._1 - 1, 0).max, velocity._2 - 1), Seq(pos.y, highest).max)
 
   private case class Area(area: (Pos, Pos)) {
-    val Seq(xStart, xEnd) = Seq(area._1.x.toInt, area._2.x.toInt).sorted
-    val Seq(yBottom, yTop) = Seq(area._1.y.toInt, area._2.y.toInt).sorted
+    val Seq(xStart, xEnd) = Seq(area._1.x, area._2.x).sorted
+    val Seq(yBottom, yTop) = Seq(area._1.y, area._2.y).sorted
 
     def contains(pos: Pos): Boolean = xStart <= pos.x && pos.x <= xEnd && yBottom <= pos.y && pos.y <= yTop
     def isOvershot(pos: Pos): Boolean = pos.x > xEnd || pos.y < yBottom

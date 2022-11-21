@@ -3,6 +3,7 @@ package adventofcode.y2016
 import adventofcode.Logging
 import adventofcode.common.pos.Pos
 
+import scala.annotation.unused
 import scala.io.BufferedSource
 
 object Day22 extends Year2016 {
@@ -36,6 +37,7 @@ object Day22 extends Year2016 {
     def isEmpty: Boolean = used == 0
     def isWall(emptyNode: Node): Boolean = used > emptyNode.size
 
+    @unused
     def mapChar(emptyNode: Node, width: Int): Char =
       if (isEmpty) '_'
       else if (isWall(emptyNode)) '#'

@@ -36,9 +36,9 @@ object Day13 extends Year2021 {
   private def fold(points: Set[Pos], fold: Fold): Set[Pos] =
     fold match {
       case FoldX(x) =>
-        points.map(point => if (point.x > x) then point.copy(x = -(point.x - x) + x) else point)
+        points.map(point => if point.x > x then point.copy(x = -(point.x - x) + x) else point)
       case FoldY(y) =>
-        points.map(point => if (point.y > y) then point.copy(y = -(point.y - y) + y) else point)
+        points.map(point => if point.y > y then point.copy(y = -(point.y - y) + y) else point)
     }
 
   private sealed trait Fold

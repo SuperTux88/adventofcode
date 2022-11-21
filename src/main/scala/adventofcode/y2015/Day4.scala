@@ -2,6 +2,7 @@ package adventofcode.y2015
 
 import java.security.MessageDigest
 import java.util.concurrent.LinkedBlockingQueue
+import scala.annotation.unused
 import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 
@@ -15,6 +16,7 @@ object Day4 extends Year2015 {
     printDayPart(2, calculateParallel(input, 6))
   }
 
+  @unused
   private def calculate(input: String, numberOfZeroes: Int): Int = {
     implicit val expectedResult: ExpectedResult = ExpectedResult(numberOfZeroes)
 

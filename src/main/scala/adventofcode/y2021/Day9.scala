@@ -13,12 +13,12 @@ object Day9 extends Year2021 {
 
     val lowPoints = heightmap.filter {
       case (pos, value) => pos.directions.forall(p => heightmap(p) > value)
-    }.toMap
+    }
 
     printDayPart(1, lowPoints.values.map(_ + 1).sum, "sum of the risk levels of all low points: %s")
 
     val basins = lowPoints.keys.map(getBasin(_, heightmap))
-    val productOfLargestThree = basins.map(_.size).toVector.sorted.takeRight(3).reduceLeft(_ * _)
+    val productOfLargestThree = basins.map(_.size).toVector.sorted.takeRight(3).product
 
     printDayPart(2, productOfLargestThree, "product of largest 3 basins: %s")
   }

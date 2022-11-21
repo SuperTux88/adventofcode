@@ -17,7 +17,7 @@ object Day4 extends Year2021 {
           (number.toInt, Pos(x, y))
         }
       }.toMap
-    }.map(Board(_)).toSeq
+    }.map(Board.apply).toSeq
 
     val (winnerBoard, lastNumber) = play(boards, numbers)
     printDayPart(1, calculateScore(winnerBoard, lastNumber), "score of the first winning board: %s")
@@ -48,7 +48,7 @@ object Day4 extends Year2021 {
   private def calculateScore(board: Board, lastNumber: Int) = board.numbers.keys.sum * lastNumber
 
   private case class Board(numbers: Map[Int, Pos]) {
-    def mark(number: Int) =
+    def mark(number: Int): (Board, Boolean) =
       numbers.get(number) match {
         case Some(pos) =>
           val newBoard = copy(numbers = numbers - number)

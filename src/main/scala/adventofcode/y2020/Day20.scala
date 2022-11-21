@@ -3,7 +3,7 @@ package adventofcode.y2020
 import adventofcode.common.pos.Direction.DirectionPos
 import adventofcode.common.pos.Pos
 
-import scala.annotation.tailrec
+import scala.annotation.{tailrec, unused}
 
 object Day20 extends Year2020 {
   override val day = 20
@@ -118,6 +118,7 @@ object Day20 extends Year2020 {
         rotated.copy(x = rotated.x + lastIndex) -> bool
     })
 
+    @unused
     def print(): Unit =
       (0 to lastIndex).foreach { y =>
         println((0 to lastIndex).map(x => if (positions(Pos(x, y))) '#' else '.').mkString)
