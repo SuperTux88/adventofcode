@@ -9,15 +9,15 @@ object OCR {
     }
   }.toMap
 
-  def printImage(image: Map[Pos, Int]) = Pos.printMap(image, _ match {
+  def printImage(image: Map[Pos, Int]): Unit = Pos.printMap(image, {
     case 0 => ' '
     case 1 => '█'
   })
 
-  def readMessage(image: Map[Pos, Int], numberOfChars: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0) =
+  def readMessage(image: Map[Pos, Int], numberOfChars: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0): String =
     (0 until numberOfChars).map(pos => readChar(getCharAt(image, pos, charSize, offset, space))).mkString
 
-  def getCharAt(image: Map[Pos, Int], position: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0) = {
+  def getCharAt(image: Map[Pos, Int], position: Int, charSize: Pos, offset: Pos = Pos(0, 0), space: Int = 0): Seq[IndexedSeq[Int]] = {
     val start = position * (charSize.x + space) + offset.x
     (offset.y until charSize.y + offset.y).map(y => (start until start + charSize.x).map(x => image(Pos(x, y))))
   }

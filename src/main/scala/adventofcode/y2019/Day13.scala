@@ -86,7 +86,7 @@ object Day13 extends Year2019 {
   }
 
   private def printMap(map: Map[Pos, Int]): Unit =
-    Pos.printMap(map.withDefaultValue(0), _ match {
+    Pos.printMap(map.withDefaultValue(0), {
       case 0 => ' '
       case 1 => '█'
       case 2 => '#'

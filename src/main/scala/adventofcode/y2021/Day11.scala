@@ -57,10 +57,10 @@ object Day11 extends Year2021 {
       case (_, nextOctopuses) => findSync(nextOctopuses, steps + 1)
     }
 
-  private def printState(octopuses: Map[Pos, Int], steps: Int) = if (Logging.debug) {
+  private def printState(octopuses: Map[Pos, Int], steps: Int): Unit = if (Logging.debug) {
     print("\u001B[0;0H")
     println(s"Current step: ${steps}")
-    Pos.printMap(octopuses, _ match {
+    Pos.printMap(octopuses, {
       case value if value > 0 && value <= 9 => Logging.wrap8BitColor(s"[${value}]", 236 + value * 2)
       case _ => Logging.wrap8BitColor("   ", 0, 255)
     })
