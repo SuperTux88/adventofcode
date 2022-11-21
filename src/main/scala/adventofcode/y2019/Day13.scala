@@ -2,9 +2,10 @@ package adventofcode.y2019
 
 import adventofcode.Logging
 import adventofcode.common.pos.Pos
+import org.jline.terminal.TerminalBuilder
+import org.jline.utils.NonBlockingReader
 
 import scala.annotation.tailrec
-import scala.tools.jline.console.ConsoleReader
 
 object Day13 extends Year2019 {
   override val day = 13
@@ -18,9 +19,15 @@ object Day13 extends Year2019 {
     val initMap = parseOutput(initGame.output)
 
     if (options.interactive) {
-      val con = new tools.jline.console.ConsoleReader()
       println("\u001b[2J\u001B[25;0HUse 'a', 's' and 'd' key to move left or stay where you are or move right.")
-      playInteractive(intCode, initMap, con)
+      val terminal = TerminalBuilder.terminal
+      try {
+        terminal.enterRawMode()
+        val reader = terminal.reader()
+        try {
+          playInteractive(intCode, initMap, reader)
+        } finally if (reader != null) reader.close()
+      } finally if (terminal != null) terminal.close()
     } else {
       if (Logging.debug) {
         printMap(initMap)
@@ -45,20 +52,20 @@ object Day13 extends Year2019 {
   }
 
   @tailrec
-  private def playInteractive(game: IntCode, map: Map[Pos, Int], con: ConsoleReader): Unit = {
+  private def playInteractive(game: IntCode, map: Map[Pos, Int], reader: NonBlockingReader): Unit = {
     val state = parseOutput(game.output, map)
 
     if (game.isRunning) {
       printState(state)
 
-      val input = con.readCharacter() match {
-        case 97 => -1
-        case 115 => 0
-        case 100 => 1
+      val input = reader.read() match {
+        case 'a' => -1
+        case 's' => 0
+        case 'd' => 1
         case _ => 0
       }
 
-      playInteractive(game.run(input), state, con)
+      playInteractive(game.run(input), state, reader)
     } else {
       println("GAME OVER!!!")
       System.exit(1)
