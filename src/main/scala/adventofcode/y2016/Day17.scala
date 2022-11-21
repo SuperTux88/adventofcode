@@ -1,6 +1,7 @@
 package adventofcode.y2016
 
 import java.security.MessageDigest
+import scala.annotation.targetName
 
 object Day17 extends Year2016 {
   override val day = 17
@@ -38,6 +39,7 @@ object Day17 extends Year2016 {
       }.filter(_.isInGrid).toList
     }
     def isVault: Boolean = x == 3 && y == 3
+    @targetName("move")
     private def +(direction: (Int, Int, Char)) = State(x + direction._1, y + direction._2, path + direction._3)
     private def isInGrid = x >= 0 && y >= 0 && x < 4 && y < 4
   }

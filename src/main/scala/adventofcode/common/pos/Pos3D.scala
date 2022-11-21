@@ -1,9 +1,14 @@
 package adventofcode.common.pos
 
+import scala.annotation.targetName
+
 case class Pos3D(x: Int, y: Int, z: Int) extends PosTrait[Pos3D] {
+  @targetName("add")
   def +(direction: (Int, Int, Int)): Pos3D = Pos3D(x + direction._1, y + direction._2, z + direction._3)
+  @targetName("add")
   def +(direction: Pos3D): Pos3D = Pos3D(x + direction.x, y + direction.y, z + direction.z)
 
+  @targetName("subtract")
   def -(other: Pos3D): Pos3D = Pos3D(x - other.x, y - other.y, z - other.z)
 
   // Manhattan distance

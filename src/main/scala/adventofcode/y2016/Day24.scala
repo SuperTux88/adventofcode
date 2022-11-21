@@ -1,5 +1,6 @@
 package adventofcode.y2016
 
+import scala.annotation.targetName
 import scala.collection.parallel.CollectionConverters.*
 import scala.io.BufferedSource
 
@@ -52,6 +53,7 @@ object Day24 extends Year2016 {
       steps
     }
 
+    @targetName("move")
     def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
     def isWall(maze: Map[(Int, Int), Char]): Boolean = maze(x, y) == '#'
   }

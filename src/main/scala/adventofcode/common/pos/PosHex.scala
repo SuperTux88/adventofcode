@@ -11,5 +11,5 @@ case class PosHex(x: Int, y: Int) extends PosTrait[PosHex] {
   // Manhattan distance
   override def distance(other: PosHex): Int = ((x - other.x).abs + (y - other.y).abs) / 2
 
-  override def neighbors = Seq(northWest, northEast, east, southEast, southWest, west)
+  override def neighbors: Seq[PosHex] = Seq(northWest, northEast, east, southEast, southWest, west)
 }

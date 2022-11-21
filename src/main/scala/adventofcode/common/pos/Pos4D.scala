@@ -1,6 +1,9 @@
 package adventofcode.common.pos
 
+import scala.annotation.targetName
+
 case class Pos4D(x: Int, y: Int, z: Int, w: Int) extends PosTrait[Pos4D] {
+  @targetName("add")
   def +(direction: (Int, Int, Int, Int)): Pos4D =
     Pos4D(x + direction._1, y + direction._2, z + direction._3, w + direction._4)
 

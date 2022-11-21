@@ -1,13 +1,20 @@
 package adventofcode.common.pos
 
+import scala.annotation.targetName
+
 case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
+  @targetName("add")
   def +(direction: (Int, Int)): Pos = Pos(x + direction._1, y + direction._2)
+  @targetName("add")
   def +(direction: Pos): Pos = Pos(x + direction.x, y + direction.y)
 
+  @targetName("subtract")
   def -(other: Pos): Pos = Pos(x - other.x, y - other.y)
 
+  @targetName("multiply")
   def *(mul: Int): Pos = Pos(x * mul, y * mul)
 
+  @targetName("divide")
   def /(div: Int): Pos = Pos(x / div, y / div)
 
   // Manhattan distance

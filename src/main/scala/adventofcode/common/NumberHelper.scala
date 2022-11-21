@@ -1,6 +1,6 @@
 package adventofcode.common
 
-import scala.annotation.tailrec
+import scala.annotation.{tailrec, targetName}
 import scala.util.{Success, Try}
 
 object NumberHelper {
@@ -80,6 +80,7 @@ object NumberHelper {
     /**
       * positive modulo
       */
+    @targetName("positiveModulo")
     def %+(d: A): A = (n + d) % d
   }
 }
