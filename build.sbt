@@ -5,6 +5,7 @@ version := "6.0"
 scalaVersion := "3.2.1"
 scalacOptions ++= Seq(
   "-deprecation",
+  "-feature",
   "-unchecked",
   "-explain",
   "-explain-types",
