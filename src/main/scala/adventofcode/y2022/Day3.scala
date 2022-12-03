@@ -19,5 +19,5 @@ object Day3 extends Year2022 {
     printDayPart(2, commonItems2.map(getPriority).sum, "Sum of priorities with groups: %s")
   }
 
-  private def getPriority(item: Char) = if (item >= 'a' && item <= 'z') item - 'a' + 1 else item - 'A' + 27
+  private def getPriority(item: Char) = if (item.isLower) item - 'a' + 1 else item - 'A' + 27
 }
