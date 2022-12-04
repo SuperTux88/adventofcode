@@ -30,18 +30,21 @@ import yaml
 from PIL.ImageDraw import ImageDraw
 from PIL import ImageFont
 
+# This results in the parent folder of the script file
+AOC_TILES_SCRIPT_DIR = Path(__file__).absolute().parent
+
 # This results in the parent directory of the script directory, the year directories should be here
-AOC_DIR = Path(__file__).absolute().parent.parent
+AOC_DIR = AOC_TILES_SCRIPT_DIR.parent
 
 # The directory where the image files for the tiles are stored. This should be committed to git.
 # Year directories are created in this directory, then each day is saved as 01.png, 02.png, etc.
-IMAGE_DIR = AOC_DIR / "Media"
+IMAGE_DIR = AOC_TILES_SCRIPT_DIR / "media"
 
 # Path to the README file where the tiles should be added
 README_PATH = AOC_DIR / "README.md"
 
 # Path to the README file where the tiles should be added
-SESSION_COOKIE_PATH = AOC_DIR / "session.cookie"
+SESSION_COOKIE_PATH = AOC_TILES_SCRIPT_DIR / ".session.cookie"
 
 # Whether the graphic should be created for days that have not been completed yet. Note that missing days between
 # completed days will still be created.
@@ -54,8 +57,9 @@ SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK = False
 # The year and day pattern to detect directories. For example, if your day folders are
 # called "day1" to "day25" then set the pattern to r"day\d{1,2}". The script extracts
 # a number from the folder and tries to guess its day that way.
-YEAR_PATTERN = r"\d{4}"
-DAY_PATTERN = r"\d{2}"
+SOLUTION_PATH = AOC_DIR / "src/main/scala/adventofcode"
+YEAR_PATTERN = r"y\d{4}"
+DAY_PATTERN = r"Day\d{1,2}.scala"
 
 
 # You can change this code entirely, or just change patterns above. You get more control if you change the code.
@@ -75,26 +79,14 @@ def get_solution_paths_dict_for_years() -> dict[int, dict[int, list[str]]]:
     solution_paths_dict: dict[int, dict[int, list[str]]] = {}
 
     # If you use a new repo for years you might just remove this if, and assign the year manually
-    for year_dir in sorted(get_paths_matching_regex(AOC_DIR, YEAR_PATTERN), reverse=True):
+    for year_dir in sorted(get_paths_matching_regex(SOLUTION_PATH, YEAR_PATTERN), reverse=True):
         year = find_first_number(year_dir.name)
         solution_paths_dict[year] = {}
         # If you have a deep structure then you can adjust the year dir as well:
         # year_dir = year_dir / "src/main/kotlin/com/example/aoc"
-        for day_dir in get_paths_matching_regex(year_dir, DAY_PATTERN):
-            day = find_first_number(day_dir.name)
-            solutions = sorted(find_recursive_solution_files(day_dir))
-
-            # To filter by extension:
-            # solutions = [s for s in solutions if s.suffix == ".py"]
-
-            # To only show a single solution:
-            # solutions = [solutions[0]]
-
-            # To show tiles for days that have been completed but do not have a solution:
-            # if len(solutions) == 0:
-            #     solutions = [Path("dummy.kt")]
-
-            solutions = [solution.relative_to(AOC_DIR) for solution in solutions]
+        for day_path in get_paths_matching_regex(year_dir, DAY_PATTERN):
+            day = find_first_number(day_path.name)
+            solutions = [day_path.relative_to(AOC_DIR)]
 
             solution_paths_dict[year][day] = [str(s) for s in solutions]
     return solution_paths_dict
@@ -112,9 +104,6 @@ NOT_COMPLETED_COLOR = ImageColor.getrgb("#333333")
 # to 162px, however then 1080p displays show 4 tiles in a row, and phone displays show 1 tile
 # instead of 2 in a row. Therefore, 161px is used here.
 TILE_WIDTH_PX = "161px"
-
-# This results in the parent folder of the script file
-AOC_TILES_SCRIPT_DIR = Path(__file__).absolute().parent
 
 # Cache path is a subfolder of the AOC folder, it includes the personal leaderboards for each year
 CACHE_DIR = AOC_TILES_SCRIPT_DIR / ".aoc_tiles_cache"

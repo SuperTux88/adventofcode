@@ -1,2 +1,6 @@
 # Advent of Code - Scala
 Scala solutions for [Advent of Code](http://adventofcode.com/)
+
+<!-- AOC TILES BEGIN -->
+
+<!-- AOC TILES END -->
