@@ -35,9 +35,9 @@ object Day9 extends Year2022 {
     if (head.neighbors.contains(tail) || head == tail) {
       Pos.zero
     } else {
-      val (diffX, diffY) = (head.x - tail.x, head.y - tail.y)
-      val moveX = if (diffX > 0) 1 else if (diffX < 0) -1 else 0
-      val moveY = if (diffY > 0) 1 else if (diffY < 0) -1 else 0
+      val diff = head - tail
+      val moveX = if (diff.x > 0) 1 else if (diff.x < 0) -1 else 0
+      val moveY = if (diff.y > 0) 1 else if (diff.y < 0) -1 else 0
       Pos(moveX, moveY)
     }
 
