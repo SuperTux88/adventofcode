@@ -18,18 +18,14 @@ object Day12 extends Year2022 {
       case c => c - 'a'
     }.toMap
 
-    printDayPart(1, getFewestSteps(List(start), end, heightmap).get, "Fewest step from start: %s")
-
-    val allStarts = heightmap.filter(_._2 == 0).keys.toList
-    printDayPart(2, getFewestSteps(allStarts, end, heightmap).get, "Fewest steps from any possible start: %s")
+    printDayPart(1, getFewestSteps(end, _ == start, heightmap), "Fewest step from start: %s")
+    printDayPart(2, getFewestSteps(end, heightmap(_) == 0, heightmap), "Fewest steps from any possible start: %s")
   }
 
-  private def getFewestSteps(start: List[Pos], end: Pos, heightmap: Map[Pos, Int]): Option[Int] =
-    Dijkstra(start, _ == end, getNeighbors(heightmap)) match {
-      case (0, Nil) => None
-      case (steps, _) => Some(steps)
-    }
+  // going reverse to find the closest possible start
+  private def getFewestSteps(end: Pos, isStart: Pos => Boolean, heightmap: Map[Pos, Int]): Int =
+    Dijkstra(end, isStart, getNeighbors(heightmap))._1
 
   private def getNeighbors(heightmap: Map[Pos, Int])(pos: Pos) =
-    pos.directions.filter(n => heightmap.contains(n) && heightmap(n) - heightmap(pos) <= 1).map(n => (1, n))
+    pos.directions.filter(n => heightmap.contains(n) && heightmap(n) - heightmap(pos) >= -1).map(n => (1, n))
 }

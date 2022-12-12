@@ -10,20 +10,8 @@ object Dijkstra {
     * @tparam T        point type
     * @return          (total cost, path)
     */
-  def apply[T](start: T, isTarget: T => Boolean, neighbors: T => List[(Int, T)]): (Int, List[T]) =
-    apply(List(start), isTarget, neighbors)
-
-  /**
-    * Dijkstra with multiple start points
-    *
-    * @param starts    start points
-    * @param isTarget  target point
-    * @param neighbors get new neighbors: (step-cost, neighbor)
-    * @tparam T        point type
-    * @return          (total cost, path)
-    */
-  def apply[T](starts: List[T], isTarget: T => Boolean, neighbors: T => List[(Int, T)]): (Int, List[T]) = {
-    val Q = mutable.PriorityQueue.from(starts.map(s => (0, List(s))))(Ordering.by(-_._1)) // order by cost
+  def apply[T](start: T, isTarget: T => Boolean, neighbors: T => List[(Int, T)]): (Int, List[T]) = {
+    val Q = mutable.PriorityQueue((0, List(start)))(Ordering.by(-_._1)) // order by cost
     val seen = mutable.Set[T]()
 
     while (Q.nonEmpty) {
