@@ -17,6 +17,3 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" 
 
 // used for interactive version of day 13 2019
 libraryDependencies += "org.jline" % "jline" % "3.21.0"
-
-// used for json solution in day 12 2015
-//libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"

@@ -1,7 +1,5 @@
 package adventofcode.y2015
 
-// import scala.util.parsing.json.JSON
-
 object Day12 extends Year2015 {
   override val day: Int = 12
 
@@ -29,16 +27,4 @@ object Day12 extends Year2015 {
       case RedValueRE() => "0"
       case str => sum(str).toString
     })
-
-  // slow
-  //  private def part2WithJsonParse = {
-  //    def sum(any: Any): Int = any match {
-  //      case number: Double => number.toInt
-  //      case array: List[Any] => array.map(sum).sum
-  //      case obj: Map[String, Any] if !obj.values.toList.contains("red") => obj.values.map(sum).sum
-  //      case x => 0
-  //    }
-  //
-  //    sum(JSON.parseFull(jsonString).get)
-  //  }
 }
