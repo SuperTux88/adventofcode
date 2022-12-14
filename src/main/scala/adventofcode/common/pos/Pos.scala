@@ -36,6 +36,14 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   def moveDirectionIndex(direction: Int, steps: Int = 1): Pos =
     Pos(x + Direction.directions(direction)._1 * steps, y + Direction.directions(direction)._2 * steps)
 
+  def direction(other: Pos): (Int, Int) = (other.x.compare(this.x), other.y.compare(this.y))
+
+  def lineTo(other: Pos): Seq[Pos] = {
+    val dir = direction(other)
+    val Pos(distX, distY) = this - other
+    Iterator.iterate(this)(_ + dir).take((distX.abs max distY.abs) + 1).toSeq
+  }
+
   def directions: List[Pos] = Direction.directions.map(this + _)
   override def neighbors: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
   def diagonals: List[Pos] = Direction.diagonals.map(this + _)

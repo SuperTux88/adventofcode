@@ -3,7 +3,7 @@ Scala solutions for [Advent of Code](http://adventofcode.com/)
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 26 ⭐
+  2022 - 28 ⭐
 </h1>
 <a href="src/main/scala/adventofcode/y2022/Day1.scala">
   <img src="AoCTiles/media/2022/01.png" width="161px">
@@ -43,6 +43,9 @@ Scala solutions for [Advent of Code](http://adventofcode.com/)
 </a>
 <a href="src/main/scala/adventofcode/y2022/Day13.scala">
   <img src="AoCTiles/media/2022/13.png" width="161px">
+</a>
+<a href="src/main/scala/adventofcode/y2022/Day14.scala">
+  <img src="AoCTiles/media/2022/14.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
