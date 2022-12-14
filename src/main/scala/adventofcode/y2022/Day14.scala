@@ -9,15 +9,13 @@ import scala.io.BufferedSource
 object Day14 extends Year2022 {
   override val day = 14
 
-  private val PointRE = """(\d+),(\d+)""".r
-
   private val SOURCE = Pos(500, 0)
   private val FALLING_DIRECTIONS: List[Pos => Pos] = List(_.down, _.down.left, _.down.right)
 
   override def runDay(input: BufferedSource): Unit = {
     implicit val rock: Set[Pos] = input.getLines().flatMap {
       _.split(" -> ").map {
-        case PointRE(x, y) => Pos(x.toInt, y.toInt)
+        case Pos.PointRE(x, y) => Pos(x.toInt, y.toInt)
       }.sliding(2).flatMap(p => p(0).lineTo(p(1)))
     }.toSet
 

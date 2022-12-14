@@ -9,13 +9,12 @@ import scala.io.BufferedSource
 object Day13 extends Year2021 {
   override val day = 13
 
-  private val PointRE = """(\d+),(\d+)""".r
   private val FoldRE = """fold along (\w)=(\d+)""".r
 
   override def runDay(input: BufferedSource): Unit = {
     val lines = input.getLines()
     val points = lines.takeWhile(_.nonEmpty).map {
-      case PointRE(x, y) => Pos(x.toInt, y.toInt)
+      case Pos.PointRE(x, y) => Pos(x.toInt, y.toInt)
     }.toSet
     val folds = lines.takeWhile(_.nonEmpty).map {
       case FoldRE("x", x) => FoldX(x.toInt)

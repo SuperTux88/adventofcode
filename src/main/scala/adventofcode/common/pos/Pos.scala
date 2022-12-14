@@ -1,6 +1,7 @@
 package adventofcode.common.pos
 
 import scala.annotation.targetName
+import scala.util.matching.Regex
 
 case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   @targetName("add")
@@ -72,6 +73,8 @@ object Pos {
         .map(x => mapValue(map(Pos(x, y)))).mkString)
     )
   }
+
+  val PointRE: Regex = """(\d+),(\d+)""".r
 
   val zero: Pos = Pos(0, 0)
 }
