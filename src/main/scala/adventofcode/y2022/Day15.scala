@@ -28,10 +28,12 @@ object Day15 extends Year2022 {
 
     printDayPart(1, rowCount - beaconsOnRow.size, "Positions which cannot contain a beacon: %s")
 
-    val distressBeacon = sensors.flatMap { sensor =>
-      val directions = sensors.filter(_ != sensor).map(_.pos.direction(sensor.pos)).toSet
-      sensor.outerBorder(directions).filter(inRange).find(p => !sensors.exists(_.isInReach(p)))
-    }.head
+    val distressBeacon = sensors.combinations(2).flatMap {
+      case List(a, b) if a.pos.distance(b.pos) == a.dist + b.dist + 2 =>
+        a.outerBorder(a.pos.direction(b.pos))
+          .filter(inRange).find(p => !sensors.exists(_.isInReach(p)))
+      case _ => None
+    }.next
 
     printDayPart(2, distressBeacon.x.toLong * 4000000 + distressBeacon.y.toLong, "Tuning frequency: %s")
   }
@@ -39,7 +41,7 @@ object Day15 extends Year2022 {
   private def inRange(p: Pos) = isInRange(p.x, 0, RANGE) && isInRange(p.y, 0, RANGE)
 
   private case class Sensor(pos: Pos, beacon: Pos) {
-    private val dist: Int = pos.distance(beacon)
+    val dist: Int = pos.distance(beacon)
 
     def isInReach(other: Pos): Boolean = pos.distance(other) <= dist
 
@@ -48,15 +50,12 @@ object Day15 extends Year2022 {
       if horizontalDiff >= 0 then Some((pos.x - horizontalDiff, pos.x + horizontalDiff)) else None
     }
 
-    def outerBorder(directions: Set[(Int, Int)]): Iterator[Pos] = {
-      val borderDist = dist + 1
-
-      directions.map {
-        case (1, -1) => Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
-        case (-1, -1) => Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
-        case (1, 1) => Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
-        case (-1, 1) => Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
-      }.reduceLeft(_ ++ _)
-    }
+    def outerBorder(direction: (Int, Int)): Iterator[Pos] =
+      direction match {
+        case (1, -1) => Pos(pos.x, pos.y - dist - 1).lineTo(Pos(pos.x + dist + 1, pos.y))
+        case (-1, -1) => Pos(pos.x, pos.y - dist - 1).lineTo(Pos(pos.x - dist - 1, pos.y))
+        case (1, 1) => Pos(pos.x, pos.y + dist + 1).lineTo(Pos(pos.x + dist + 1, pos.y))
+        case (-1, 1) => Pos(pos.x, pos.y + dist + 1).lineTo(Pos(pos.x - dist - 1, pos.y))
+      }
   }
 }
