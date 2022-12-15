@@ -22,9 +22,6 @@ object Day5 extends Year2021 {
     printDayPart(2, gridWithDiagonals.values.count(_ >= 2), "dangerous areas with diagonal vents: %s")
   }
 
-  private def markVent(map: Map[Pos, Int], from: Pos, to: Pos) = {
-    val diff = Seq((from.x - to.x).abs, (from.y - to.y).abs).max + 1
-    val dir = Pos(to.x.compare(from.x), to.y.compare(from.y))
-    Iterator.iterate(from)(_ + dir).take(diff).foldLeft(map)(_.changeBy(_, 1))
-  }
+  private def markVent(map: Map[Pos, Int], from: Pos, to: Pos) =
+    from.lineTo(to).foldLeft(map)(_.changeBy(_, 1))
 }
