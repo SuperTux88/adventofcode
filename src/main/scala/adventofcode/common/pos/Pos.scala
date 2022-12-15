@@ -39,10 +39,10 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 
   def direction(other: Pos): (Int, Int) = (other.x.compare(this.x), other.y.compare(this.y))
 
-  def lineTo(other: Pos): Seq[Pos] = {
+  def lineTo(other: Pos): Iterator[Pos] = {
     val dir = direction(other)
     val Pos(distX, distY) = this - other
-    Iterator.iterate(this)(_ + dir).take((distX.abs max distY.abs) + 1).toSeq
+    Iterator.iterate(this)(_ + dir).take((distX.abs max distY.abs) + 1)
   }
 
   def directions: List[Pos] = Direction.directions.map(this + _)
