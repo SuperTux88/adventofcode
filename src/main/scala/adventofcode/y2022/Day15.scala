@@ -29,7 +29,8 @@ object Day15 extends Year2022 {
     printDayPart(1, rowCount - beaconsOnRow.size, "Positions which cannot contain a beacon: %s")
 
     val distressBeacon = sensors.flatMap { sensor =>
-      sensor.outerBorder.filter(inRange).find(p => !sensors.exists(_.isInReach(p)))
+      val directions = sensors.filter(_ != sensor).map(_.pos.direction(sensor.pos)).toSet
+      sensor.outerBorder(directions).filter(inRange).find(p => !sensors.exists(_.isInReach(p)))
     }.head
 
     printDayPart(2, distressBeacon.x.toLong * 4000000 + distressBeacon.y.toLong, "Tuning frequency: %s")
@@ -47,15 +48,15 @@ object Day15 extends Year2022 {
       if horizontalDiff >= 0 then Some((pos.x - horizontalDiff, pos.x + horizontalDiff)) else None
     }
 
-    def outerBorder: Iterator[Pos] = {
+    def outerBorder(directions: Set[(Int, Int)]): Iterator[Pos] = {
       val borderDist = dist + 1
 
-      val topRight = Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
-      val topLeft = Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
-      val bottomRight = Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
-      val bottomLeft = Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
-
-      topRight ++ bottomRight ++ bottomLeft ++ topLeft
+      directions.map {
+        case (1, -1) => Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
+        case (-1, -1) => Pos(pos.x, pos.y - borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
+        case (1, 1) => Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x + borderDist, pos.y))
+        case (-1, 1) => Pos(pos.x, pos.y + borderDist).lineTo(Pos(pos.x - borderDist, pos.y))
+      }.reduceLeft(_ ++ _)
     }
   }
 }
