@@ -10,13 +10,7 @@ object Day10 extends Year2019 {
   override val day = 10
 
   override def runDay(input: BufferedSource): Unit = {
-    val asteroids = input.getLines().zipWithIndex.flatMap {
-      case (line, y) =>
-        line.zipWithIndex.flatMap {
-          case ('#', x) => Some(Pos(x, y))
-          case _ => None
-        }
-    }.toSet
+    val asteroids = Pos.parseSet(input.getLines())
 
     val (stationPos, visibleAsteroids) = asteroids.par.map { asteroid =>
       asteroid -> getVisibleAsteroids(asteroid, asteroids - asteroid)

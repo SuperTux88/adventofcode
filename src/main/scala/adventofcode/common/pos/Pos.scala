@@ -60,6 +60,14 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 object Pos {
   def apply(pos: (Int, Int)): Pos = Pos(pos._1, pos._2)
 
+  def parseSet(lines: Iterator[String], charToSearch: Char = '#'): Set[Pos] = lines.zipWithIndex.flatMap {
+    case (line, y) =>
+      line.zipWithIndex.flatMap {
+        case (c, x) if c == charToSearch => Some(Pos(x, y))
+        case _ => None
+      }
+  }.toSet
+
   def parseMap[V](lines: Iterator[String], value: Char => V): Map[Pos, V] =
     lines.zipWithIndex.flatMap {
       case (line, y) => line.zipWithIndex.map {
