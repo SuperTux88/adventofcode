@@ -26,6 +26,10 @@ import re
 import json
 from typing import Literal
 
+import os
+import sys
+import tempfile
+
 import requests
 from PIL import Image, ImageColor
 import yaml
@@ -33,10 +37,10 @@ from PIL.ImageDraw import ImageDraw
 from PIL import ImageFont
 
 # This results in the parent folder of the script file
-AOC_TILES_SCRIPT_DIR = Path(__file__).absolute().parent
+AOC_TILES_SCRIPT_DIR = Path(os.path.abspath(__file__)).absolute().parent
 
 # This results in the parent directory of the script directory, the year directories should be here
-AOC_DIR = AOC_TILES_SCRIPT_DIR.parent
+AOC_DIR = Path(os.getcwd())
 
 # The directory where the image files for the tiles are stored. This should be committed to git.
 # Year directories are created in this directory, then each day is saved as 01.png, 02.png, etc.
@@ -59,10 +63,22 @@ SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK = False
 # The year and day pattern to detect directories. For example, if your day folders are
 # called "day1" to "day25" then set the pattern to r"day\d{1,2}". The script extracts
 # a number from the folder and tries to guess its day that way.
-SOLUTION_PATH = AOC_DIR / "src/main/scala/adventofcode"
+SOLUTION_PATHS = ["src/main/scala/adventofcode", "src"]
 YEAR_PATTERN = r"y\d{4}"
-DAY_PATTERN = r"Day\d{1,2}.scala"
+DAY_PATTERN = r"(Day\d{1,2}.scala|day\d{1,2}.rs)"
 
+REPO_URLS = {
+  "scala": "https://github.com/SuperTux88/adventofcode",
+  "rust": "https://github.com/SuperTux88/adventofcode-rs"
+}
+
+CURRENT = sys.argv[1] if len(sys.argv) > 1 else "scala"
+if CURRENT == "rust":
+    IMAGE_DIR = AOC_DIR / "AoCTiles"
+
+TMP_DIR = Path(tempfile.gettempdir()) / "AoCTiles"
+if not os.path.exists(TMP_DIR):
+    os.mkdir(TMP_DIR)
 
 # On how to improve legibility of the text when the background is white, outline will add a dark outline around
 # the text, "text" will make the text itself dark, none will not change the text color (leaves it white)
@@ -84,20 +100,38 @@ def get_solution_paths_dict_for_years() -> dict[int, dict[int, list[str]]]:
 
     """
     solution_paths_dict: dict[int, dict[int, list[str]]] = {}
+    add_solutions_from_path(solution_paths_dict, AOC_DIR)
 
-    # If you use a new repo for years you might just remove this if, and assign the year manually
-    for year_dir in sorted(get_paths_matching_regex(SOLUTION_PATH, YEAR_PATTERN), reverse=True):
-        year = find_first_number(year_dir.name)
-        solution_paths_dict[year] = {}
-        # If you have a deep structure then you can adjust the year dir as well:
-        # year_dir = year_dir / "src/main/kotlin/com/example/aoc"
-        for day_path in get_paths_matching_regex(year_dir, DAY_PATTERN):
-            day = find_first_number(day_path.name)
-            solutions = [day_path.relative_to(AOC_DIR)]
+    for repo in (repo for lang, repo in REPO_URLS.items() if lang != CURRENT):
+        add_solutions_from_git(solution_paths_dict, repo)
 
-            solution_paths_dict[year][day] = [str(s) for s in solutions]
     return solution_paths_dict
 
+def add_solutions_from_path(solution_paths_dict, current, repo_url=None):
+    for path in (path for path in SOLUTION_PATHS if (current / path).exists()):
+        for year_dir in sorted(get_paths_matching_regex(current / path, YEAR_PATTERN), reverse=True):
+            year = find_first_number(year_dir.name)
+            solution_paths_dict.setdefault(year, {})
+
+            for day_path in get_paths_matching_regex(year_dir, DAY_PATTERN):
+                day = find_first_number(day_path.name)
+
+                solution_paths_dict[year].setdefault(day, [])
+                if repo_url is None:
+                    solution_paths_dict[year][day].append(str(day_path.relative_to(current)))
+                else:
+                    solution_paths_dict[year][day].append(f"{repo_url}/blob/main/{day_path.relative_to(current)}")
+
+def add_solutions_from_git(solution_paths_dict, repo_url):
+    print(f"Getting solutions from {repo_url}")
+    repo_tmp_path = TMP_DIR / repo_url.split("/")[-1]
+
+    if not os.path.exists(repo_tmp_path):
+        os.system(f"git clone {repo_url} {repo_tmp_path}")
+    else:
+        os.system(f"cd {repo_tmp_path} && git pull")
+
+    add_solutions_from_path(solution_paths_dict, repo_tmp_path, repo_url)
 
 # ======================================================
 # === The following likely do not need to be changed ===
@@ -131,7 +165,7 @@ GITHUB_LANGUAGES_PATH = AOC_TILES_SCRIPT_DIR / "github_languages.yml"
 
 @cache
 def get_font(size: int, path: str):
-    return ImageFont.truetype(str(AOC_DIR / path), size)
+    return ImageFont.truetype(str(path), size)
 
 
 # Fonts, note that the fonts sizes are specifically adjusted to the following fonts, if you change the fonts
@@ -250,8 +284,8 @@ class HTML:
         return "\n".join(self.tags)
 
 
-def darker_color(c: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
-    return c[0] - 10, c[1] - 10, c[2] - 10, 255
+def darker_color(c: tuple[int, int, int, int], diff = 10) -> tuple[int, int, int, int]:
+    return c[0] - diff, c[1] - diff, c[2] - diff, 255
 
 
 # Luminance of color
@@ -268,6 +302,7 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
     colors = [ImageColor.getrgb(extension_to_color[language]) for language in languages]
     if len(colors) == 1:
         colors.append(darker_color(colors[0]))
+    colors = [darker_color(color, 40) if color_similarity(color, (255, 255, 255), 80) else color for color in colors]
     image = Image.new("RGB", (200, 100), NOT_COMPLETED_COLOR)
 
     def fill_with_colors(colors, fill_only_half):
@@ -405,7 +440,7 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
     fill_empty_days_in_dict(day_to_solutions, max_day)
 
     completed_solutions = dict()
-    completed_cache_path = CACHE_DIR / f"completed-{year}.json"
+    completed_cache_path = CACHE_DIR / f"completed-{year}-{CURRENT}.json"
     if completed_cache_path.exists():
         with open(completed_cache_path, "r") as file:
             completed_solutions = {int(day): solutions for day, solutions in json.load(file).items()}
