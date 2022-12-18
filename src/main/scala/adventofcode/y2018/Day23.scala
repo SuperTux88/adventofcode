@@ -10,8 +10,6 @@ object Day23 extends Year2018 {
 
   private val NanoBotRE = """pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)""".r
 
-  private val center = Pos3D(0, 0, 0)
-
   override def runDay(input: BufferedSource): Unit = {
     val bots = input.getLines().map {
       case NanoBotRE(x, y, z, r) => Bot(Pos3D(x.toInt, y.toInt, z.toInt), r.toInt)
@@ -20,7 +18,7 @@ object Day23 extends Year2018 {
     val strongestBot = bots.maxBy(_.range)
 
     printDayPart(1, bots.count(strongestBot.isInRange))
-    printDayPart(2, findClosestWithMostBots(bots).distance(center))
+    printDayPart(2, findClosestWithMostBots(bots).distance(Pos3D.zero))
   }
 
   private trait Octahedron {
@@ -59,7 +57,7 @@ object Day23 extends Year2018 {
       val (currentHeuristic, currentBox) = Q.dequeue()
       if (currentBox.range == 0) {
         val sameBotCountPositions = currentBox.pos :: Q.filter(_._1 == currentHeuristic).map(_._2.pos).toList
-        return sameBotCountPositions.minBy(_.distance(center))
+        return sameBotCountPositions.minBy(_.distance(Pos3D.zero))
       } else if (seen.add(currentBox)) {
         currentBox.split.foreach { box =>
           Q.enqueue(((bots.count(box.overlaps), -box.range), box))
@@ -67,7 +65,7 @@ object Day23 extends Year2018 {
       }
     }
 
-    center // nothing found
+    Pos3D.zero // nothing found
   }
 
   private def middle(points: Iterable[Int]): Int = points.min + (points.max - points.min) / 2

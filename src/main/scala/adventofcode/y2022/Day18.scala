@@ -8,12 +8,8 @@ import scala.io.BufferedSource
 object Day18 extends Year2022 {
   override val day = 18
 
-  private val CubeRE = """(\d+),(\d+),(\d+)""".r
-
   override def runDay(input: BufferedSource): Unit = {
-    val lava = input.getLines().map {
-      case CubeRE(x, y, z) => Pos3D(x.toInt, y.toInt, z.toInt)
-    }.toSet
+    val lava = input.getLines().map(Pos3D.parse).toSet
     val airNeighbors = lava.flatMap(_.directions).diff(lava)
 
     val surface = lava.toSeq.map(_.directions.count(airNeighbors.contains)).sum

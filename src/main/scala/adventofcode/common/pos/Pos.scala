@@ -60,6 +60,13 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 object Pos {
   def apply(pos: (Int, Int)): Pos = Pos(pos._1, pos._2)
 
+  private val PosRE: Regex = """(-?\d+),(-?\d+)""".r
+
+  def parse(s: String): Pos = s match {
+    case PosRE(x, y) => Pos(x.toInt, y.toInt)
+    case _ => throw new IllegalArgumentException(s"Cannot parse $s as Pos")
+  }
+
   def parseSet(lines: Iterator[String], charToSearch: Char = '#'): Set[Pos] = lines.zipWithIndex.flatMap {
     case (line, y) =>
       line.zipWithIndex.flatMap {
@@ -81,8 +88,6 @@ object Pos {
         .map(x => mapValue(map(Pos(x, y)))).mkString)
     )
   }
-
-  val PointRE: Regex = """(\d+),(\d+)""".r
 
   val zero: Pos = Pos(0, 0)
 }

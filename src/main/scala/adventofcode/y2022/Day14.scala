@@ -14,9 +14,7 @@ object Day14 extends Year2022 {
 
   override def runDay(input: BufferedSource): Unit = {
     implicit val rock: Set[Pos] = input.getLines().flatMap {
-      _.split(" -> ").map {
-        case Pos.PointRE(x, y) => Pos(x.toInt, y.toInt)
-      }.sliding(2).flatMap(p => p(0).lineTo(p(1)))
+      _.split(" -> ").map(Pos.parse).sliding(2).flatMap(p => p(0).lineTo(p(1)))
     }.toSet
 
     val maxDepth = rock.maxBy(_.y).y

@@ -12,7 +12,6 @@ object Day19 extends Year2021 {
   override val day = 19
 
   private val ScannerRE = """--- scanner (\d+) ---""".r
-  private val Pos3dRE = """(-?\d+),(-?\d+),(-?\d+)""".r
 
   override def runDay(input: String): Unit = {
     val scanners = input.split("\n\n").map(scanner => {
@@ -20,9 +19,7 @@ object Day19 extends Year2021 {
       val number = scannerLines.next match {
         case ScannerRE(number) => number.toInt
       }
-      val beacons = scannerLines.map {
-        case Pos3dRE(x, y, z) => Pos3D(x.toInt, y.toInt, z.toInt)
-      }.toList
+      val beacons = scannerLines.map(Pos3D.parse).toList
       Scanner(number, beacons)
     }).toSeq
 
@@ -34,7 +31,7 @@ object Day19 extends Year2021 {
   }
 
   @tailrec
-  private def findBeacons(scanners: ParSeq[Scanner], beacons: Set[Pos3D], offsets: List[Pos3D] = List(Pos3D(0, 0, 0))): (Set[Pos3D], List[Pos3D]) = {
+  private def findBeacons(scanners: ParSeq[Scanner], beacons: Set[Pos3D], offsets: List[Pos3D] = List(Pos3D.zero)): (Set[Pos3D], List[Pos3D]) = {
     val overlapping = scanners.flatMap(scanner => findRotation(scanner.rotate(), beacons))
     val (remainingScanners, newBeacons, newOffsets) = overlapping.foldLeft(scanners, beacons, offsets) {
       case ((scanners, beacons, offsets), (newScanner, offset)) =>

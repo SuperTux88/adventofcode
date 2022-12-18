@@ -8,7 +8,7 @@ import scala.io.BufferedSource
 object Day15 extends Year2022 {
   override val day = 15
 
-  private val SensorRE = """Sensor at x=([\d-]+), y=([\d-]+): closest beacon is at x=([\d-]+), y=([\d-]+)""".r
+  private val SensorRE = """Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)""".r
 
   private val ROW_P1 = 2000000
   private val RANGE = 4000000

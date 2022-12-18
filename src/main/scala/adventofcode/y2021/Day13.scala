@@ -13,9 +13,7 @@ object Day13 extends Year2021 {
 
   override def runDay(input: BufferedSource): Unit = {
     val lines = input.getLines()
-    val points = lines.takeWhile(_.nonEmpty).map {
-      case Pos.PointRE(x, y) => Pos(x.toInt, y.toInt)
-    }.toSet
+    val points = lines.takeWhile(_.nonEmpty).map(Pos.parse).toSet
     val folds = lines.takeWhile(_.nonEmpty).map {
       case FoldRE("x", x) => FoldX(x.toInt)
       case FoldRE("y", y) => FoldY(y.toInt)

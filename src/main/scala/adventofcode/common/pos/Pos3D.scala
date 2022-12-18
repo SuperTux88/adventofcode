@@ -31,3 +31,13 @@ case class Pos3D(x: Int, y: Int, z: Int) extends PosTrait[Pos3D] {
 
   override def toString = s"$x,$y,$z"
 }
+case object Pos3D {
+  private val Pos3dRE = """(-?\d+),(-?\d+),(-?\d+)""".r
+
+  def parse(s: String): Pos3D = s match {
+    case Pos3dRE(x, y, z) => Pos3D(x.toInt, y.toInt, z.toInt)
+    case _ => throw new IllegalArgumentException(s"Cannot parse $s as Pos3D")
+  }
+
+  val zero: Pos3D = Pos3D(0, 0, 0)
+}
