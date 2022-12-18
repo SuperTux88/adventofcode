@@ -7,6 +7,8 @@ object Direction {
   val diagonals: List[(Int, Int)] = List((-1, -1), (1, -1), (1, 1), (-1, 1))
   val directionsWithDiagonals: List[(Int, Int)] = directions ::: diagonals
 
+  val directions3d: List[(Int, Int, Int)] = List((-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1))
+
   val compassDirections: List[Char] = List('N', 'E', 'S', 'W')
 
   val up: Pos = Pos(0, -1)

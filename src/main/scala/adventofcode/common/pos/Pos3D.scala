@@ -19,6 +19,8 @@ case class Pos3D(x: Int, y: Int, z: Int) extends PosTrait[Pos3D] {
     ((x - to.x).abs.toLong + offset) * ((y - to.y).abs.toLong + offset) * ((z - to.z).abs.toLong + offset)
   }
 
+  def directions: Seq[Pos3D] = Direction.directions3d.map(this + _)
+
   override def neighbors: Seq[Pos3D] =
     for {
       x <- -1 to 1
