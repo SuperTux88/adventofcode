@@ -81,6 +81,6 @@ object NumberHelper {
       * positive modulo
       */
     @targetName("positiveModulo")
-    def %+(d: A): A = (n + d) % d
+    def %+(d: A): A = ((n % d) + d) % d
   }
 }
