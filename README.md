@@ -1,5 +1,5 @@
-# Advent of Code - Scala
-Scala solutions for [Advent of Code](http://adventofcode.com/)
+# 🎄 Advent of Code - Scala
+Scala solutions for [Advent of Code](http://adventofcode.com/). My rust solutions can be found [here](https://github.com/SuperTux88/adventofcode-rs).
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
