@@ -26,9 +26,9 @@ object Day11 extends Year2019 {
     if (result.isRunning) {
       val (paint, turn) = (result.output.next(), result.output.next())
 
-      val newDirection = turn match {
-        case 0 => Direction.rotateRight(direction)
-        case 1 => Direction.rotateLeft(direction)
+      val newDirection = turn match { // directions?
+        case 0 => Direction.rotateLeft(direction)
+        case 1 => Direction.rotateRight(direction)
       }
 
       move(result, map.updated(pos, paint.toInt), pos.moveDirectionIndex(newDirection), newDirection)

@@ -18,6 +18,9 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   @targetName("divide")
   def /(div: Int): Pos = Pos(x / div, y / div)
 
+  @targetName("modulo")
+  def %(div: Int): Pos = Pos(x % div, y % div)
+
   // Manhattan distance
   override def distance(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
 

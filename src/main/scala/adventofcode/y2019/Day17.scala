@@ -43,10 +43,10 @@ object Day17 extends Year2019 {
     if (scaffolds.contains(pos.moveDirectionIndex(dir))) {
       val walkedPath = Iterator.iterate(pos)(_.moveDirectionIndex(dir)).drop(1).takeWhile(scaffolds.contains).toList
       walkedPath.length.toString :: getPath(scaffolds, walkedPath.last, dir)
-    } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateLeft(dir)))) {
-      "R" :: getPath(scaffolds, pos, Direction.rotateLeft(dir))
     } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateRight(dir)))) {
-      "L" :: getPath(scaffolds, pos, Direction.rotateRight(dir))
+      "R" :: getPath(scaffolds, pos, Direction.rotateRight(dir))
+    } else if (scaffolds.contains(pos.moveDirectionIndex(Direction.rotateLeft(dir)))) {
+      "L" :: getPath(scaffolds, pos, Direction.rotateLeft(dir))
     } else {
       Nil
     }

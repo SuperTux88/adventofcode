@@ -16,8 +16,9 @@ object Direction {
   val down: Pos = Pos(0, 1)
   val left: Pos = Pos(-1, 0)
 
-  def rotateLeft(directionIndex: Int): Int = (directionIndex + 1) % 4
-  def rotateRight(directionIndex: Int): Int = (directionIndex + 3) % 4
+  def rotateLeft(directionIndex: Int): Int = (directionIndex + 3) % 4
+  def rotateRight(directionIndex: Int): Int = (directionIndex + 1) % 4
+  def flip(directionIndex: Int): Int = (directionIndex + 2) % 4
 
   implicit class DirectionPos(pos: Pos) {
     def rotateLeft: Pos = Pos(pos.y, -pos.x)
