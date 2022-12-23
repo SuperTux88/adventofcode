@@ -93,9 +93,10 @@ object Day22 extends Year2022 {
     val posOnOldSide = oldPos % cubeSize
     val oldSide = oldPos / cubeSize
 
-    CONNECTIONS.flatMap { case (connection, rotate) =>
-      val rotatedConnection = connection.map(oldSide + _.rotate(dir))
-      if (rotatedConnection.forall(cube.contains)) {
+    CONNECTIONS.map { case (connection, rotate) =>
+      (connection.map(oldSide + _.rotate(dir)), rotate)
+    }.collectFirst {
+      case (connection, rotate) if connection.forall(cube.contains) =>
         val newDir = (dir + rotate) % 4
         val rotatedSide = rotate match {
           case 0 => posOnOldSide
@@ -103,11 +104,10 @@ object Day22 extends Year2022 {
           case 2 => posOnOldSide * -1 + (cubeSize - 1, cubeSize - 1)
           case 3 => posOnOldSide.rotateLeft + (0, cubeSize - 1)
         }
-        val gluedSide = rotatedConnection.head.moveDirectionIndex(Direction.flip(newDir))
+        val gluedSide = connection.head.moveDirectionIndex(Direction.flip(newDir))
         val newPos = (gluedSide * cubeSize + rotatedSide).moveDirectionIndex(newDir)
-        Some((newPos, newDir))
-      } else None
-    }.head
+        (newPos, newDir)
+    }.get
   }
 
   private def calcPassword(pos: Pos, dir: Int) = 1000 * pos.y + 4 * pos.x + dir
