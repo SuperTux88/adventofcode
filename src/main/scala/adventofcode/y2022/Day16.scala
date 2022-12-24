@@ -1,6 +1,6 @@
 package adventofcode.y2022
 
-import adventofcode.common.search.{AStar, Dijkstra}
+import adventofcode.common.search.Dijkstra
 
 import scala.annotation.tailrec
 import scala.io.BufferedSource
