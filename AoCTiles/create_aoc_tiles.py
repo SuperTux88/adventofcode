@@ -466,7 +466,7 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
 
 
 def main():
-    for year, day_to_solutions_list in get_solution_paths_dict_for_years().items():
+    for year, day_to_solutions_list in reversed(sorted(get_solution_paths_dict_for_years().items())):
         print(f"=== Generating table for year {year} ===")
         handle_year(year, day_to_solutions_list)
 
