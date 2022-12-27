@@ -4,6 +4,7 @@ import adventofcode.common.search.Dijkstra
 
 import scala.annotation.tailrec
 import scala.io.BufferedSource
+import scala.collection.parallel.CollectionConverters.*
 
 object Day16 extends Year2022 {
   override val day = 16
@@ -30,7 +31,7 @@ object Day16 extends Year2022 {
     printDayPart(1, maxPressures30.values.max, "Most pressure released in 30 minutes: %s")
 
     val maxPressures26 = findMaxPressures(valvesWithFlow, valveDistances, 26)
-    val pressuresWithElephant = maxPressures26.map {
+    val pressuresWithElephant = maxPressures26.par.map {
       case (myValves, myPressure) =>
         val elephantValves = valvesWithFlow.keySet.diff(myValves)
         elephantValves.subsets().flatMap(maxPressures26.get).map(myPressure + _).max
