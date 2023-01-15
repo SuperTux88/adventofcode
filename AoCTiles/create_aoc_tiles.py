@@ -50,7 +50,9 @@ IMAGE_DIR = AOC_TILES_SCRIPT_DIR / "media"
 README_PATH = AOC_DIR / "README.md"
 
 # Path to the cookie session file
-SESSION_COOKIE_PATH = AOC_TILES_SCRIPT_DIR / ".session.cookie"
+SESSION_COOKIE_PATH = Path.home() / ".config" / "adventofcode.session"
+if (not SESSION_COOKIE_PATH.exists()):
+  SESSION_COOKIE_PATH = AOC_TILES_SCRIPT_DIR / ".session.cookie"
 
 # Whether the graphic should be created for days that have not been completed yet. Note that missing days between
 # completed days will still be created.
