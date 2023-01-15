@@ -9,18 +9,32 @@ import scala.io.BufferedSource
 object Day22 extends Year2022 {
   override val day = 22
 
-  private val CONNECTIONS = List(
-    (List(Pos(-1, -1), Pos(-1, 0)), 3), // left 1
-    (List(Pos(1, -1), Pos(1, 0)), 1), // right 1
-    (List(Pos(-2, -1), Pos(-2, 0), Pos(-1, 0)), 2), // left 2 up
-    (List(Pos(-2, 1), Pos(-1, 1), Pos(0, 1)), 2), // left 2 down
-    (List(Pos(2, -1), Pos(2, 0), Pos(1, 0)), 2), // right 2 up
-    (List(Pos(2, 1), Pos(1, 1), Pos(0, 1)), 2), // right 2 down
-    (List(Pos(-1, 3), Pos(-1, 2), Pos(0, 2), Pos(0, 1)), 1), // left 3
-    (List(Pos(3, 1), Pos(2, 1), Pos(1, 1), Pos(1, 0)), 3), // right 3
-    (List(Pos(2, 3)), 0), // right 4
-    (List(Pos(-2, 3)), 0), // left 4
-  )
+  // connections are reversed, so the first element is the target location
+  private val CONNECTIONS =
+    (List(Pos(0, 3)), 0) :: // straight 4 (the only possibility)
+      List(
+        (List(Pos(1, -1), Pos(1, 0)), 1), // right, up
+        (List(Pos(2, -1), Pos(2, 0), Pos(1, 0)), 2), // 2 right, up
+        (List(Pos(2, 1), Pos(1, 1), Pos(0, 1)), 2), // 2 right, down
+        (List(Pos(1, 3), Pos(1, 2), Pos(0, 2), Pos(0, 1)), 3), // down, 2 right, down
+        (List(Pos(3, 1), Pos(2, 1), Pos(1, 1), Pos(1, 0)), 3), // right, down, 2 right
+        (List(Pos(1, 3), Pos(1, 2), Pos(1, 1), Pos(1, 0)), 1), // right, 3 down
+        (List(Pos(3, -1), Pos(3, 0), Pos(2, 0), Pos(1, 0)), 3), // 3 right, up
+        (List(Pos(2, 2), Pos(1, 2), Pos(1, 1), Pos(0, 1)), 1), // down, right, down, right
+        (List(Pos(2, 3), Pos(2, 2), Pos(1, 2), Pos(1, 1), Pos(1, 0)), 0), // right, 2 down, right, down
+        (List(Pos(2, 3), Pos(1, 3), Pos(1, 2), Pos(1, 1), Pos(0, 1)), 0), // down, right, 2 down, right
+        (List(Pos(4, 1), Pos(3, 1), Pos(2, 1), Pos(2, 0), Pos(1, 0)), 0), // right 2, down, right 2
+      ).flatMap { case (con, dir) =>
+        // mirror to left side
+        val mirror = con.map(p => p.copy(x = -p.x))
+        val mirrorDir = dir match {
+          case 0 => 0
+          case 1 => 3
+          case 2 => 2
+          case 3 => 1
+        }
+        List((con, dir), (mirror, mirrorDir))
+      }
 
   override def runDay(input: BufferedSource): Unit = {
     val lines = input.getLines()
