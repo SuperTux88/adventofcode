@@ -1,6 +1,6 @@
 name := "adventofcode"
 
-version := "7.0"
+version := "8.0"
 
 scalaVersion := "3.3.1"
 scalacOptions ++= Seq(
