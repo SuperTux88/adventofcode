@@ -2,7 +2,7 @@ name := "adventofcode"
 
 version := "7.0"
 
-scalaVersion := "3.2.1"
+scalaVersion := "3.3.1"
 scalacOptions ++= Seq(
   "-deprecation",
   "-feature",
