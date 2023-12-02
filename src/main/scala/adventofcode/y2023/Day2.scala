@@ -6,7 +6,7 @@ object Day2 extends Year2023 {
   override val day = 2
 
   private val GameRE = """Game (\d+): (.*)""".r
-  private val ColorRE = """(\d+) (\w+)""".r
+  private val ColorRE = """(\d+) (red|green|blue)""".r
 
   private val MAX_RED = 12
   private val MAX_GREEN = 13
@@ -15,12 +15,9 @@ object Day2 extends Year2023 {
   override def runDay(input: BufferedSource): Unit = {
     val games = input.getLines().takeWhile(_.nonEmpty).map {
       case GameRE(id, game) => Game(id.toInt, game.split("[;,] ").map {
-        case ColorRE(count, color) => color match {
-          case "red" => Red(count.toInt)
-          case "green" => Green(count.toInt)
-          case "blue" => Blue(count.toInt)
-          case _ => throw new Exception("Invalid color")
-        }
+        case ColorRE(count, "red") => Red(count.toInt)
+        case ColorRE(count, "green") => Green(count.toInt)
+        case ColorRE(count, "blue") => Blue(count.toInt)
       }.toSeq)
     }.toSeq
 
