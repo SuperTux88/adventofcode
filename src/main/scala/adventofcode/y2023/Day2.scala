@@ -14,15 +14,13 @@ object Day2 extends Year2023 {
 
   override def runDay(input: BufferedSource): Unit = {
     val games = input.getLines().takeWhile(_.nonEmpty).map {
-      case GameRE(id, game) => Game(id.toInt, game.split("; ").map { set =>
-        set.split(", ").map {
-          case ColorRE(count, color) => color match {
-            case "red" => Red(count.toInt)
-            case "green" => Green(count.toInt)
-            case "blue" => Blue(count.toInt)
-            case _ => throw new Exception("Invalid color")
-          }
-        }.toSeq
+      case GameRE(id, game) => Game(id.toInt, game.split("[;,] ").map {
+        case ColorRE(count, color) => color match {
+          case "red" => Red(count.toInt)
+          case "green" => Green(count.toInt)
+          case "blue" => Blue(count.toInt)
+          case _ => throw new Exception("Invalid color")
+        }
       }.toSeq)
     }.toSeq
 
@@ -33,16 +31,16 @@ object Day2 extends Year2023 {
     printDayPart(2, allPowerOfMinimalCubes.sum, "Sum of the power of minimal cubes: %s")
   }
 
-  private case class Game(id: Int, sets: Seq[Seq[Color]]) {
+  private case class Game(id: Int, cubes: Seq[Color]) {
     def isValid: Boolean =
-      sets.flatten.forall {
+      cubes.forall {
         case Red(count) => count <= MAX_RED
         case Green(count) => count <= MAX_GREEN
         case Blue(count) => count <= MAX_BLUE
       }
 
     def getPowerOfMinimalCubes: Int =
-      sets.flatten.groupBy(_.getClass).values.map(_.map(_.count).max).product
+      cubes.groupBy(_.getClass).values.map(_.map(_.count).max).product
   }
 
   private sealed trait Color {
