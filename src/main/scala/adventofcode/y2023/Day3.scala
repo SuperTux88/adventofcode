@@ -26,7 +26,7 @@ object Day3 extends Year2023 {
     def checkPos(pos: Pos, numbers: List[PartNumber] = List.empty): List[PartNumber] = {
       if (pos <= size) {
         val (endPos, number) = getPartNumber(engine, pos)
-        val nextPos = if (endPos.x >= size.x) Pos(0, endPos.y + 1) else endPos.right
+        val nextPos = if (endPos.x >= size.x) endPos.nextLine else endPos.right
         number match {
           case Some(value) => checkPos(nextPos, value :: numbers)
           case None => checkPos(nextPos, numbers)

@@ -29,6 +29,8 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   def down: Pos = copy(y = y + 1)
   def left: Pos = copy(x = x - 1)
 
+  def nextLine: Pos = Pos(0, y + 1)
+
   def move(direction: Char): Pos = direction match {
     case 'N' | 'U' | '^' => up
     case 'E' | 'R' | '>' => right

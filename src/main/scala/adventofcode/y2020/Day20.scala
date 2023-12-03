@@ -72,7 +72,7 @@ object Day20 extends Year2020 {
     if (rotatedNextTile.neighborsDirections(tilesData)(1) > 0)
       findGrid(tilesData, newTilesMap, currentPos.right)
     else if (rotatedNextTile.neighborsDirections(tilesData)(2) > 0)
-      findGrid(tilesData, newTilesMap, Pos(0, currentPos.y + 1))
+      findGrid(tilesData, newTilesMap, currentPos.nextLine)
     else
       newTilesMap
   }
