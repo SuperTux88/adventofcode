@@ -1,0 +1,6 @@
+-   id: create-day-tiles
+    name: create-day-tiles
+    description: Create and update AoC Tiles
+    entry: AoCTiles/create_aoc_tiles.py
+    language: script
+    stages: [commit, manual]

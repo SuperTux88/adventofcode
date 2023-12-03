@@ -3,8 +3,8 @@ repos:
     hooks:
       - id: create-day-tiles
         name: create-day-tiles
-        entry: python3 AoCTiles/create_aoc_tiles.py
-        language: system
+        entry: AoCTiles/create_aoc_tiles.py
+        language: script
         # only run when a new input file gets added, which means a new day was added
         files: ^src/main/resources/input/[0-9]{4}/day[0-9]{1,2}.txt$
         args: ["scala"]

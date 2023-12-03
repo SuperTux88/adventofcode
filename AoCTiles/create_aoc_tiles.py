@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Author: LiquidFun
 Source: https://github.com/LiquidFun/adventofcode
