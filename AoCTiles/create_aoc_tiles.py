@@ -29,6 +29,7 @@ import json
 from typing import Literal
 
 import os
+import subprocess
 import sys
 import tempfile
 
@@ -130,10 +131,12 @@ def add_solutions_from_git(solution_paths_dict, repo_url):
     print(f"Getting solutions from {repo_url}")
     repo_tmp_path = TMP_DIR / repo_url.split("/")[-1]
 
+    git_env = dict(filter(lambda var: not var[0].startswith("GIT_") , os.environ.copy().items()))
     if not os.path.exists(repo_tmp_path):
-        os.system(f"git clone {repo_url} {repo_tmp_path}")
+        subprocess.Popen(["git", "clone", repo_url, repo_tmp_path], env=git_env, stdout=sys.stdout, stderr=sys.stderr).communicate()
     else:
-        os.system(f"cd {repo_tmp_path} && git pull")
+        print(f"Updating {repo_tmp_path}")
+        subprocess.Popen(["git", "-C", repo_tmp_path, "pull"], env=git_env, stdout=sys.stdout, stderr=sys.stderr).communicate()
 
     add_solutions_from_path(solution_paths_dict, repo_tmp_path, repo_url)
 
