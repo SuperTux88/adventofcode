@@ -11,15 +11,17 @@ object Day6 extends Year2023 {
     }.toSeq
 
     val races = numbers.map(_.map(_.toLong)).transpose
-    val wins = races.map { case Seq(time, distance) => countWins(time, distance) }
+    val wins = races.map { case Seq(time, distance) => calculateWins(time, distance) }
     printDayPart(1, wins.product, "Product of numbers of ways to beat the record: %s")
 
     val Seq(realTime, realDistance) = numbers.map(_.mkString.toLong)
-    printDayPart(2, countWins(realTime, realDistance), "Number of ways to beat the record with real race: %s")
+    printDayPart(2, calculateWins(realTime, realDistance), "Number of ways to beat the record with real race: %s")
   }
 
-  private def race(pushTime: Long, raceTime: Long): Long = pushTime * (raceTime - pushTime)
-  private def countWins(time: Long, distance: Long): Int =
-    // The win count is mirrored, so we can just only the first half and double it
-    (1L to time / 2).count(race(_, time) > distance) * 2 - ((time - 1) % 2).toInt
+  private def calculateWins(time: Long, distance: Long): Int = {
+    // Use quadratic formula to find the time at which it starts to win against the distance
+    val start = (time - math.sqrt(math.pow(time.toDouble, 2) - 4 * distance)) / 2
+    // There is an equal ammount of seconds also at the end, where it doesn't win. So just removing these twice works.
+    (time - 2 * (start + 1).floor + 1).toInt
+  }
 }
