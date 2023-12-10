@@ -3,7 +3,7 @@ Scala solutions for [Advent of Code](http://adventofcode.com/). My rust solution
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 18 ⭐
+  2023 - 20 ⭐
 </h1>
 <a href="src/main/scala/adventofcode/y2023/Day1.scala">
   <img src="AoCTiles/media/2023/01.png" width="161px">
@@ -31,6 +31,9 @@ Scala solutions for [Advent of Code](http://adventofcode.com/). My rust solution
 </a>
 <a href="src/main/scala/adventofcode/y2023/Day9.scala">
   <img src="AoCTiles/media/2023/09.png" width="161px">
+</a>
+<a href="src/main/scala/adventofcode/y2023/Day10.scala">
+  <img src="AoCTiles/media/2023/10.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 50 ⭐
