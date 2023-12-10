@@ -4,6 +4,7 @@ import adventofcode.Logging
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
+import scala.io.AnsiColor.{CYAN, RED, RESET}
 import scala.io.BufferedSource
 
 object Day10 extends Year2023 {
@@ -83,13 +84,17 @@ object Day10 extends Year2023 {
     else findOutside(pipe, size, next, seen ++ next)
   }
 
-  private def printMap[V](size: Pos, map: Map[Pos, Char], pipes: Set[Pos], inside: Set[Pos]): Unit = {
-    (0 to size.y).foreach(y => println((0 to size.x)
-      .map(x => Pos(x, y) match {
-        case pos if pipes.contains(pos) => map(pos)
-        case pos if inside.contains(pos) => 'I'
-        case pos => ' '
-      }).mkString)
-    )
-  }
+  private def printMap[V](size: Pos, map: Map[Pos, Char], pipes: Set[Pos], inside: Set[Pos]): Unit =
+    (0 to size.y).foreach(y => println((0 to size.x).map(x => Pos(x, y) match {
+      case pos if pipes.contains(pos) => map(pos) match {
+        case '|' => '┃'
+        case '-' => '━'
+        case 'L' => '┗'
+        case 'J' => '┛'
+        case '7' => '┓'
+        case 'F' => '┏'
+        case 'S' => 'S'
+      }
+      case pos => (if (inside.contains(pos)) CYAN else RED) + '█' + RESET
+    }).mkString))
 }
