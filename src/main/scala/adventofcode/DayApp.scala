@@ -31,18 +31,16 @@ trait DayApp {
   }
   def runDay(input: String): Unit = ???
 
-  def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
+  protected final def printDayPart(part: Int, solution: Long, formatString: String = "%s"): Unit =
     printDayPart(part, solution.toString, formatString)
-  def printDayPart(part: Int, solution: String, formatString: String): Unit = {
+  protected final def printDayPart(part: Int, solution: String, formatString: String): Unit =
     if (Logging.results) {
       println(s"$year Day $day - Part $part: ${String.format(formatString, s"$GREEN$solution$RESET")}")
       if (options.input.isEmpty) Solutions.check(year, day, part, solution)
     }
-  }
 
-  def printDebug(text: String): Unit = {
+  protected final def printDebug(text: String): Unit =
     if (Logging.debug) println(s"DEBUG: $text")
-  }
 }
 
 object Logging {
