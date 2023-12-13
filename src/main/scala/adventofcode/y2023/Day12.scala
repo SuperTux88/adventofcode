@@ -9,72 +9,54 @@ object Day12 extends Year2023 {
 
   override def runDay(input: BufferedSource): Unit = {
     val records = input.getLines().takeWhile(_.nonEmpty).map { line =>
-      val Array(conditionsStr, groupsStr) = line.split(" ")
-      val conditions = conditionsStr.map {
+      val Array(springsStr, groupsStr) = line.split(" ")
+      val springs = springsStr.map {
         case '.' => Condition.Operational
         case '#' => Condition.Damaged
         case '?' => Condition.Unknown
       }.toList
       val damagedGroups = groupsStr.split(",").map(_.toInt).toList
-      Record(conditions, damagedGroups)
+      Record(springs, damagedGroups)
     }.toList.par
 
-    val valid = records.map(_.getValidPossibilities)
-    printDayPart(1, valid.sum, "Sum of possible arrangements: %s")
+    printDayPart(1, records.map(_.getValidPossibilities).sum, "Sum of possible arrangements: %s")
 
-    val records2 = records.map { r =>
-      val conditions = List.fill(5)(Condition.Unknown :: r.conditions).flatten.tail
+    val records5 = records.map { r =>
+      val springs = List.fill(5)(Condition.Unknown :: r.springs).flatten.tail
       val groups = List.fill(5)(r.damagedGroups).flatten
-      Record(conditions, groups)
+      Record(springs, groups)
     }
-    val valid2 = records2.map(_.getValidPossibilities)
-
-    printDayPart(2, valid2.sum, "Sum of possible arrangements after unfold: %s")
+    printDayPart(2, records5.map(_.getValidPossibilities).sum, "Sum of possible arrangements after unfold: %s")
   }
 
   private enum Condition {
     case Operational, Damaged, Unknown
   }
 
-  private case class Record(conditions: List[Condition], damagedGroups: List[Int]) {
-    def getValidPossibilities: Long = {
-      val seen: mutable.Map[(Int, Int, Int), Long] = mutable.Map.empty
+  private case class Record(springs: List[Condition], damagedGroups: List[Int]) {
+    def getValidPossibilities: Long = getCachedValidPossibilities(springs, damagedGroups)
 
-      def inner(conditionIndex: Int, groupIndex: Int, currentDamagedLength: Int): Long = {
-        val key = (conditionIndex, groupIndex, currentDamagedLength)
-        if (seen.contains(key)) return seen(key) // already known how many possibilities are possible with the rest
+    private val CACHE = mutable.Map.empty[(List[Condition], List[Int]), Long]
 
-        if (conditionIndex == conditions.length) { // if last item
-          if (groupIndex == damagedGroups.size && currentDamagedLength == 0)
-            return 1 // valid if not damaged and if there are no more damaged groups left
-          else if (groupIndex == damagedGroups.size - 1 && damagedGroups(groupIndex) == currentDamagedLength)
-            return 1 // valid if the number of damaged items in the last group is correct
-          else
-            return 0 // invalid otherwise
-        }
-
-        var result = 0L
-        val current = conditions(conditionIndex)
-
-        if (current == Condition.Operational || current == Condition.Unknown) {
-          if (currentDamagedLength == 0) {
-            // we are in a group that is not damaged
-            result += inner(conditionIndex + 1, groupIndex, 0)
-          } else if (damagedGroups.lift(groupIndex).contains(currentDamagedLength)) {
-            // the last group was damaged and the number of damaged items is correct
-            result += inner(conditionIndex + 1, groupIndex + 1, 0)
-          }
-        }
-        if (current == Condition.Damaged || current == Condition.Unknown) {
-          // increase damaged counter
-          result += inner(conditionIndex + 1, groupIndex, currentDamagedLength + 1)
-        }
-
-        seen += key -> result
-        result
-      }
-
-      inner(0, 0, 0)
-    }
+    private def getCachedValidPossibilities(springs: List[Condition], damagedGroups: List[Int]): Long =
+      CACHE.getOrElseUpdate((springs, damagedGroups), (springs, damagedGroups) match {
+        case (_, Nil) => if (springs.contains(Condition.Damaged)) 0 else 1 // only valid if no more damaged springs left
+        case (Nil, _ :: _) => 0 // it no more springs left, but still groups left, it is invalid
+        case (Condition.Operational :: tail, damagedGroups) => // skip operational springs
+          getCachedValidPossibilities(tail, damagedGroups)
+        case (Condition.Damaged :: _, currentGroup :: damagedGroups) =>
+          if (springs.length >= currentGroup) { // try to consume all damaged springs in the current group
+            val (group, tail) = springs.splitAt(currentGroup)
+            if (group.contains(Condition.Operational)) 0 // if there are operational springs in the group, it is invalid
+            else tail match {
+              case Nil => if (damagedGroups.isEmpty) 1 else 0 // if there are no more groups left, it is valid
+              case Condition.Damaged :: _ => 0 // if the next spring is also damaged, it is invalid
+              case _ :: tail => getCachedValidPossibilities(tail, damagedGroups) // otherwise, continue with the next spring
+            }
+          } else 0 // if there are not enough springs left, it is invalid
+        case (Condition.Unknown :: tail, damagedGroups) =>
+          // try to consume the unknown spring as both operational and damaged
+          getCachedValidPossibilities(tail, damagedGroups) + getCachedValidPossibilities(Condition.Damaged :: tail, damagedGroups)
+      })
   }
 }
