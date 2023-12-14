@@ -15,6 +15,9 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   @targetName("multiply")
   def *(mul: Int): Pos = Pos(x * mul, y * mul)
 
+  @targetName("multiply")
+  def *(mul: Pos): Pos = Pos(x * mul.x, y * mul.y)
+
   @targetName("divide")
   def /(div: Int): Pos = Pos(x / div, y / div)
 
@@ -49,6 +52,20 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
     val Pos(distX, distY) = this - other
     Iterator.iterate(this)(_ + dir).take((distX.abs max distY.abs) + 1)
   }
+
+  /**
+    * Returns the positions that are on the border of a rectangle with this as the top left corner of the free space
+    *
+    * @param size size of the empty space in the middle, the border is one bigger in each direction
+    * @return
+    */
+  def border(size: Pos): Set[Pos] = {
+    val Pos(width, height) = size
+    (-1 to width).map(x => Pos(this.x + x, y - 1)) ++
+      (-1 to width).map(x => Pos(this.x + x, y + height)) ++
+      (0 until height).map(y => Pos(x - 1, this.y + y)) ++
+      (0 until height).map(y => Pos(x + width, this.y + y))
+  }.toSet
 
   def directions: List[Pos] = Direction.directions.map(this + _)
   override def neighbors: List[Pos] = Direction.directionsWithDiagonals.map(this + _)
