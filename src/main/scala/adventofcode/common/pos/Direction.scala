@@ -15,6 +15,11 @@ object Direction {
   val right: Pos = Pos(1, 0)
   val down: Pos = Pos(0, 1)
   val left: Pos = Pos(-1, 0)
+  
+  val upIndex = 0
+  val rightIndex = 1
+  val downIndex = 2
+  val leftIndex = 3
 
   def rotateLeft(directionIndex: Int): Int = (directionIndex + 3) % 4
   def rotateRight(directionIndex: Int): Int = (directionIndex + 1) % 4

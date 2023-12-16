@@ -76,6 +76,7 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   override def toString = s"$x,$y"
 
   import scala.math.Ordered.orderingToOrdered
+
   override def compare(that: Pos): Int = (this.y, this.x) compare(that.y, that.x)
 }
 
@@ -104,12 +105,14 @@ object Pos {
       }
     }.toMap
 
-  def printMap[V](map: Map[Pos, V], mapValue: V => (Char | String), min: Option[Pos] = None, max: Option[Pos] = None): Unit = {
+  def printMapArea(min: Pos, max: Pos, mapPos: Pos => (Char | String)): Unit =
+    (min.y to max.y).foreach(y => println((min.x to max.x).map(x => mapPos(Pos(x, y))).mkString))
+
+  def printMap[V](map: Map[Pos, V], mapValue: V => (Char | String), min: Option[Pos] = None, max: Option[Pos] = None): Unit =
     (min.getOrElse(map.keys.minBy(_.y)).y to max.getOrElse(map.keys.maxBy(_.y)).y).foreach(y =>
       println((min.getOrElse(map.keys.minBy(_.x)).x to max.getOrElse(map.keys.maxBy(_.x)).x)
         .map(x => mapValue(map(Pos(x, y)))).mkString)
     )
-  }
 
   val zero: Pos = Pos(0, 0)
 }
