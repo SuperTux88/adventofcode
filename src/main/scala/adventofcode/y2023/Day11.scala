@@ -8,7 +8,7 @@ object Day11 extends Year2023 {
   override val day = 11
 
   override def runDay(input: BufferedSource): Unit = {
-    val galaxies = Pos.parseMap(input.getLines(), _ == '#').filter(_._2).keySet.toList
+    val galaxies = Pos.parseSet(input.getLines()).toList
     val emptyX = getEmptySpace(galaxies, _.x)
     val emptyY = getEmptySpace(galaxies, _.y)
 
