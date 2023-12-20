@@ -35,8 +35,8 @@ object Day20 extends Year2023 {
     printDayPart(1, low * high, "Products of low and high pulses sent: %s")
 
     val rxInput = outputMappings.find(_._2.contains("rx")).get._1
-    val conjunctionInputs = outputMappings.filter(_._2.contains(rxInput)).keys.toList
-    val loops = conjunctionInputs.map(findConjunctionLoop(outputMappings, modules, rxInput, _))
+    val conjunctionInputs = outputMappings.filter(_._2.contains(rxInput)).keySet
+    val loops = findConjunctionLoop(outputMappings, modules, rxInput, conjunctionInputs)
 
     printDayPart(2, NumberHelper.lcm(loops), "The rx module receives a low pulse after %s button presses")
   }
@@ -65,16 +65,21 @@ object Day20 extends Year2023 {
   }
 
   private def findConjunctionLoop(outputs: Map[String, List[String]], state: Map[String, Module],
-                                  conjunction: String, module: String): Long = {
+                                  conjunction: String, modules: Set[String]): List[Long] = {
     @tailrec
-    def loop(state: Map[String, Module], loops: Long = 0): Long = {
-      if (state(conjunction).asInstanceOf[Conjunction].wasTrue.contains(module))
-        loops
-      else
-        loop(simulate(outputs, state)._1, loops + 1)
+    def loop(state: Map[String, Module], todo: Set[String],
+             result: List[Long] = List.empty, loops: Long = 0): List[Long] = {
+      if (todo.isEmpty) result
+      else {
+        val intersection = state(conjunction).asInstanceOf[Conjunction].wasTrue.intersect(todo)
+        if (intersection.nonEmpty)
+          loop(state, todo -- intersection, loops :: result, loops)
+        else
+          loop(simulate(outputs, state)._1, todo, result, loops + 1)
+      }
     }
 
-    loop(state)
+    loop(state, modules)
   }
 
   private def splitOutputs(outputs: String): List[String] = outputs.split(", ").toList
