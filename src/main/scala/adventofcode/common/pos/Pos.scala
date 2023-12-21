@@ -1,5 +1,7 @@
 package adventofcode.common.pos
 
+import adventofcode.common.NumberHelper.ExtendedIntegral
+
 import scala.annotation.targetName
 import scala.util.matching.Regex
 
@@ -23,6 +25,9 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 
   @targetName("modulo")
   def %(div: Int): Pos = Pos(x % div, y % div)
+
+  @targetName("positiveModulo")
+  def %+(mod: Pos): Pos = Pos(x %+ mod.x, y %+ mod.y)
 
   // Manhattan distance
   override def distance(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
