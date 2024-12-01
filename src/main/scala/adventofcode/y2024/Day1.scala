@@ -18,7 +18,8 @@ object Day1 extends Year2024 {
     }
     printDayPart(1, distances.sum, "Distance between the two lists: %s")
 
-    val similarity = list1.map(x => list2.count(_ == x) * x)
+    val list2Counts = list2.groupBy(identity).view.mapValues(_.size)
+    val similarity = list1.map(x => list2Counts.getOrElse(x, 0) * x)
     printDayPart(2, similarity.sum, "Similarity score of the two lists: %s")
   }
 }
