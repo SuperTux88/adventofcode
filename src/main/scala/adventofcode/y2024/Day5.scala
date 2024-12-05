@@ -16,22 +16,19 @@ object Day5 extends Year2024 {
     }.toSeq
     val updates = lines.map(_.split(",").map(_.toInt).toSeq).toSeq
 
-    val beforeRules = rules.groupMap(_.second)(_.first)
-    val afterRules = rules.groupMap(_.first)(_.second)
+    val rulesMap = rules.groupMap(_.second)(_.first).withDefaultValue(Nil)
 
-    val (validOrders, invalidOrders) = updates.partition(findFirstBrokenIndex(beforeRules, afterRules)(_).isEmpty)
+    val (validOrders, invalidOrders) = updates.partition(findFirstBrokenIndex(rulesMap)(_).isEmpty)
     printDayPart(1, validOrders.map(getMiddle).sum, "Sum of middle pages of correct updates: %s")
 
-    val fixedOrders = invalidOrders.par.map(fixOrder(findFirstBrokenIndex(beforeRules, afterRules), _))
+    val fixedOrders = invalidOrders.par.map(fixOrder(findFirstBrokenIndex(rulesMap), _))
     printDayPart(2, fixedOrders.map(getMiddle).sum, "Sum of middle pages of fixed updates: %s")
   }
 
-  private def findFirstBrokenIndex(beforeRules: Map[Int, Seq[Int]], afterRules: Map[Int, Seq[Int]])(update: Seq[Int]): Option[Int] =
+  private def findFirstBrokenIndex(rules: Map[Int, Seq[Int]])(update: Seq[Int]): Option[Int] =
     update.indices.find { i =>
-      val page = update(i)
-      val beforePages = update.take(i)
       val afterPages = update.drop(i + 1)
-      beforeRules(page).exists(afterPages.contains) || afterRules(page).exists(beforePages.contains)
+      rules(update(i)).exists(afterPages.contains)
     }
 
   private def fixOrder(findBrokenIndex: Seq[Int] => Option[Int], update: Seq[Int]): Seq[Int] = {
