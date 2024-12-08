@@ -77,6 +77,8 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   def diagonals: List[Pos] = Direction.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
+  
+  def isInBounds(min: Pos, max: Pos): Boolean = x >= min.x && y >= min.y && x <= max.x && y <= max.y
 
   override def toString = s"$x,$y"
 
