@@ -15,7 +15,7 @@ object Day5 extends Year2021 {
       case VentRE(x1, y1, x2, y2) => (Pos(x1.toInt, y1.toInt), Pos(x2.toInt, y2.toInt))
     }.partition(v => v._1.x == v._2.x || v._1.y == v._2.y)
 
-    val grid = straightVents.foldLeft(Map[Pos, Int]().withDefaultValue(0))((map, vent) => markVent(map, vent._1, vent._2))
+    val grid = straightVents.foldLeft(Map[Pos, Int]())((map, vent) => markVent(map, vent._1, vent._2))
     printDayPart(1, grid.values.count(_ >= 2), "dangerous areas: %s")
 
     val gridWithDiagonals = diagonalVents.foldLeft(grid)((map, vent) => markVent(map, vent._1, vent._2))

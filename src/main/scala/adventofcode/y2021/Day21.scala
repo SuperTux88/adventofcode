@@ -36,7 +36,7 @@ object Day21 extends Year2021 {
 
   @tailrec
   private def playQuantum(states: Map[(Player, Player), Long], winCount: (Long, Long) = (0L, 0L)): Long = {
-    val newStates = states.foldLeft(Map[(Player, Player), Long]().withDefaultValue(0L)) {
+    val newStates = states.foldLeft(Map[(Player, Player), Long]()) {
       case (newStates, ((currentPlayer, otherPlayer), currentStateCount)) =>
         quantumDice.foldLeft(newStates) { case (newStates, (steps, count)) =>
           val newPlayers = (otherPlayer, currentPlayer.move(steps))

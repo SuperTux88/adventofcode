@@ -5,7 +5,7 @@ object MapImplicits {
 
     import math.Integral.Implicits.infixIntegralOps
 
-    def changeBy(key: K, diff: V): Map[K, V] = map.updated(key, map(key) + diff)
+    def changeBy(key: K, diff: V): Map[K, V] = map.updatedWith(key)(_.map(_ + diff).orElse(Some(diff)))
   }
 
   implicit class ListMapImplicits[K, V](map: Map[K, List[V]]) {
