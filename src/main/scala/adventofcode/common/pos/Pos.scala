@@ -22,6 +22,9 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 
   @targetName("divide")
   def /(div: Int): Pos = Pos(x / div, y / div)
+  
+  @targetName("divide")
+  def /(div: Pos): Pos = Pos(x / div.x, y / div.y)
 
   @targetName("modulo")
   def %(div: Int): Pos = Pos(x % div, y % div)
