@@ -19,8 +19,8 @@ object Dijkstra {
       if (isTarget(current.head)) {
         return (cost, current)
       } else if (seen.add(current.head)) {
-        neighbors(current.head).foreach { n =>
-          Q.enqueue((cost + n._1, n._2 :: current))
+        neighbors(current.head).foreach { (nextCost, nextState) =>
+          Q.enqueue((cost + nextCost, nextState :: current))
         }
       }
     }
