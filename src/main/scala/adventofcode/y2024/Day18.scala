@@ -5,6 +5,7 @@ import adventofcode.common.pos.Pos
 import adventofcode.common.search.Dijkstra
 
 import scala.io.BufferedSource
+import scala.io.AnsiColor.{CYAN, RED, RESET}
 
 object Day18 extends Year2024 {
   override val day = 18
@@ -30,8 +31,10 @@ object Day18 extends Year2024 {
     val index = bytes.indices.findLast { i =>
       Dijkstra(Pos(0, 0), _ == SIZE, next(bytes.take(i)))._2.nonEmpty
     }.get
-    if (Logging.debug) printMap(bytes.take(index), Dijkstra(Pos(0, 0), _ == SIZE, next(bytes.take(index)))._2)
-    printDayPart(2, bytes(index).toString, "P2: %s")
+    val blocking = bytes(index)
+    if (Logging.debug)
+      printMap(bytes.take(index), Dijkstra(Pos(0, 0), _ == SIZE, next(bytes.take(index)))._2, Some(blocking))
+    printDayPart(2, blocking.toString, "P2: %s")
   }
 
   private def next(bytes: List[Pos])(pos: Pos): List[(Int, Pos)] =
@@ -39,10 +42,15 @@ object Day18 extends Year2024 {
       next.x >= 0 && next.x <= SIZE.x && next.y >= 0 && next.y <= SIZE.y && !bytes.contains(next)
     }.map((1, _))
 
-  private def printMap(bytes: List[Pos], steps: List[Pos]): Unit = if (Logging.debug)
+  private def printMap(bytes: List[Pos], steps: List[Pos], blocking: Option[Pos] = None): Unit = if (Logging.debug)
     for (y <- 0 to SIZE.y) {
       for (x <- 0 to SIZE.x) {
-        print(if (bytes.contains(Pos(x, y))) '#' else if (steps.contains(Pos(x, y))) 'O' else '.')
+        print(
+          if (bytes.contains(Pos(x, y))) '#'
+          else if (blocking.contains(Pos(x, y))) s"${RED}X${RESET}"
+          else if (steps.contains(Pos(x, y))) s"${CYAN}O${RESET}"
+          else '.'
+        )
       }
       println()
     }
