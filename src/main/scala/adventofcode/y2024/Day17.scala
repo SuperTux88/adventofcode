@@ -19,14 +19,19 @@ object Day17 extends Year2024 {
     }
 
     val output = runProgram(registers, program)
-    printDayPart(1, output.mkString(","), "P1: %s")
+    printDayPart(1, output.mkString(","), "Output of the program: %s")
+
+    val registerA = findRegisterA(program, program.reverse, 0L).get
+    printDayPart(2, registerA, "Value of register A for the program to output itself: %s")
   }
 
   @tailrec
   private def runProgram(registers: List[Long], program: List[Int], pointer: Int = 0, output: List[Int] = List.empty): List[Int] = {
     // println(s"registers: $registers, program: $program, pointer: $pointer, output: $output")
-    if (pointer >= program.length) output.reverse
-    else {
+    if (pointer >= program.length) {
+      // println(s"Output: $output")
+      output.reverse
+    } else {
       val List(a, b, c) = registers
       val opcode = program(pointer)
       val operand = program(pointer + 1)
@@ -53,6 +58,16 @@ object Day17 extends Year2024 {
       }
     }
   }
+
+  private def findRegisterA(program: List[Int], reverseOutput: List[Int], a: Long): Option[Long] =
+    if (reverseOutput.isEmpty) Some(a)
+    else (0 to 7).map(_ + (a << 3)).iterator
+      .filter(a => {
+        // println(s"Trying a: $a | 0o${a.toOctalString}")
+        runProgram(List(a, 0, 0), program).head == reverseOutput.head
+      })
+      .flatMap(findRegisterA(program, reverseOutput.tail, _))
+      .nextOption
 
   private def getCombo(value: Int, registers: List[Long]): Long =
     value match {
