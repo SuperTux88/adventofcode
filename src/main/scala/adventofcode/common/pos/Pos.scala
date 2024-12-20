@@ -22,7 +22,7 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
 
   @targetName("divide")
   def /(div: Int): Pos = Pos(x / div, y / div)
-  
+
   @targetName("divide")
   def /(div: Pos): Pos = Pos(x / div.x, y / div.y)
 
@@ -80,7 +80,7 @@ case class Pos(x: Int, y: Int) extends PosTrait[Pos] with Ordered[Pos] {
   def diagonals: List[Pos] = Direction.diagonals.map(this + _)
 
   def positive: Boolean = x >= 0 && y >= 0
-  
+
   def isInBounds(min: Pos, max: Pos): Boolean = x >= min.x && y >= min.y && x <= max.x && y <= max.y
 
   override def toString = s"$x,$y"
@@ -114,6 +114,11 @@ object Pos {
         case (char, x) => Pos(x, y) -> value(char)
       }
     }.toMap
+
+  def parseMapStartEnd(lines: Iterator[String]): (Map[Pos, Char], Pos, Pos) = {
+    val map = parseMap(lines, identity)
+    (map, map.find(_._2 == 'S').get._1, map.find(_._2 == 'E').get._1)
+  }
 
   def printMapArea(min: Pos, max: Pos, mapPos: Pos => (Char | String)): Unit =
     (min.y to max.y).foreach(y => println((min.x to max.x).map(x => mapPos(Pos(x, y))).mkString))

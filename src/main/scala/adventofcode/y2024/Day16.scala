@@ -11,10 +11,7 @@ object Day16 extends Year2024 {
   override val day = 16
 
   override def runDay(input: BufferedSource): Unit = {
-    val map = Pos.parseMap(input.getLines().takeWhile(_.nonEmpty), identity)
-    val start = map.find { case (_, c) => c == 'S' }.get._1
-    val end = map.find { case (_, c) => c == 'E' }.get._1
-
+    val (map, start, end) = Pos.parseMapStartEnd(input.getLines().takeWhile(_.nonEmpty))
     val startState = State(start, Direction.rightIndex)
 
     val shortestPath = Dijkstra(startState, _.pos == end, _.next(map))
