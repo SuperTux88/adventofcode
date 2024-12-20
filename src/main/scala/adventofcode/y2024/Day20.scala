@@ -15,9 +15,10 @@ object Day20 extends Year2024 {
     val walls = map.filter(_._2 == '#').keySet
 
     val course = Dijkstra(start, _ == end, next(map))._2.reverse
+    val courseMap = course.zipWithIndex.toMap
 
     val cheats = findCheatPositions(walls).par.map { cheat =>
-      val indexes = cheat.directions.filterNot(walls.contains).map(course.indexOf)
+      val indexes = cheat.directions.filterNot(walls.contains).map(courseMap)
       cheat -> (indexes.max - indexes.min - 2)
     }
 
@@ -25,9 +26,10 @@ object Day20 extends Year2024 {
     printDayPart(1, cheats.count(_._2 >= 100), "%s cheats would save at least 100 picoseconds")
 
     val cheats2 = course.par.flatMap { from =>
-      findTargets(from, course.dropWhile(_ != from).tail.toSet).flatMap { to =>
+      val fromIndex = courseMap(from)
+      findTargets(from, course.drop(fromIndex + 1).toSet).flatMap { to =>
         val distance = from.distance(to)
-        val steps = course.indexOf(to) - course.indexOf(from) - distance
+        val steps = courseMap(to) - fromIndex - distance
         if (steps <= 0) {
           None
         } else {
