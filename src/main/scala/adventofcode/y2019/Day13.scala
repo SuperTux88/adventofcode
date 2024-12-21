@@ -1,6 +1,7 @@
 package adventofcode.y2019
 
 import adventofcode.Logging
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 import org.jline.terminal.TerminalBuilder
 import org.jline.utils.NonBlockingReader
@@ -77,7 +78,7 @@ object Day13 extends Year2019 {
     }
 
   private def countBlocks(map: Map[Pos, Int]) = map.count(_._2 == 2)
-  private def getHorizontalPos(map: Map[Pos, Int], id: Int) = map.find(_._2 == id).get._1.x
+  private def getHorizontalPos(map: Map[Pos, Int], id: Int) = map.findKeyByValue(id).get.x
 
   private def printState(state: Map[Pos, Int]): Unit = {
     print("\u001B[0;0H")

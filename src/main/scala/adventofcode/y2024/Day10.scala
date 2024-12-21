@@ -1,5 +1,6 @@
 package adventofcode.y2024
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 
 import scala.collection.parallel.CollectionConverters.*
@@ -10,7 +11,7 @@ object Day10 extends Year2024 {
 
   override def runDay(input: BufferedSource): Unit = {
     val map = Pos.parseMap(input.getLines(), _.asDigit)
-    val starts = map.filter(_._2 == 0).keySet.toList
+    val starts = map.keySetByValue(0).toList
 
     val trails = starts.par.map(findTrails(map))
     printDayPart(1, trails.map(_.toSet.size).sum, "Score of all trailheads: %s")

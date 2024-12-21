@@ -10,6 +10,7 @@ object Direction {
   val directions3d: List[(Int, Int, Int)] = List((-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1))
 
   val compassDirections: List[Char] = List('N', 'E', 'S', 'W')
+  val arrowDirections: List[Char] = List('^', '>', 'v', '<')
 
   val up: Pos = Pos(0, -1)
   val right: Pos = Pos(1, 0)

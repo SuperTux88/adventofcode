@@ -1,5 +1,6 @@
 package adventofcode.y2019
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 import adventofcode.common.search.Dijkstra
 
@@ -85,7 +86,7 @@ object Day20 extends Year2019 {
         pos.x <= maze.bottomRight.x && pos.y <= maze.bottomRight.y) 1 else -1
 
   private case class Maze(map: Map[Pos, Char], portals: Map[Pos, Label], start: Label, end: Label) {
-    private val walls = map.filter(_._2 == '#').keys.toSet
+    private val walls = map.keySetByValue('#')
     val (topLeft, bottomRight) = (Pos(2, 2), Pos(walls.map(_.x).max, walls.map(_.y).max))
   }
 

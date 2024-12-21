@@ -1,5 +1,6 @@
 package adventofcode.y2023
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 
 import scala.annotation.tailrec
@@ -12,8 +13,8 @@ object Day21 extends Year2023 {
 
   override def runDay(input: BufferedSource): Unit = {
     val initMap = Pos.parseMap(input.getLines(), identity)
-    val open = initMap.filter(_._2 == '.').keySet
-    val start = initMap.find(_._2 == 'S').get._1
+    val open = initMap.keySetByValue('.')
+    val start = initMap.findKeyByValue('S').get
     val size = initMap.keys.max.x + 1
 
     val stepsNeeded = getStepsNeeded(open, start)

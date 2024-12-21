@@ -1,5 +1,6 @@
 package adventofcode.y2019
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 import adventofcode.common.search.Dijkstra
 
@@ -16,7 +17,7 @@ object Day18 extends Year2019 {
     val map = Pos.parseMap(input.getLines(), char => char)
 
     val allKeys = map.values.filter(_.isLower).toSet
-    val startPos = map.find(_._2 == '@').get._1
+    val startPos = map.findKeyByValue('@').get
 
     val futurePart1 = Future {
       getShortestPath(Seq(startPos), map, allKeys)

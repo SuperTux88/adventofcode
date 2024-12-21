@@ -1,5 +1,6 @@
 package adventofcode.y2023
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
@@ -15,8 +16,8 @@ object Day14 extends Year2023 {
     val rocks = Pos.parseMap(input.getLines(), identity)
     val size = rocks.keys.max.down.right
 
-    val blocked = rocks.filter(_._2 == '#').keySet ++ Pos.zero.border(size)
-    val round = rocks.filter(_._2 == 'O').keySet
+    val blocked = rocks.keySetByValue('#') ++ Pos.zero.border(size)
+    val round = rocks.keySetByValue('O')
     val platform = Platform(blocked)
 
     val rolledUp = platform.rollDirection(round, Direction.up)

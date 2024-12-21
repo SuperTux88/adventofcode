@@ -9,8 +9,7 @@ object Day12 extends Year2022 {
   override val day = 12
 
   override def runDay(input: BufferedSource): Unit = {
-    val map = Pos.parseMap(input.getLines(), identity)
-    val (start, end) = (map.find(_._2 == 'S').get._1, map.find(_._2 == 'E').get._1)
+    val (map, start, end) = Pos.parseMapStartEnd(input.getLines())
 
     val heightmap = map.view.mapValues {
       case 'S' => 0

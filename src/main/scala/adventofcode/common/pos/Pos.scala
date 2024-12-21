@@ -116,8 +116,9 @@ object Pos {
     }.toMap
 
   def parseMapStartEnd(lines: Iterator[String]): (Map[Pos, Char], Pos, Pos) = {
+    import adventofcode.common.MapImplicits.MapImplicits
     val map = parseMap(lines, identity)
-    (map, map.find(_._2 == 'S').get._1, map.find(_._2 == 'E').get._1)
+    (map, map.findKeyByValue('S').get, map.findKeyByValue('E').get)
   }
 
   def printMapArea(min: Pos, max: Pos, mapPos: Pos => (Char | String)): Unit =

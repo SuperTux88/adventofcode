@@ -1,6 +1,7 @@
 package adventofcode.y2023
 
 import adventofcode.Logging
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
@@ -40,7 +41,7 @@ object Day10 extends Year2023 {
   override def runDay(input: BufferedSource): Unit = {
     val map = Pos.parseMap(input.getLines(), identity)
     val size = map.keys.max
-    val start = map.find(_._2 == 'S').get._1
+    val start = map.findKeyByValue('S').get
 
     val mapPipes = map.flatMap((pos, char) => PIPES.get(char).map(pos -> _))
     val pipeLoop = findLoop(mapPipes, start)

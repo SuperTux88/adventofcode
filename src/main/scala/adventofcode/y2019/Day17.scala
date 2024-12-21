@@ -1,11 +1,10 @@
 package adventofcode.y2019
 
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.{Direction, Pos}
 
 object Day17 extends Year2019 {
   override val day = 17
-
-  private val directions = List('^', '>', 'v', '<')
 
   override def runDay(input: IntCode): Unit = {
     IntCode.printDelay = 1
@@ -21,11 +20,11 @@ object Day17 extends Year2019 {
       }
     }.toMap
 
-    val (robotStartPos, directionChar) = map.find(coord => directions.contains(coord._2)).get
-    val scaffolds = map.filter(_._2 == '#').keys.toSet
+    val (robotStartPos, directionChar) = map.find(coord => Direction.arrowDirections.contains(coord._2)).get
+    val scaffolds = map.keySetByValue('#')
     val intersections = scaffolds.filter(_.directions.forall(scaffolds.contains))
 
-    val path = getPath(scaffolds, robotStartPos, directions.indexOf(directionChar))
+    val path = getPath(scaffolds, robotStartPos, Direction.arrowDirections.indexOf(directionChar))
 
     val functions = getSubPathFunctions(List(path)).head.toMap
     val mainRoutine = getMainRoutine(path, functions.map(f => f._2.toVector -> f._1))

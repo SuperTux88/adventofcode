@@ -1,5 +1,7 @@
 package adventofcode.y2016
 
+import adventofcode.common.MapImplicits.MapImplicits
+
 import scala.annotation.targetName
 import scala.collection.parallel.CollectionConverters.*
 import scala.io.BufferedSource
@@ -14,7 +16,7 @@ object Day24 extends Year2016 {
       line._1.zipWithIndex.map(c => (c._2, line._2) -> c._1)
     }.toMap
 
-    val start = Pos(maze.find(_._2 == '0').get._1)
+    val start = Pos(maze.findKeyByValue('0').get)
     val targets = maze.flatMap {
       case (pos, char) if char >= '1' && char <= '9' => Some(Pos(pos))
       case _ => None

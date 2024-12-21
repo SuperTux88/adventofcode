@@ -1,6 +1,7 @@
 package adventofcode.y2024
 
 import adventofcode.Logging
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Pos
 import adventofcode.common.search.Dijkstra
 
@@ -12,7 +13,7 @@ object Day20 extends Year2024 {
 
   override def runDay(input: BufferedSource): Unit = {
     val (map, start, end) = Pos.parseMapStartEnd(input.getLines().takeWhile(_.nonEmpty))
-    val walls = map.filter(_._2 == '#').keySet
+    val walls = map.keySetByValue('#')
 
     val course = Dijkstra(start, _ == end, next(map))._2.reverse
     val courseMap = course.zipWithIndex.toMap

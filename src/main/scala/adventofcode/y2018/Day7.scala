@@ -1,5 +1,7 @@
 package adventofcode.y2018
 
+import adventofcode.common.MapImplicits.MapImplicits
+
 import scala.annotation.tailrec
 import scala.io.BufferedSource
 
@@ -38,7 +40,7 @@ object Day7 extends Year2018 {
       workParallel(stepsTodo - next, instructions, workers + (next -> (next - 4 + time)), time)
     } else {
       val newTime = workers.minBy(_._2)._2
-      val doneTasks = workers.filter(_._2 == newTime).keys
+      val doneTasks = workers.keySetByValue(newTime)
       val newInstructions = instructions.view.mapValues(_ -- doneTasks).filter(_._2.nonEmpty).toMap
       workParallel(stepsTodo, newInstructions, workers -- doneTasks, newTime)
     }

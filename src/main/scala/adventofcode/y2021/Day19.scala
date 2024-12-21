@@ -1,6 +1,7 @@
 package adventofcode.y2021
 
 import adventofcode.common.IterableImplicits
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.Direction.DirectionPos3D
 import adventofcode.common.pos.Pos3D
 

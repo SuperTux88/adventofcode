@@ -1,6 +1,7 @@
 package adventofcode.y2018
 
 import adventofcode.Logging
+import adventofcode.common.MapImplicits.MapImplicits
 import adventofcode.common.pos.{Direction, Pos}
 
 import scala.annotation.tailrec
@@ -14,7 +15,7 @@ object Day20 extends Year2018 {
 
     if (Logging.debug) Pos.printMap(map.withDefaultValue('#'), identity)
 
-    val distances = walkMap(map.filter(_._2 == '.').keys.toSet, map)
+    val distances = walkMap(map.keySetByValue('.'), map)
 
     printDayPart(1, distances.maxBy(_._2)._2)
     printDayPart(2, distances.count(_._2 >= 1000))
